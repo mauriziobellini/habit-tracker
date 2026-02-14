@@ -1,0 +1,242 @@
+import SwiftUI
+import SwiftData
+
+struct TaskListView: View {
+    @Environment(\.modelContext) private var modelContext
+    @Query(sort: \HabitTask.sortOrder) private var tasks: [HabitTask]
+    @Query(sort: \Category.sortOrder) private var categories: [Category]
+
+    @State private var viewModel = TaskListViewModel()
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    /// Collapse to 1 column at accessibility text sizes (UX principles section 7).
+    private var columns: [GridItem] {
+        if dynamicTypeSize >= .accessibility3 {
+            return [GridItem(.flexible(), spacing: 16)]
+        }
+        return [
+            GridItem(.flexible(), spacing: 16),
+            GridItem(.flexible(), spacing: 16),
+        ]
+    }
+
+    var body: some View {
+        NavigationStack {
+            ZStack {
+                Color(.systemBackground)
+                    .ignoresSafeArea()
+
+                if tasks.isEmpty {
+                    emptyStateView
+                } else {
+                    taskGridView
+                }
+
+                // Settings gear — bottom left
+                VStack {
+                    Spacer()
+                    HStack {
+                        settingsButton
+                        Spacer()
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.bottom, 8)
+                }
+            }
+            .navigationTitle("My Habits")
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    categoryMenu
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    addButton
+                }
+            }
+            .sheet(isPresented: $viewModel.showingTaskSelector) {
+                NewTaskSelectorView()
+            }
+            .sheet(isPresented: $viewModel.showingSettings) {
+                AppSettingsView()
+            }
+            .sheet(item: $viewModel.taskToEdit) { task in
+                NavigationStack {
+                    TaskConfigurationView(
+                        viewModel: TaskConfigurationViewModel(mode: .edit(task))
+                    )
+                }
+            }
+            .sheet(item: $viewModel.taskForStats) { task in
+                TaskStatsView(task: task)
+            }
+            .alert("Delete Task", isPresented: $viewModel.showDeleteConfirmation) {
+                Button("Cancel", role: .cancel) {}
+                Button("Delete", role: .destructive) {
+                    viewModel.deleteTask(context: modelContext)
+                }
+            } message: {
+                if let task = viewModel.taskToDelete {
+                    Text("Are you sure you want to delete \"\(task.title)\"? This action cannot be undone.")
+                }
+            }
+        }
+    }
+
+    // MARK: - Category Dropdown
+
+    private var categoryMenu: some View {
+        Menu {
+            Button {
+                viewModel.selectedCategoryID = nil
+            } label: {
+                Label("All", systemImage: viewModel.selectedCategoryID == nil ? "checkmark" : "")
+            }
+
+            Divider()
+
+            ForEach(categories) { category in
+                Button {
+                    viewModel.selectedCategoryID = category.id
+                } label: {
+                    Label(
+                        category.name,
+                        systemImage: viewModel.selectedCategoryID == category.id ? "checkmark" : ""
+                    )
+                }
+            }
+        } label: {
+            HStack(spacing: 4) {
+                Text(selectedCategoryName)
+                    .font(.subheadline.weight(.medium))
+                Image(systemName: "chevron.down")
+                    .font(.caption2.weight(.semibold))
+            }
+            .foregroundStyle(.primary)
+        }
+    }
+
+    private var selectedCategoryName: String {
+        guard let id = viewModel.selectedCategoryID else { return "All" }
+        return categories.first { $0.id == id }?.name ?? "All"
+    }
+
+    // MARK: - Add Button
+
+    private var addButton: some View {
+        Button {
+            viewModel.showingTaskSelector = true
+        } label: {
+            Image(systemName: "plus")
+                .font(.title3.weight(.semibold))
+                .foregroundStyle(.white)
+                .frame(width: 36, height: 36)
+                .background(Circle().fill(Color.accentColor))
+        }
+        .accessibilityLabel(String(localized: "Add new habit"))
+        .accessibilityIdentifier("addTaskButton")
+    }
+
+    // MARK: - Settings Button
+
+    private var settingsButton: some View {
+        Button {
+            viewModel.showingSettings = true
+        } label: {
+            Image(systemName: "gearshape.fill")
+                .font(.title3)
+                .foregroundStyle(.secondary)
+        }
+        .accessibilityLabel(String(localized: "Settings"))
+        .accessibilityIdentifier("settingsButton")
+    }
+
+    // MARK: - Task Grid
+
+    private var taskGridView: some View {
+        ScrollView {
+            LazyVGrid(columns: columns, spacing: 24) {
+                ForEach(viewModel.filteredTasks(tasks)) { task in
+                    taskCell(task)
+                }
+            }
+            .padding(.horizontal, 16)
+            .padding(.top, 8)
+            .padding(.bottom, 80) // space for settings gear
+        }
+    }
+
+    private func taskCell(_ task: HabitTask) -> some View {
+        let isCompleted = task.isCompleted(on: .now)
+
+        return TapAndHoldTaskView(
+            task: task,
+            isCompleted: isCompleted,
+            circleSize: 80,
+            onSingleTap: {
+                // Single tap → no-op here; context menu handles it
+            },
+            onCompleted: {
+                recordCompletion(for: task)
+            }
+        )
+        .contextMenu {
+            Button {
+                viewModel.taskForStats = task
+            } label: {
+                Label("Stats", systemImage: "chart.line.uptrend.xyaxis")
+            }
+
+            Button {
+                viewModel.taskToEdit = task
+            } label: {
+                Label("Edit", systemImage: "pencil")
+            }
+
+            Button(role: .destructive) {
+                viewModel.confirmDelete(task)
+            } label: {
+                Label("Remove", systemImage: "trash")
+            }
+        }
+    }
+
+    private func recordCompletion(for task: HabitTask) {
+        let completion = TaskCompletion(task: task)
+        modelContext.insert(completion)
+        // Suppress today's notification if task completed early
+        if task.notificationEnabled {
+            NotificationService.shared.suppressTodayNotification(for: task)
+        }
+    }
+
+    // MARK: - Empty State
+
+    private var emptyStateView: some View {
+        VStack(spacing: 16) {
+            Image(systemName: "plus.circle.dashed")
+                .font(.system(size: 64))
+                .foregroundStyle(.secondary)
+
+            Text("No habits yet")
+                .font(.title2.weight(.semibold))
+
+            Text("Tap the + button to create your first habit")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+
+            Button {
+                viewModel.showingTaskSelector = true
+            } label: {
+                Text("Add Habit")
+                    .font(.headline)
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 32)
+                    .padding(.vertical, 12)
+                    .background(Capsule().fill(Color.accentColor))
+            }
+            .padding(.top, 8)
+        }
+        .padding(32)
+    }
+}
+

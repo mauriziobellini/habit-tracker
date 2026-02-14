@@ -1,0 +1,58 @@
+name: HabitTracker
+options:
+  bundleIdPrefix: com.habittracker
+  deploymentTarget:
+    iOS: "17.0"
+  xcodeVersion: "15.0"
+  generateEmptyDirectories: true
+  groupSortPosition: top
+
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    TARGETED_DEVICE_FAMILY: "1"
+    GENERATE_INFOPLIST_FILE: YES
+    INFOPLIST_KEY_UILaunchScreen_Generation: YES
+    INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: "UIInterfaceOrientationPortrait"
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+
+targets:
+  HabitTracker:
+    type: application
+    platform: iOS
+    sources:
+      - path: HabitTracker
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.habittracker.app
+        INFOPLIST_KEY_CFBundleDisplayName: "Habit Tracker"
+        INFOPLIST_KEY_LSApplicationCategoryType: "public.app-category.lifestyle"
+        MARKETING_VERSION: "1.0.0"
+        CURRENT_PROJECT_VERSION: "1"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        SWIFT_EMIT_LOC_STRINGS: YES
+
+  HabitTrackerTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: HabitTrackerTests
+    dependencies:
+      - target: HabitTracker
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.habittracker.tests
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/HabitTracker.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/HabitTracker"
+        BUNDLE_LOADER: "$(TEST_HOST)"
+
+  HabitTrackerUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: HabitTrackerUITests
+    dependencies:
+      - target: HabitTracker
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.habittracker.uitests
+        TEST_TARGET_NAME: HabitTracker

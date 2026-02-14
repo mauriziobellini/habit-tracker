@@ -1,0 +1,184 @@
+/* 
+  Localizable.strings
+  HabitTracker
+  
+  English (base) — all user-facing strings externalized for i18n.
+  Phase 1 (MVP): English only. Infrastructure ready for P1 languages.
+*/
+
+// MARK: - General
+"All" = "All";
+"Cancel" = "Cancel";
+"Close" = "Close";
+"Done" = "Done";
+"Save" = "Save";
+"Delete" = "Delete";
+"Edit" = "Edit";
+"Remove" = "Remove";
+"Add" = "Add";
+"None" = "None";
+
+// MARK: - Task List
+"My Habits" = "My Habits";
+"No habits yet" = "No habits yet";
+"Tap the + button to create your first habit" = "Tap the + button to create your first habit";
+"Add Habit" = "Add Habit";
+"Add new habit" = "Add new habit";
+"Settings" = "Settings";
+"Delete Task" = "Delete Task";
+"Are you sure you want to delete \"%@\"? This action cannot be undone." = "Are you sure you want to delete \"%@\"? This action cannot be undone.";
+
+// MARK: - Task Status
+"completed" = "completed";
+"not completed" = "not completed";
+"Already completed" = "Already completed";
+"Double tap to open menu, or double tap and hold to complete" = "Double tap to open menu, or double tap and hold to complete";
+"%@ completed" = "%@ completed";
+
+// MARK: - Task Selector
+"New Task" = "New Task";
+"Create custom task…" = "Create custom task…";
+
+// MARK: - Task Configuration
+"Configure Task" = "Configure Task";
+"Edit Task" = "Edit Task";
+"Task" = "Task";
+"Task name" = "Task name";
+"Change icon" = "Change icon";
+"Goal" = "Goal";
+"Goal type" = "Goal type";
+"Target" = "Target";
+"Unit" = "Unit";
+"Measurement period" = "Measurement period";
+"Schedule" = "Schedule";
+"Frequency" = "Frequency";
+"Times per day: %d" = "Times per day: %d";
+"Notification" = "Notification";
+"Reminder" = "Reminder";
+"Time" = "Time";
+"Appearance" = "Appearance";
+"Color" = "Color";
+"Category" = "Category";
+"Create New Category" = "Create New Category";
+"Category name" = "Category name";
+
+// MARK: - Goal Types
+"No Goal" = "No Goal";
+"Repetitions" = "Repetitions";
+"Cups" = "Cups";
+"Calories" = "Calories";
+"Distance" = "Distance";
+"Weight" = "Weight";
+"Capacity" = "Capacity";
+
+// MARK: - Measurement Duration
+"Daily" = "Daily";
+"Weekly" = "Weekly";
+"Monthly" = "Monthly";
+
+// MARK: - Frequency
+"Every Day" = "Every Day";
+"Specific Days" = "Specific Days";
+
+// MARK: - Weekdays
+"Mon" = "Mon";
+"Tue" = "Tue";
+"Wed" = "Wed";
+"Thu" = "Thu";
+"Fri" = "Fri";
+"Sat" = "Sat";
+"Sun" = "Sun";
+"Monday" = "Monday";
+"Tuesday" = "Tuesday";
+"Wednesday" = "Wednesday";
+"Thursday" = "Thursday";
+"Friday" = "Friday";
+"Saturday" = "Saturday";
+"Sunday" = "Sunday";
+
+// MARK: - Measurement Systems
+"Metric (km, kg, L)" = "Metric (km, kg, L)";
+"US Customary (mi, lb, fl oz)" = "US Customary (mi, lb, fl oz)";
+"Imperial (mi, st, pt)" = "Imperial (mi, st, pt)";
+
+// MARK: - Stats
+"Stats" = "Stats";
+"Completions" = "Completions";
+"Completion %" = "Completion %";
+"Trend" = "Trend";
+"No data for this period" = "No data for this period";
+"Current Streak" = "Current Streak";
+"%d days" = "%d days";
+"Manage Task Completions" = "Manage Task Completions";
+"Manage Completions" = "Manage Completions";
+"Select Dates" = "Select Dates";
+
+// MARK: - Settings
+"General" = "General";
+"Week starts on" = "Week starts on";
+"Language" = "Language";
+"Measurement Units" = "Measurement Units";
+"Units" = "Units";
+"Categories" = "Categories";
+"Built-in" = "Built-in";
+"Add Category" = "Add Category";
+"Delete Category" = "Delete Category";
+"Delete \"%@\"? Tasks in this category will become uncategorized." = "Delete \"%@\"? Tasks in this category will become uncategorized.";
+
+// MARK: - Onboarding
+"Build Streaks.\nForm Habits." = "Build Streaks.\nForm Habits.";
+"Track your daily habits and build streaks of consecutive days to stay motivated." = "Track your daily habits and build streaks of consecutive days to stay motivated.";
+"Get Started" = "Get Started";
+"Skip" = "Skip";
+"Tap & Hold to Complete" = "Tap & Hold to Complete";
+"Press and hold the circle for 2 seconds to mark a habit as done." = "Press and hold the circle for 2 seconds to mark a habit as done.";
+"Your goal is to build a streak of consecutive days" = "Your goal is to build a streak of consecutive days";
+"Continue" = "Continue";
+"Create Your First Habit" = "Create Your First Habit";
+"Choose a preset or create a custom habit to get started." = "Choose a preset or create a custom habit to get started.";
+"Choose a Habit" = "Choose a Habit";
+
+// MARK: - Icon Picker
+"Choose Icon" = "Choose Icon";
+"Search icons" = "Search icons";
+
+// MARK: - Notifications
+"Habit Reminder" = "Habit Reminder";
+"Time to %@!" = "Time to %@!";
+
+// MARK: - Preset Task Names
+"Walk" = "Walk";
+"Run" = "Run";
+"Bike" = "Bike";
+"Push ups" = "Push ups";
+"Pull ups" = "Pull ups";
+"Gym" = "Gym";
+"Swim" = "Swim";
+"Meditate" = "Meditate";
+"Eat a healthy meal" = "Eat a healthy meal";
+"Write journal" = "Write journal";
+"Walk the dog" = "Walk the dog";
+"Take vitamins" = "Take vitamins";
+"Drink water" = "Drink water";
+"Decrease caffeine" = "Decrease caffeine";
+"Decrease calories intake" = "Decrease calories intake";
+"Don't smoke" = "Don't smoke";
+"Don't bite nails" = "Don't bite nails";
+"Time in daylight" = "Time in daylight";
+"Bed time early" = "Bed time early";
+"Wash hands" = "Wash hands";
+"Floss your teeth" = "Floss your teeth";
+"Call parents" = "Call parents";
+"Call a friend" = "Call a friend";
+"Ask a friend out" = "Ask a friend out";
+"Kiss partner" = "Kiss partner";
+"Talk to a stranger" = "Talk to a stranger";
+"Learn a language" = "Learn a language";
+"Read a book" = "Read a book";
+"Play instrument" = "Play instrument";
+
+// MARK: - Preset Categories
+"Health" = "Health";
+"Fitness" = "Fitness";
+"Learning" = "Learning";
+"Social" = "Social";
