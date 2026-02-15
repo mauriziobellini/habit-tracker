@@ -197,3 +197,171 @@ Derived from the functional requirements and user journeys in [prd.md](prd.md).
 - **Given** the task menu is open,
   **When** the user taps outside the menu,
   **Then** the menu closes without any action.
+
+---
+
+### Bug Fixes – Completion Ring Alignment
+
+- **Given** a task circle is shown in the task list,
+  **When** the user taps and holds to complete a task,
+  **Then** the progress ring is visually centered over the task circle, not offset by the title text below.
+
+---
+
+### Bug Fixes – Task Menu Single Tap
+
+- **Given** the user is on the task list,
+  **When** the user performs a single fast tap (not a long press) on a task circle,
+  **Then** the task menu appears with Stats, Edit, and Remove options.
+
+---
+
+### Bug Fixes – First Completion Counted in Stats
+
+- **Given** the user completes a task for the first time today,
+  **When** the user opens the task stats,
+  **Then** the completion is immediately reflected in the completion count and percentage for the current time window.
+
+---
+
+### Bug Fixes – Measurement Units in Task Config
+
+- **Given** the user has set the measurement system to "US Customary" in Settings,
+  **When** the user creates or edits a task and selects a distance goal,
+  **Then** the available unit options are "ft" and "mi" (not "m" and "km").
+
+- **Given** the user changes the measurement system in Settings,
+  **When** the user opens any task configuration,
+  **Then** all goal unit options (distance, weight, capacity) reflect the selected measurement system.
+
+---
+
+### Bug Fixes – Date Picker Defaults
+
+- **Given** the user is on task stats,
+  **When** the user opens the time window date picker,
+  **Then** the picker displays the current month in view, with the last 30 days pre-selected.
+
+---
+
+### Bug Fixes – Date Picker Weekday Headers
+
+- **Given** the user opens any date picker (stats time window or manage completions),
+  **When** the weekday headers are displayed,
+  **Then** all seven day abbreviations are visible (M, Tu, W, Th, F, Sa, Su) without duplicates being merged.
+
+---
+
+### Bug Fixes – Stats Trend Line Week Alignment
+
+- **Given** the user has set the week start day to Monday in Settings,
+  **When** the stats trend line is displayed with weekly buckets,
+  **Then** each weekly data point aligns with Monday as the start of the week.
+
+- **Given** the user has set the week start day to Sunday in Settings,
+  **When** the stats trend line is displayed,
+  **Then** each weekly data point aligns with Sunday as the start of the week.
+
+---
+
+### Bug Fixes – Category Management in Settings
+
+- **Given** the user is on the Settings screen viewing categories,
+  **When** the user swipes left on a custom (non-built-in) category,
+  **Then** both "Delete" and "Rename" options appear.
+
+- **Given** a custom category has tasks assigned to it,
+  **When** the user deletes that category,
+  **Then** a confirmation dialog warns that tasks will become uncategorized, and upon confirmation, linked tasks have no category.
+
+- **Given** a category is a built-in preset,
+  **When** the user views it in Settings,
+  **Then** no delete or rename actions are available.
+
+---
+
+### Bug Fixes – Week Start in Task Config
+
+- **Given** the user has set the week start day to Sunday in Settings,
+  **When** the user opens the task configuration and selects "Specific Days",
+  **Then** the weekday picker starts with Sunday on the left.
+
+---
+
+### Bug Fixes – Add Task Button Background
+
+- **Given** the task list is displayed,
+  **When** the user views the "+" add task button in the toolbar,
+  **Then** there is no visible background halo different from the app background around the button.
+
+---
+
+### Bug Fixes – Empty Categories in Dropdown
+
+- **Given** a category exists but has no tasks assigned,
+  **When** the user opens the category dropdown on the task list,
+  **Then** that empty category is not shown in the dropdown.
+
+---
+
+### Bug Fixes – Measurement Units Picker Label
+
+- **Given** the user opens Settings and views the Measurement Units section,
+  **When** the picker is displayed inline,
+  **Then** the word "Units" does not appear as a non-selectable item in the list.
+
+---
+
+### FR-8: General Stats Section
+
+- **Given** the user is on the task list,
+  **When** the user taps the stats icon in the bottom bar,
+  **Then** a general stats view opens showing aggregated completions, average completion percentage, and a trend chart for all tasks.
+
+- **Given** the general stats view is open,
+  **When** the user selects a specific category from the dropdown,
+  **Then** all displayed stats (completions, percentage, trend chart) are filtered to only include tasks from that category.
+
+- **Given** the general stats view is open with "All" selected,
+  **When** the user opens the time window picker and selects a date range,
+  **Then** the stats update to reflect the selected date range.
+
+---
+
+### FR-9: Goal Quantity Stepper
+
+- **Given** the user is configuring a task with a non-"No Goal" goal type,
+  **When** the goal value input is displayed,
+  **Then** a stepper control is shown instead of a free-text field.
+
+- **Given** the goal type is "Calories",
+  **When** the stepper is displayed,
+  **Then** the minimum value is 10 and each step increments by 10.
+
+- **Given** the goal type is any other type (distance, times, cups, etc.),
+  **When** the stepper is displayed,
+  **Then** the minimum value is 1 and each step increments by 1.
+
+---
+
+### FR-10: "Every Week" Frequency
+
+- **Given** the user is configuring a task's schedule,
+  **When** the user selects "Every Week" as the frequency,
+  **Then** a "Times per week" stepper appears (range 1–7) and no specific-day picker is shown.
+
+---
+
+### FR-11: Onboarding Text
+
+- **Given** the user opens the app for the first time,
+  **When** the onboarding welcome screen is displayed,
+  **Then** the title reads "Small habits, massive change." and the subtitle reads "Track your daily habits and stay motivated."
+
+---
+
+### FR-13: App Icon
+
+- **Given** the app is installed on a device,
+  **When** the user views the home screen,
+  **Then** the app icon shows a blue-to-indigo gradient with a white circular progress ring and checkmark.

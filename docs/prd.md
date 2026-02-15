@@ -83,7 +83,7 @@ Tasks are represented by a round with the icon and task name underneath. When us
 
 
 - **FR-2: Task list**  
-Task list show in a grid of 2 columns each task created by the user. Each task is represented by a circle with icon and title underneath. On top of the task list a drop down list shows the task categories. When user taps on it can quickly filter the categories in the task list. The drop down list also has a “all” element to show all items
+Task list show in a grid of 2 columns each task created by the user. Each task is represented by a circle with icon and title underneath. On top of the task list a drop down list shows the task categories. When user taps on it can quickly filter the categories in the task list. The drop down list also has a "all" element to show all items
 
 On the top right a prominent plus button is shown. When user taps on the plus button then they can add a new task accessing to new task selector
 
@@ -137,8 +137,8 @@ User can always change the preset goal of the preset task in task configurator
 When user creates or edit an existing task they access to its configuration. The configuration allows user to define the following task properties:
 
 Select icon: if tasks is predefined then icon is prefilled. Even if prefilled user can still change it. If task is custom then user can select an icon from a multitude of available icons. If no icon is selected for a custom task then the first 2 initials of the task name are used to be displayed instead of the icon.
-- Title: if task is predefined then it’s prefilled and can be editable
-- Goal: user can select the goal of the task. If it is a preset task the goal is pre defined by the task. If it’s a time based task for example user can selct how much is the duration of the task. Ex 5 min. Or 2 hours. These are the possible goal types: no goal (just completion is the goal), number of times/repetitions (default: one, ex used for push ups), time(hours and min and seconds), number of cups (to drink), calories, distance (km, meters, etc), weight (kg, g, etc.), capacity (liters, millilitres, etc.)
+- Title: if task is predefined then it's prefilled and can be editable
+- Goal: user can select the goal of the task. If it is a preset task the goal is pre defined by the task. If it's a time based task for example user can selct how much is the duration of the task. Ex 5 min. Or 2 hours. These are the possible goal types: no goal (just completion is the goal), number of times/repetitions (default: one, ex used for push ups), time(hours and min and seconds), number of cups (to drink), calories, distance (km, meters, etc), weight (kg, g, etc.), capacity (liters, millilitres, etc.)
 - Frequency and planning: user can select if the task needs to be done daily ( 1 time a day, multiple times a day) or specific days of the week. 
 - User can selct if this task can send a push notification or not. If allowed to send a push notification then a push will be sent according to frequency. User can specify the time of the day to receive the push notification. If the task is completed before the scheduled push time then is not sent
 - User can select the task color 
@@ -190,6 +190,13 @@ In app settings user can configure the following:
 - Measurments units: international system of units, US customary system or imperial system (ex: km vs miles, etc.)
 - Category section: Add, remove or edit task categories
 
+
+**FR-8: General Stats Section**
+In the task list, in the bottom left next to the settings icon, a stats icon appears. When user taps the icon a general stats section appears. The general stats section is similar to the task stats section (FR-4): it includes a time window selector, completion count, average completion percentage, and a trend line chart. The difference is that stats are aggregated across all tasks by default. On top of the view, a task category dropdown list is available (defaulting to "All"). User can filter by task category. When a specific category is selected, all stats refer only to tasks in that category.
+
+
+**FR-9: App Icon**
+The app has a custom icon inspired by the circular shape of the task completion ring. The icon features a gradient blue-to-indigo background with a white progress ring and checkmark, reflecting the habit tracking concept.
 
 ### 5.2 Optional / Nice-to-Have
 - 
@@ -315,4 +322,3 @@ See [acceptance-criteria.md](acceptance-criteria.md) for the full Given/When/The
 
 ## 15. Appendix
 Links, references, diagrams, research, etc.
-

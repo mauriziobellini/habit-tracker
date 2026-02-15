@@ -38,6 +38,8 @@
 		EDD200C451CDE27EB45ECFB8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 138C611BFA4D4ACC1F3C36CB /* Localizable.strings */; };
 		F23263948587519EB627F317 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE8528969D8819227990018 /* OnboardingView.swift */; };
 		F3423CF38E297CCABF912DEA /* HabitTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6BFFF12E7DB747A20A8D03 /* HabitTask.swift */; };
+		AA1B2C3D4E5F6A7B8C9D0E1F /* GeneralStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2C3D4E5F6A7B8C9D0E1FA2 /* GeneralStatsView.swift */; };
+		CC3D4E5F6A7B8C9D0E1F2A3B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DD4E5F6A7B8C9D0E1F2A3B4C /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -92,6 +94,8 @@
 		F4C0E2AD31A3D8C1D8DBDE9C /* ColorPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
 		FA2B740D6EC85B6E9989605C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		FCFA7262F739D0FAED7FD0F2 /* TaskConfigurationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskConfigurationViewModel.swift; sourceTree = "<group>"; };
+		BB2C3D4E5F6A7B8C9D0E1FA2 /* GeneralStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralStatsView.swift; sourceTree = "<group>"; };
+		DD4E5F6A7B8C9D0E1F2A3B4C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -154,6 +158,7 @@
 		9C9D0BF25D7DE56F117F6DA2 /* HabitTracker */ = {
 			isa = PBXGroup;
 			children = (
+				DD4E5F6A7B8C9D0E1F2A3B4C /* Assets.xcassets */,
 				2CEDC5272953824332C89E86 /* Models */,
 				352DB91DF7592F1B4DD73E96 /* Resources */,
 				C31E65DCE16EF06192345FA0 /* Services */,
@@ -201,6 +206,7 @@
 				851B74AA932C567FAF6F1A28 /* AppSettingsView.swift */,
 				A01D3B2F0CE1E28873802DF5 /* CompletionRingView.swift */,
 				F24414004E5E02018196388D /* ContentView.swift */,
+				BB2C3D4E5F6A7B8C9D0E1FA2 /* GeneralStatsView.swift */,
 				B705C0BE80977C6E0153F2A4 /* IconPickerView.swift */,
 				BB249180B1715966263AFEAB /* ManageCompletionsView.swift */,
 				85D78856B1AA5B60B94314CC /* NewTaskSelectorView.swift */,
@@ -313,6 +319,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EDD200C451CDE27EB45ECFB8 /* Localizable.strings in Resources */,
+				CC3D4E5F6A7B8C9D0E1F2A3B /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -359,6 +366,7 @@
 				2915E12FA3CD194AD57283E3 /* TaskStatsView.swift in Sources */,
 				59C7101B2C6D84858D21B1ED /* TaskStatsViewModel.swift in Sources */,
 				1C3FA772AAEB7BDE83875473 /* TimeWindowSelectorView.swift in Sources */,
+				AA1B2C3D4E5F6A7B8C9D0E1F /* GeneralStatsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
