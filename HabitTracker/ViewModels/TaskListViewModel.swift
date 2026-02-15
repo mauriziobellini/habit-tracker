@@ -7,10 +7,13 @@ final class TaskListViewModel {
     var selectedCategoryID: UUID?
     var showingTaskSelector = false
     var showingSettings = false
+    var showingGeneralStats = false
     var taskToEdit: HabitTask?
     var taskForStats: HabitTask?
     var taskToDelete: HabitTask?
     var showDeleteConfirmation = false
+    var taskForMenu: HabitTask?
+    var showingTaskMenu = false
 
     /// Filter tasks by the selected category. `nil` means "All".
     func filteredTasks(_ tasks: [HabitTask]) -> [HabitTask] {

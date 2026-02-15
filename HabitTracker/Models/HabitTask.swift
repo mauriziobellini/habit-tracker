@@ -89,6 +89,8 @@ extension HabitTask {
             return true
         case .specificDays:
             return scheduledDays.contains(weekday)
+        case .everyWeek:
+            return true // scheduled every day; completion tracked per week
         }
     }
 

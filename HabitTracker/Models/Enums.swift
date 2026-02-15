@@ -47,23 +47,48 @@ enum GoalType: String, Codable, CaseIterable, Identifiable {
         }
     }
 
-    /// Default unit options for this goal type.
+    /// Default unit options for this goal type (system-agnostic fallback).
     var defaultUnits: [String] {
+        units(for: .metric)
+    }
+
+    /// Unit options for this goal type according to the selected measurement system.
+    func units(for system: MeasurementSystem) -> [String] {
         switch self {
         case .none:        return []
         case .repetitions: return ["times"]
         case .time:        return ["sec", "min", "hr"]
         case .cups:        return ["cups"]
         case .calories:    return ["kcal"]
-        case .distance:    return ["m", "km", "mi"]
-        case .weight:      return ["g", "kg", "lb"]
-        case .capacity:    return ["mL", "L"]
+        case .distance:
+            switch system {
+            case .metric:   return ["m", "km"]
+            case .us:       return ["ft", "mi"]
+            case .imperial: return ["ft", "mi"]
+            }
+        case .weight:
+            switch system {
+            case .metric:   return ["g", "kg"]
+            case .us:       return ["oz", "lb"]
+            case .imperial: return ["oz", "st", "lb"]
+            }
+        case .capacity:
+            switch system {
+            case .metric:   return ["mL", "L"]
+            case .us:       return ["fl oz", "gal"]
+            case .imperial: return ["fl oz", "pt"]
+            }
         }
     }
 
     /// The primary default unit for this goal type.
     var primaryUnit: String? {
         defaultUnits.first
+    }
+
+    /// The primary unit for a given measurement system.
+    func primaryUnit(for system: MeasurementSystem) -> String? {
+        units(for: system).first
     }
 }
 
@@ -73,6 +98,7 @@ enum GoalType: String, Codable, CaseIterable, Identifiable {
 enum FrequencyType: String, Codable, CaseIterable, Identifiable {
     case daily        = "daily"
     case specificDays = "specificDays"
+    case everyWeek    = "everyWeek"
 
     var id: String { rawValue }
 
@@ -80,6 +106,7 @@ enum FrequencyType: String, Codable, CaseIterable, Identifiable {
         switch self {
         case .daily:        return String(localized: "Every Day")
         case .specificDays: return String(localized: "Specific Days")
+        case .everyWeek:    return String(localized: "Every Week")
         }
     }
 }

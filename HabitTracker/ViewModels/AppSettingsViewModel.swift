@@ -10,6 +10,8 @@ final class AppSettingsViewModel {
     var newCategoryName = ""
     var categoryToDelete: Category? = nil
     var showDeleteCategoryConfirmation = false
+    var categoryToRename: Category? = nil
+    var renameCategoryName = ""
 
     @MainActor
     func load(from context: ModelContext) {
@@ -43,7 +45,30 @@ final class AppSettingsViewModel {
     @MainActor
     func deleteCategory(context: ModelContext) {
         guard let category = categoryToDelete else { return }
+        // Unlink tasks from this category before deleting
+        for task in category.tasks {
+            task.category = nil
+        }
         context.delete(category)
         categoryToDelete = nil
+    }
+
+    func startRenaming(_ category: Category) {
+        categoryToRename = category
+        renameCategoryName = category.name
+    }
+
+    @MainActor
+    func saveRename() {
+        let trimmed = renameCategoryName.trimmingCharacters(in: .whitespaces)
+        guard !trimmed.isEmpty, let category = categoryToRename else { return }
+        category.name = trimmed
+        categoryToRename = nil
+        renameCategoryName = ""
+    }
+
+    func cancelRename() {
+        categoryToRename = nil
+        renameCategoryName = ""
     }
 }

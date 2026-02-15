@@ -38,6 +38,8 @@ final class NotificationService {
             weekdays = Array(1...7)
         case .specificDays:
             weekdays = task.scheduledDays
+        case .everyWeek:
+            weekdays = Array(1...7)
         }
 
         for isoWeekday in weekdays {
