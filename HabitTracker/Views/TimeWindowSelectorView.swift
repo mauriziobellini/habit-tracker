@@ -7,8 +7,8 @@ struct TimeWindowSelectorView: View {
 
     var onSelect: (Date, Date) -> Void
 
-    @State private var startDate: Date? = nil
-    @State private var endDate: Date? = nil
+    @State private var startDate: Date? = Calendar.current.date(byAdding: .day, value: -30, to: Calendar.current.startOfDay(for: .now))
+    @State private var endDate: Date? = Calendar.current.startOfDay(for: .now)
     @State private var referenceDate = Date.now
 
     /// Range of months to display (24 months back, 2 forward).
@@ -37,12 +37,16 @@ struct TimeWindowSelectorView: View {
                     .padding(16)
                 }
                 .onAppear {
-                    // Scroll to current month
-                    let calendar = Calendar.current
-                    let currentMonth = calendar.date(
-                        from: calendar.dateComponents([.year, .month], from: Date.now)
-                    )!
-                    proxy.scrollTo(currentMonth, anchor: .center)
+                    // Scroll to current month with slight delay for LazyVStack layout
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+                        let calendar = Calendar.current
+                        let currentMonth = calendar.date(
+                            from: calendar.dateComponents([.year, .month], from: Date.now)
+                        )!
+                        withAnimation {
+                            proxy.scrollTo(currentMonth, anchor: .center)
+                        }
+                    }
                 }
             }
             .navigationTitle("Select Dates")
@@ -86,7 +90,7 @@ struct TimeWindowSelectorView: View {
 
             // Weekday headers
             LazyVGrid(columns: columns, spacing: 4) {
-                ForEach(["M", "T", "W", "T", "F", "S", "S"], id: \.self) { day in
+                ForEach(Array(["M", "Tu", "W", "Th", "F", "Sa", "Su"].enumerated()), id: \.offset) { _, day in
                     Text(day)
                         .font(.caption2.weight(.medium))
                         .foregroundStyle(.secondary)

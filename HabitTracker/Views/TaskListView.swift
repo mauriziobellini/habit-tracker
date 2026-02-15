@@ -32,11 +32,12 @@ struct TaskListView: View {
                     taskGridView
                 }
 
-                // Settings gear — bottom left
+                // Bottom bar — settings (left), stats (right of settings)
                 VStack {
                     Spacer()
                     HStack {
                         settingsButton
+                        generalStatsButton
                         Spacer()
                     }
                     .padding(.horizontal, 16)
@@ -78,6 +79,31 @@ struct TaskListView: View {
                     Text("Are you sure you want to delete \"\(task.title)\"? This action cannot be undone.")
                 }
             }
+            .confirmationDialog(
+                viewModel.taskForMenu?.title ?? "Task",
+                isPresented: $viewModel.showingTaskMenu,
+                titleVisibility: .visible
+            ) {
+                Button("Stats") {
+                    if let task = viewModel.taskForMenu {
+                        viewModel.taskForStats = task
+                    }
+                }
+                Button("Edit") {
+                    if let task = viewModel.taskForMenu {
+                        viewModel.taskToEdit = task
+                    }
+                }
+                Button("Remove", role: .destructive) {
+                    if let task = viewModel.taskForMenu {
+                        viewModel.confirmDelete(task)
+                    }
+                }
+                Button("Cancel", role: .cancel) {}
+            }
+            .sheet(isPresented: $viewModel.showingGeneralStats) {
+                GeneralStatsView()
+            }
         }
     }
 
@@ -93,7 +119,7 @@ struct TaskListView: View {
 
             Divider()
 
-            ForEach(categories) { category in
+            ForEach(categories.filter { !$0.tasks.isEmpty }) { category in
                 Button {
                     viewModel.selectedCategoryID = category.id
                 } label: {
@@ -131,6 +157,7 @@ struct TaskListView: View {
                 .frame(width: 36, height: 36)
                 .background(Circle().fill(Color.accentColor))
         }
+        .buttonStyle(.plain)
         .accessibilityLabel(String(localized: "Add new habit"))
         .accessibilityIdentifier("addTaskButton")
     }
@@ -147,6 +174,20 @@ struct TaskListView: View {
         }
         .accessibilityLabel(String(localized: "Settings"))
         .accessibilityIdentifier("settingsButton")
+    }
+
+    // MARK: - General Stats Button
+
+    private var generalStatsButton: some View {
+        Button {
+            viewModel.showingGeneralStats = true
+        } label: {
+            Image(systemName: "chart.bar.fill")
+                .font(.title3)
+                .foregroundStyle(.secondary)
+        }
+        .accessibilityLabel(String(localized: "General Stats"))
+        .accessibilityIdentifier("generalStatsButton")
     }
 
     // MARK: - Task Grid
@@ -172,31 +213,13 @@ struct TaskListView: View {
             isCompleted: isCompleted,
             circleSize: 80,
             onSingleTap: {
-                // Single tap → no-op here; context menu handles it
+                viewModel.taskForMenu = task
+                viewModel.showingTaskMenu = true
             },
             onCompleted: {
                 recordCompletion(for: task)
             }
         )
-        .contextMenu {
-            Button {
-                viewModel.taskForStats = task
-            } label: {
-                Label("Stats", systemImage: "chart.line.uptrend.xyaxis")
-            }
-
-            Button {
-                viewModel.taskToEdit = task
-            } label: {
-                Label("Edit", systemImage: "pencil")
-            }
-
-            Button(role: .destructive) {
-                viewModel.confirmDelete(task)
-            } label: {
-                Label("Remove", systemImage: "trash")
-            }
-        }
     }
 
     private func recordCompletion(for task: HabitTask) {
@@ -239,4 +262,3 @@ struct TaskListView: View {
         .padding(32)
     }
 }
-

@@ -4,6 +4,7 @@ import Charts
 /// Task stats view (FR-4): shows completion count, percentage, trend chart.
 struct TaskStatsView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
     @State var viewModel: TaskStatsViewModel
 
     private var accentColor: Color {
@@ -52,6 +53,9 @@ struct TaskStatsView: View {
             }
             .sheet(isPresented: $viewModel.showingManageCompletions) {
                 ManageCompletionsView(task: viewModel.task)
+            }
+            .onAppear {
+                viewModel.loadSettings(from: modelContext)
             }
         }
     }

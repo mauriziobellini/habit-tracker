@@ -6,9 +6,18 @@ struct TaskConfigurationView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @Query(sort: \Category.sortOrder) private var categories: [Category]
+    @Query private var allSettings: [AppSettings]
 
     @Bindable var viewModel: TaskConfigurationViewModel
     var onSave: (() -> Void)? = nil
+
+    private var measurementSystem: MeasurementSystem {
+        allSettings.first?.measurementSystem ?? .metric
+    }
+
+    private var weekStartDay: Int {
+        allSettings.first?.weekStartDay ?? 1
+    }
 
     var body: some View {
         Form {
@@ -117,14 +126,26 @@ struct TaskConfigurationView: View {
             }
 
             if viewModel.goalType != .none {
+                let systemUnits = viewModel.goalType.units(for: measurementSystem)
                 HStack {
-                    TextField("Target", text: $viewModel.goalValueString)
-                        .keyboardType(.decimalPad)
+                    // Stepper for goal value
+                    let step: Double = viewModel.goalType == .calories ? 10 : 1
+                    let minVal: Double = viewModel.goalType == .calories ? 10 : 1
+                    Stepper(
+                        value: Binding(
+                            get: { viewModel.goalValue ?? minVal },
+                            set: { viewModel.goalValue = $0 }
+                        ),
+                        in: minVal...99999,
+                        step: step
+                    ) {
+                        Text("\(Int(viewModel.goalValue ?? minVal))")
+                            .font(.headline)
+                    }
 
-                    if let units = viewModel.goalType.defaultUnits as [String]?,
-                       !units.isEmpty {
+                    if !systemUnits.isEmpty {
                         Picker("Unit", selection: unitBinding) {
-                            ForEach(units, id: \.self) { unit in
+                            ForEach(systemUnits, id: \.self) { unit in
                                 Text(unit).tag(unit)
                             }
                         }
@@ -168,14 +189,28 @@ struct TaskConfigurationView: View {
             if viewModel.frequencyType == .specificDays {
                 weekdayPicker
             }
+
+            if viewModel.frequencyType == .everyWeek {
+                Stepper("Times per week: \(viewModel.timesPerDay)",
+                        value: $viewModel.timesPerDay, in: 1...7)
+            }
         } header: {
             Text("Schedule")
         }
     }
 
+    /// Ordered weekdays starting from the user's configured week start day.
+    private var orderedWeekdays: [Weekday] {
+        let all = Weekday.allCases
+        guard let startIndex = all.firstIndex(where: { $0.rawValue == weekStartDay }) else {
+            return Array(all)
+        }
+        return Array(all[startIndex...]) + Array(all[..<startIndex])
+    }
+
     private var weekdayPicker: some View {
         HStack(spacing: 8) {
-            ForEach(Weekday.allCases) { day in
+            ForEach(orderedWeekdays) { day in
                 let isSelected = viewModel.scheduledDays.contains(day.rawValue)
                 Button {
                     if isSelected {
@@ -184,7 +219,7 @@ struct TaskConfigurationView: View {
                         viewModel.scheduledDays.insert(day.rawValue)
                     }
                 } label: {
-                    Text(String(day.shortName.prefix(1)))
+                    Text(String(day.shortName.prefix(2)))
                         .font(.caption.weight(.semibold))
                         .frame(width: 32, height: 32)
                         .background(
