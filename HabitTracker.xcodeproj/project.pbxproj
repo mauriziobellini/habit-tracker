@@ -37,6 +37,7 @@
 		EAF1BE4C4BB5649483885136 /* IconPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B705C0BE80977C6E0153F2A4 /* IconPickerView.swift */; };
 		EDD200C451CDE27EB45ECFB8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 138C611BFA4D4ACC1F3C36CB /* Localizable.strings */; };
 		F23263948587519EB627F317 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE8528969D8819227990018 /* OnboardingView.swift */; };
+		AB12CD34EF5678901234AB56 /* RewardCelebrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD34EF5678901234AB5678CD /* RewardCelebrationView.swift */; };
 		F3423CF38E297CCABF912DEA /* HabitTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6BFFF12E7DB747A20A8D03 /* HabitTask.swift */; };
 		AA1B2C3D4E5F6A7B8C9D0E1F /* GeneralStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2C3D4E5F6A7B8C9D0E1FA2 /* GeneralStatsView.swift */; };
 		CC3D4E5F6A7B8C9D0E1F2A3B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DD4E5F6A7B8C9D0E1F2A3B4C /* Assets.xcassets */; };
@@ -95,6 +96,7 @@
 		FA2B740D6EC85B6E9989605C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		FCFA7262F739D0FAED7FD0F2 /* TaskConfigurationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskConfigurationViewModel.swift; sourceTree = "<group>"; };
 		BB2C3D4E5F6A7B8C9D0E1FA2 /* GeneralStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralStatsView.swift; sourceTree = "<group>"; };
+		CD34EF5678901234AB5678CD /* RewardCelebrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardCelebrationView.swift; sourceTree = "<group>"; };
 		DD4E5F6A7B8C9D0E1F2A3B4C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -211,6 +213,7 @@
 				BB249180B1715966263AFEAB /* ManageCompletionsView.swift */,
 				85D78856B1AA5B60B94314CC /* NewTaskSelectorView.swift */,
 				2AE8528969D8819227990018 /* OnboardingView.swift */,
+				CD34EF5678901234AB5678CD /* RewardCelebrationView.swift */,
 				1D8BB79D76463C3FC92070D0 /* TapAndHoldTaskView.swift */,
 				28C8A86B481D189412D02753 /* TaskCircleView.swift */,
 				770BA6BADD427DA34662E4D1 /* TaskConfigurationView.swift */,
@@ -354,6 +357,7 @@
 				80D5834BBA338DE8B5FE9151 /* NotificationService.swift in Sources */,
 				F23263948587519EB627F317 /* OnboardingView.swift in Sources */,
 				E6B30D35E25C9AE7E69955C6 /* PresetTaskCatalog.swift in Sources */,
+				AB12CD34EF5678901234AB56 /* RewardCelebrationView.swift in Sources */,
 				438540AAEBDEB376E5BD0559 /* SeedDataService.swift in Sources */,
 				1B2BAE892F57DDB2AE6EA908 /* StatisticsService.swift in Sources */,
 				4D89E16428D785D55CA8CEBA /* TapAndHoldTaskView.swift in Sources */,

@@ -20,6 +20,9 @@ struct AppSettingsView: View {
 
                 // MARK: Categories
                 categorySection
+
+                // MARK: Support
+                supportSection
             }
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)
@@ -33,6 +36,23 @@ struct AppSettingsView: View {
             }
             .onAppear {
                 viewModel.load(from: modelContext)
+            }
+            .alert("Email Copied", isPresented: $viewModel.showEmailCopiedAlert) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text("Support email copied to clipboard. Send your message to habit-tracker@fooshi.co")
+            }
+            .alert("Rename Category", isPresented: $viewModel.showRenameCategoryAlert) {
+                TextField("Category name", text: $viewModel.renameCategoryName)
+                Button("Cancel", role: .cancel) {
+                    viewModel.cancelRename()
+                }
+                Button("Save") {
+                    viewModel.saveRename()
+                }
+                .disabled(viewModel.renameCategoryName.trimmingCharacters(in: .whitespaces).isEmpty)
+            } message: {
+                Text("Enter a new name for the category")
             }
             .alert("Delete Category", isPresented: $viewModel.showDeleteCategoryConfirmation) {
                 Button("Cancel", role: .cancel) {}
@@ -61,12 +81,12 @@ struct AppSettingsView: View {
                 Text("Sunday").tag(7)
             }
 
-            Button("Language") {
-                // Open iOS Settings for language
-                if let url = URL(string: UIApplication.openSettingsURLString) {
-                    UIApplication.shared.open(url)
-                }
-            }
+            // TODO: Re-enable when localization is implemented (see issue #10)
+            // Button("Language") {
+            //     if let url = URL(string: UIApplication.openSettingsURLString) {
+            //         UIApplication.shared.open(url)
+            //     }
+            // }
         } header: {
             Text("General")
         }
@@ -93,33 +113,8 @@ struct AppSettingsView: View {
     private var categorySection: some View {
         Section {
             ForEach(categories) { category in
-                if viewModel.categoryToRename?.id == category.id {
-                    // Inline rename editor
-                    HStack {
-                        TextField("Category name", text: $viewModel.renameCategoryName)
-                        Button("Save") {
-                            viewModel.saveRename()
-                        }
-                        .disabled(viewModel.renameCategoryName.trimmingCharacters(in: .whitespaces).isEmpty)
-                        Button("Cancel") {
-                            viewModel.cancelRename()
-                        }
-                        .foregroundStyle(.secondary)
-                    }
-                } else {
-                    HStack {
-                        Text(category.name)
-                            .foregroundStyle(.primary)
-
-                        Spacer()
-
-                        if category.isPreset {
-                            Text("Built-in")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
-                    }
-                    .swipeActions(edge: .trailing) {
+                categoryRow(category)
+                    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                         if !category.isPreset {
                             Button(role: .destructive) {
                                 viewModel.confirmDeleteCategory(category)
@@ -135,7 +130,21 @@ struct AppSettingsView: View {
                             .tint(.blue)
                         }
                     }
-                }
+                    .contextMenu {
+                        if !category.isPreset {
+                            Button {
+                                viewModel.startRenaming(category)
+                            } label: {
+                                Label("Rename", systemImage: "pencil")
+                            }
+
+                            Button(role: .destructive) {
+                                viewModel.confirmDeleteCategory(category)
+                            } label: {
+                                Label("Delete", systemImage: "trash")
+                            }
+                        }
+                    }
             }
 
             if viewModel.showingNewCategory {
@@ -153,6 +162,52 @@ struct AppSettingsView: View {
             }
         } header: {
             Text("Categories")
+        }
+    }
+
+    private func categoryRow(_ category: Category) -> some View {
+        HStack {
+            Text(category.name)
+                .foregroundStyle(.primary)
+
+            Spacer()
+
+            if category.isPreset {
+                Text("Built-in")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+        }
+    }
+
+    // MARK: - Support Section
+
+    private var supportSection: some View {
+        Section {
+            Button {
+                let email = "habit-tracker@fooshi.co"
+                if let url = URL(string: "mailto:\(email)"),
+                   UIApplication.shared.canOpenURL(url) {
+                    UIApplication.shared.open(url)
+                } else {
+                    UIPasteboard.general.string = email
+                    viewModel.showEmailCopiedAlert = true
+                }
+            } label: {
+                HStack {
+                    Image(systemName: "envelope.fill")
+                        .foregroundStyle(.secondary)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Contact Support")
+                            .foregroundStyle(.primary)
+                        Text("habit-tracker@fooshi.co")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+        } header: {
+            Text("Support")
         }
     }
 }

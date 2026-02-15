@@ -22,6 +22,11 @@ final class HabitTask {
     var createdAt: Date
     var updatedAt: Date
 
+    // Reward configuration
+    var rewardEnabled: Bool
+    var rewardStreakCount: Int
+    var rewardText: String?
+
     var category: Category?
 
     @Relationship(deleteRule: .cascade, inverse: \TaskCompletion.task)
@@ -44,6 +49,9 @@ final class HabitTask {
         notificationTime: Date? = nil,
         colorToken: String = "blue",
         sortOrder: Int = 0,
+        rewardEnabled: Bool = false,
+        rewardStreakCount: Int = 2,
+        rewardText: String? = nil,
         category: Category? = nil,
         createdAt: Date = .now,
         updatedAt: Date = .now
@@ -64,6 +72,9 @@ final class HabitTask {
         self.notificationTime = notificationTime
         self.colorToken = colorToken
         self.sortOrder = sortOrder
+        self.rewardEnabled = rewardEnabled
+        self.rewardStreakCount = rewardStreakCount
+        self.rewardText = rewardText
         self.category = category
         self.createdAt = createdAt
         self.updatedAt = updatedAt

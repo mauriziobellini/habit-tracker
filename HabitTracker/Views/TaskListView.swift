@@ -104,6 +104,18 @@ struct TaskListView: View {
             .sheet(isPresented: $viewModel.showingGeneralStats) {
                 GeneralStatsView()
             }
+            .overlay {
+                if viewModel.showingRewardCelebration {
+                    RewardCelebrationView(
+                        rewardText: viewModel.rewardCelebrationText
+                    ) {
+                        viewModel.showingRewardCelebration = false
+                    }
+                    .transition(.opacity)
+                    .zIndex(100)
+                }
+            }
+            .animation(.easeInOut(duration: 0.3), value: viewModel.showingRewardCelebration)
         }
     }
 
@@ -155,9 +167,14 @@ struct TaskListView: View {
                 .font(.title3.weight(.semibold))
                 .foregroundStyle(.white)
                 .frame(width: 36, height: 36)
-                .background(Circle().fill(Color.accentColor))
+                .background(
+                    Circle().fill(Color.accentColor)
+                )
+                .clipShape(Circle())
+                .contentShape(Circle())
         }
         .buttonStyle(.plain)
+        .background(Color.clear)
         .accessibilityLabel(String(localized: "Add new habit"))
         .accessibilityIdentifier("addTaskButton")
     }
@@ -228,6 +245,14 @@ struct TaskListView: View {
         // Suppress today's notification if task completed early
         if task.notificationEnabled {
             NotificationService.shared.suppressTodayNotification(for: task)
+        }
+        // Check if this completion triggers a reward
+        if task.rewardEnabled, let rewardText = task.rewardText, !rewardText.isEmpty {
+            let streak = task.currentStreak()
+            if streak > 0 && streak % task.rewardStreakCount == 0 {
+                viewModel.rewardCelebrationText = rewardText
+                viewModel.showingRewardCelebration = true
+            }
         }
     }
 

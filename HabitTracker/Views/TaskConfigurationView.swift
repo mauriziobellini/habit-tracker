@@ -36,6 +36,9 @@ struct TaskConfigurationView: View {
             // MARK: Appearance
             appearanceSection
 
+            // MARK: Reward
+            rewardSection
+
             // MARK: Category
             categorySection
         }
@@ -283,6 +286,23 @@ struct TaskConfigurationView: View {
             .padding(.vertical, 4)
         } header: {
             Text("Appearance")
+        }
+    }
+
+    // MARK: - Reward Section
+
+    private var rewardSection: some View {
+        Section {
+            Toggle("Enable Reward", isOn: $viewModel.rewardEnabled)
+
+            if viewModel.rewardEnabled {
+                Stepper("Streak to earn: \(viewModel.rewardStreakCount)",
+                        value: $viewModel.rewardStreakCount, in: 2...365)
+
+                TextField("Reward description", text: $viewModel.rewardText)
+            }
+        } header: {
+            Text("Reward")
         }
     }
 

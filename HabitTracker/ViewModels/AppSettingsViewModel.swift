@@ -12,6 +12,8 @@ final class AppSettingsViewModel {
     var showDeleteCategoryConfirmation = false
     var categoryToRename: Category? = nil
     var renameCategoryName = ""
+    var showRenameCategoryAlert = false
+    var showEmailCopiedAlert = false
 
     @MainActor
     func load(from context: ModelContext) {
@@ -56,6 +58,7 @@ final class AppSettingsViewModel {
     func startRenaming(_ category: Category) {
         categoryToRename = category
         renameCategoryName = category.name
+        showRenameCategoryAlert = true
     }
 
     @MainActor

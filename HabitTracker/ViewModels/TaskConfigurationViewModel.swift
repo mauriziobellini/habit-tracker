@@ -34,6 +34,11 @@ final class TaskConfigurationViewModel {
     var showingNewCategoryField: Bool = false
     var showingIconPicker: Bool = false
 
+    // Reward
+    var rewardEnabled: Bool = false
+    var rewardStreakCount: Int = 2
+    var rewardText: String = ""
+
     var presetIdentifier: String? = nil
     var isPreset: Bool = false
 
@@ -61,6 +66,9 @@ final class TaskConfigurationViewModel {
             ) ?? .now
             colorToken = task.colorToken
             selectedCategoryID = task.category?.id
+            rewardEnabled = task.rewardEnabled
+            rewardStreakCount = task.rewardStreakCount
+            rewardText = task.rewardText ?? ""
             presetIdentifier = task.presetIdentifier
             isPreset = task.isPreset
         }
@@ -125,6 +133,9 @@ final class TaskConfigurationViewModel {
                 notificationEnabled: notificationEnabled,
                 notificationTime: notificationEnabled ? notificationTime : nil,
                 colorToken: colorToken,
+                rewardEnabled: rewardEnabled,
+                rewardStreakCount: rewardStreakCount,
+                rewardText: rewardEnabled ? (rewardText.trimmingCharacters(in: .whitespaces).isEmpty ? nil : rewardText.trimmingCharacters(in: .whitespaces)) : nil,
                 category: categories.first { $0.id == selectedCategoryID }
             )
             context.insert(task)
@@ -151,6 +162,9 @@ final class TaskConfigurationViewModel {
             task.notificationEnabled = notificationEnabled
             task.notificationTime = notificationEnabled ? notificationTime : nil
             task.colorToken = colorToken
+            task.rewardEnabled = rewardEnabled
+            task.rewardStreakCount = rewardStreakCount
+            task.rewardText = rewardEnabled ? (rewardText.trimmingCharacters(in: .whitespaces).isEmpty ? nil : rewardText.trimmingCharacters(in: .whitespaces)) : nil
             task.category = categories.first { $0.id == selectedCategoryID }
             task.updatedAt = .now
             // Reschedule notifications on edit

@@ -150,6 +150,26 @@ struct TaskStatsView: View {
 
     // MARK: - Trend Chart
 
+    /// Compute explicit x-axis date values from trend data so the last value
+    /// is always visible and dates match the configured week start day.
+    private var chartXAxisDates: [Date] {
+        let data = viewModel.trendData
+        guard !data.isEmpty else { return [] }
+        if data.count <= 5 {
+            return data.map(\.date)
+        }
+        // Show ~5 evenly spaced labels, always including first and last
+        var dates: [Date] = []
+        let step = max(1, (data.count - 1) / 4)
+        for i in stride(from: 0, to: data.count, by: step) {
+            dates.append(data[i].date)
+        }
+        if let last = data.last?.date, dates.last != last {
+            dates.append(last)
+        }
+        return dates
+    }
+
     private var trendChart: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Trend")
@@ -184,7 +204,7 @@ struct TaskStatsView: View {
                     .foregroundStyle(accentColor)
                 }
                 .chartXAxis {
-                    AxisMarks(values: .automatic) { _ in
+                    AxisMarks(values: chartXAxisDates) { _ in
                         AxisGridLine()
                         AxisValueLabel(format: .dateTime.month(.abbreviated).day())
                     }

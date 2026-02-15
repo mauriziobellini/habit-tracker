@@ -15,6 +15,10 @@ final class TaskListViewModel {
     var taskForMenu: HabitTask?
     var showingTaskMenu = false
 
+    // Reward celebration
+    var showingRewardCelebration = false
+    var rewardCelebrationText = ""
+
     /// Filter tasks by the selected category. `nil` means "All".
     func filteredTasks(_ tasks: [HabitTask]) -> [HabitTask] {
         guard let categoryID = selectedCategoryID else {
