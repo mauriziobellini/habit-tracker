@@ -32,7 +32,7 @@ struct TaskListView: View {
                     taskGridView
                 }
 
-                // Bottom bar — settings (left), stats (right of settings)
+                // Bottom bar \u{2014} settings (left), stats (right of settings)
                 VStack {
                     Spacer()
                     HStack {
