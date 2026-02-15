@@ -41,7 +41,11 @@ struct AppSettingsView: View {
                 }
             } message: {
                 if let cat = viewModel.categoryToDelete {
-                    Text("Delete \"\(cat.name)\"? Tasks in this category will become uncategorized.")
+                    if cat.tasks.isEmpty {
+                        Text("Delete \"\(cat.name)\"?")
+                    } else {
+                        Text("Delete \"\(cat.name)\"? \(cat.tasks.count) task(s) are assigned to this category and will become uncategorized.")
+                    }
                 }
             }
         }
@@ -78,6 +82,7 @@ struct AppSettingsView: View {
                 }
             }
             .pickerStyle(.inline)
+            .labelsHidden()
         } header: {
             Text("Measurement Units")
         }
@@ -88,24 +93,46 @@ struct AppSettingsView: View {
     private var categorySection: some View {
         Section {
             ForEach(categories) { category in
-                HStack {
-                    Text(category.name)
-                        .foregroundStyle(.primary)
-
-                    Spacer()
-
-                    if category.isPreset {
-                        Text("Built-in")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+                if viewModel.categoryToRename?.id == category.id {
+                    // Inline rename editor
+                    HStack {
+                        TextField("Category name", text: $viewModel.renameCategoryName)
+                        Button("Save") {
+                            viewModel.saveRename()
+                        }
+                        .disabled(viewModel.renameCategoryName.trimmingCharacters(in: .whitespaces).isEmpty)
+                        Button("Cancel") {
+                            viewModel.cancelRename()
+                        }
+                        .foregroundStyle(.secondary)
                     }
-                }
-                .swipeActions(edge: .trailing) {
-                    if !category.isPreset {
-                        Button(role: .destructive) {
-                            viewModel.confirmDeleteCategory(category)
-                        } label: {
-                            Label("Delete", systemImage: "trash")
+                } else {
+                    HStack {
+                        Text(category.name)
+                            .foregroundStyle(.primary)
+
+                        Spacer()
+
+                        if category.isPreset {
+                            Text("Built-in")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    .swipeActions(edge: .trailing) {
+                        if !category.isPreset {
+                            Button(role: .destructive) {
+                                viewModel.confirmDeleteCategory(category)
+                            } label: {
+                                Label("Delete", systemImage: "trash")
+                            }
+
+                            Button {
+                                viewModel.startRenaming(category)
+                            } label: {
+                                Label("Rename", systemImage: "pencil")
+                            }
+                            .tint(.blue)
                         }
                     }
                 }

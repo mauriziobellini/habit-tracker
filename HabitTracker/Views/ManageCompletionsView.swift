@@ -74,7 +74,7 @@ struct ManageCompletionsView: View {
     private var weekdayHeaders: some View {
         let columns = Array(repeating: GridItem(.flexible(), spacing: 4), count: 7)
         return LazyVGrid(columns: columns, spacing: 4) {
-            ForEach(["M", "T", "W", "T", "F", "S", "S"], id: \.self) { day in
+            ForEach(Array(["M", "Tu", "W", "Th", "F", "Sa", "Su"].enumerated()), id: \.offset) { _, day in
                 Text(day)
                     .font(.caption2.weight(.medium))
                     .foregroundStyle(.secondary)

@@ -70,6 +70,7 @@ enum StatisticsService {
         for task: HabitTask,
         from startDate: Date,
         to endDate: Date,
+        weekStartDay: Int = 1,
         calendar: Calendar = .current
     ) -> [TrendPoint] {
         let days = calendar.dateComponents([.day], from: startDate, to: endDate).day ?? 0
@@ -78,8 +79,51 @@ enum StatisticsService {
         if useMonthly {
             return monthlyTrend(for: task, from: startDate, to: endDate, calendar: calendar)
         } else {
-            return weeklyTrend(for: task, from: startDate, to: endDate, calendar: calendar)
+            return weeklyTrend(for: task, from: startDate, to: endDate, weekStartDay: weekStartDay, calendar: calendar)
         }
+    }
+
+    /// Aggregated completion counts for all tasks within a date range.
+    static func trendDataForAll(
+        tasks: [HabitTask],
+        from startDate: Date,
+        to endDate: Date,
+        weekStartDay: Int = 1,
+        calendar: Calendar = .current
+    ) -> [TrendPoint] {
+        let days = calendar.dateComponents([.day], from: startDate, to: endDate).day ?? 0
+        let useMonthly = days >= 60
+
+        if useMonthly {
+            return monthlyTrendForAll(tasks: tasks, from: startDate, to: endDate, calendar: calendar)
+        } else {
+            return weeklyTrendForAll(tasks: tasks, from: startDate, to: endDate, weekStartDay: weekStartDay, calendar: calendar)
+        }
+    }
+
+    /// Total completions across multiple tasks in a date range.
+    static func totalCompletionCount(
+        tasks: [HabitTask],
+        from startDate: Date,
+        to endDate: Date
+    ) -> Int {
+        tasks.reduce(0) { sum, task in
+            sum + completionCount(for: task, from: startDate, to: endDate)
+        }
+    }
+
+    /// Average completion percentage across multiple tasks in a date range.
+    static func averageCompletionPercentage(
+        tasks: [HabitTask],
+        from startDate: Date,
+        to endDate: Date,
+        calendar: Calendar = .current
+    ) -> Double {
+        guard !tasks.isEmpty else { return 0 }
+        let total = tasks.reduce(0.0) { sum, task in
+            sum + completionPercentage(for: task, from: startDate, to: endDate, calendar: calendar)
+        }
+        return total / Double(tasks.count)
     }
 
     // MARK: - Private Bucketing
@@ -88,10 +132,15 @@ enum StatisticsService {
         for task: HabitTask,
         from startDate: Date,
         to endDate: Date,
+        weekStartDay: Int = 1,
         calendar: Calendar = .current
     ) -> [TrendPoint] {
         var points: [TrendPoint] = []
+        // Align bucket start to the configured week start day
         var bucketStart = calendar.startOfDay(for: startDate)
+        let currentWeekday = calendar.isoWeekday(for: bucketStart)
+        let daysSinceWeekStart = (currentWeekday - weekStartDay + 7) % 7
+        bucketStart = calendar.date(byAdding: .day, value: -daysSinceWeekStart, to: bucketStart)!
 
         while bucketStart < endDate {
             let bucketEnd = min(
@@ -101,6 +150,54 @@ enum StatisticsService {
             let count = completionCount(for: task, from: bucketStart, to: bucketEnd)
             points.append(TrendPoint(date: bucketStart, count: count))
             bucketStart = calendar.date(byAdding: .day, value: 7, to: bucketStart)!
+        }
+
+        return points
+    }
+
+    private static func weeklyTrendForAll(
+        tasks: [HabitTask],
+        from startDate: Date,
+        to endDate: Date,
+        weekStartDay: Int = 1,
+        calendar: Calendar = .current
+    ) -> [TrendPoint] {
+        var points: [TrendPoint] = []
+        var bucketStart = calendar.startOfDay(for: startDate)
+        let currentWeekday = calendar.isoWeekday(for: bucketStart)
+        let daysSinceWeekStart = (currentWeekday - weekStartDay + 7) % 7
+        bucketStart = calendar.date(byAdding: .day, value: -daysSinceWeekStart, to: bucketStart)!
+
+        while bucketStart < endDate {
+            let bucketEnd = min(
+                calendar.date(byAdding: .day, value: 7, to: bucketStart)!,
+                endDate
+            )
+            let count = totalCompletionCount(tasks: tasks, from: bucketStart, to: bucketEnd)
+            points.append(TrendPoint(date: bucketStart, count: count))
+            bucketStart = calendar.date(byAdding: .day, value: 7, to: bucketStart)!
+        }
+
+        return points
+    }
+
+    private static func monthlyTrendForAll(
+        tasks: [HabitTask],
+        from startDate: Date,
+        to endDate: Date,
+        calendar: Calendar = .current
+    ) -> [TrendPoint] {
+        var points: [TrendPoint] = []
+        var bucketStart = calendar.startOfDay(for: startDate)
+
+        while bucketStart < endDate {
+            let bucketEnd = min(
+                calendar.date(byAdding: .month, value: 1, to: bucketStart)!,
+                endDate
+            )
+            let count = totalCompletionCount(tasks: tasks, from: bucketStart, to: bucketEnd)
+            points.append(TrendPoint(date: bucketStart, count: count))
+            bucketStart = calendar.date(byAdding: .month, value: 1, to: bucketStart)!
         }
 
         return points
