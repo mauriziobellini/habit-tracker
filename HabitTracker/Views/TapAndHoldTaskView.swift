@@ -32,15 +32,13 @@ struct TapAndHoldTaskView: View {
     }
 
     var body: some View {
-        ZStack {
-            // Base task circle
-            TaskCircleView(
-                task: task,
-                isCompleted: isCompleted || showCompletionBurst,
-                circleSize: circleSize
-            )
-            .scaleEffect(showCompletionBurst ? 1.15 : 1.0)
-
+        TaskCircleView(
+            task: task,
+            isCompleted: isCompleted || showCompletionBurst,
+            circleSize: circleSize
+        )
+        .scaleEffect(showCompletionBurst ? 1.15 : 1.0)
+        .overlay(alignment: .top) {
             // Progress ring overlay (only while holding and not yet completed)
             if !isCompleted && progress > 0 {
                 CompletionRingView(
@@ -49,6 +47,8 @@ struct TapAndHoldTaskView: View {
                     lineWidth: 4,
                     size: circleSize + 4
                 )
+                .frame(width: circleSize + 4, height: circleSize + 4)
+                .offset(y: -2) // center ring over the task circle
             }
         }
         .animation(reduceMotion ? nil : .easeOut(duration: 0.3), value: showCompletionBurst)

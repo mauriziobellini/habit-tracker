@@ -52,11 +52,11 @@ struct OnboardingView: View {
                 .font(.system(size: 80))
                 .foregroundStyle(Color.accentColor)
 
-            Text("Build Streaks.\nForm Habits.")
+            Text("Small habits,\nmassive change.")
                 .font(.largeTitle.weight(.bold))
                 .multilineTextAlignment(.center)
 
-            Text("Track your daily habits and build streaks of consecutive days to stay motivated.")
+            Text("Track your daily habits and stay motivated.")
                 .font(.body)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
