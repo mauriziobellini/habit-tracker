@@ -2,14 +2,13 @@
 
 ## 1. Overview
 **The to-do list that helps you form good habits:**  
-The best way to improve yourself is to create small habits. The app allows you to track tasks you want to complete each day in order to form a habit. This app should be a copy/cut of the most famous app streak
+The best way to improve yourself is to create small habits. The app allows you to track tasks you want to complete each day in order to form a habit.
 
 **Context:**  
 We want to demonstrate that we can build clones of existing apps via AI code generation. Habit trackers are very popular apps and relatively easy to create. We can create a personal habit tracker with no need to create api services, authentication, cloud to store user data.
 
 **Goals:**
 - Create an iOS habit tracker with a very nice catching and smooth ui
-- It needs to be similar to the popular habit tracker called Streak
 - It needs to be easy to sell on app store
 
 
@@ -289,7 +288,7 @@ Guidelines, not designs.
 For the full UX & UI guidelines, see [ux-ui-principles.md](ux-ui-principles.md).
 
 **Summary:**
-- Minimal, focused UI inspired by Streak; delight through motion and haptics
+- Minimal, focused UI; delight through motion and haptics
 - SF Pro typography with Dynamic Type; SF Symbols for icons
 - Per-task accent colors; full dark mode support via semantic SwiftUI colors
 - Accessibility: VoiceOver, Reduce Motion alternatives, 44pt touch targets, WCAG AA contrast

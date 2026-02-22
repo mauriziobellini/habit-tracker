@@ -1,6 +1,6 @@
-# Habit Tracker
+# Habit Ring
 
-An iOS habit tracker app inspired by [Streak](https://streaksapp.com) — helps users build daily habits with a beautiful, smooth UI.
+An iOS habit tracker app that helps users build daily habits with a beautiful, smooth UI.
 
 ## About
 

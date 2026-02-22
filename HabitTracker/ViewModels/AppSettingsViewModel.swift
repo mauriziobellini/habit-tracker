@@ -14,6 +14,7 @@ final class AppSettingsViewModel {
     var renameCategoryName = ""
     var showRenameCategoryAlert = false
     var showEmailCopiedAlert = false
+    var showDeleteAllDataConfirmation = false
 
     @MainActor
     func load(from context: ModelContext) {
@@ -73,5 +74,28 @@ final class AppSettingsViewModel {
     func cancelRename() {
         categoryToRename = nil
         renameCategoryName = ""
+    }
+
+    /// Deletes all habits, completions, and categories; resets onboarding. Preset categories are re-seeded on next launch.
+    @MainActor
+    func deleteAllData(context: ModelContext) {
+        let taskDescriptor = FetchDescriptor<HabitTask>()
+        let categoryDescriptor = FetchDescriptor<Category>()
+        guard let tasks = try? context.fetch(taskDescriptor),
+              let categories = try? context.fetch(categoryDescriptor) else { return }
+
+        for task in tasks {
+            NotificationService.shared.cancelNotifications(for: task)
+        }
+        for task in tasks {
+            context.delete(task)
+        }
+        for category in categories {
+            context.delete(category)
+        }
+        let settings = AppSettings.shared(in: context)
+        settings.hasCompletedOnboarding = false
+        settings.weekStartDay = 1
+        settings.measurementSystem = .metric
     }
 }

@@ -23,6 +23,9 @@ struct AppSettingsView: View {
 
                 // MARK: Support
                 supportSection
+
+                // MARK: Data
+                dataSection
             }
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)
@@ -67,6 +70,15 @@ struct AppSettingsView: View {
                         Text("Delete \"\(cat.name)\"? \(cat.tasks.count) task(s) are assigned to this category and will become uncategorized.")
                     }
                 }
+            }
+            .alert(String(localized: "Delete All Data"), isPresented: $viewModel.showDeleteAllDataConfirmation) {
+                Button("Cancel", role: .cancel) {}
+                Button(String(localized: "Delete All Data"), role: .destructive) {
+                    viewModel.deleteAllData(context: modelContext)
+                    dismiss()
+                }
+            } message: {
+                Text(String(localized: "This will remove all habits, completions, and categories. Preset categories will be restored on next launch. This cannot be undone."))
             }
         }
     }
@@ -182,8 +194,23 @@ struct AppSettingsView: View {
 
     // MARK: - Support Section
 
+    private static let privacyPolicyURL = URL(string: "https://habit-ring.lovable.app/privacy")!
+
     private var supportSection: some View {
         Section {
+            Button {
+                if UIApplication.shared.canOpenURL(Self.privacyPolicyURL) {
+                    UIApplication.shared.open(Self.privacyPolicyURL)
+                }
+            } label: {
+                HStack {
+                    Image(systemName: "hand.raised.fill")
+                        .foregroundStyle(.secondary)
+                    Text("Privacy Policy")
+                        .foregroundStyle(.primary)
+                }
+            }
+
             Button {
                 let email = "habit-tracker@fooshi.co"
                 if let url = URL(string: "mailto:\(email)"),
@@ -208,6 +235,22 @@ struct AppSettingsView: View {
             }
         } header: {
             Text("Support")
+        }
+    }
+
+    // MARK: - Data Section
+
+    private var dataSection: some View {
+        Section {
+            Button(role: .destructive) {
+                viewModel.showDeleteAllDataConfirmation = true
+            } label: {
+                Label(String(localized: "Delete All Data"), systemImage: "trash")
+            }
+        } header: {
+            Text(String(localized: "Data"))
+        } footer: {
+            Text(String(localized: "Remove all habits and data. Onboarding will show again on next launch."))
         }
     }
 }

@@ -114,6 +114,10 @@
 "Select Dates" = "Select Dates";
 
 // MARK: - Settings
+"Data" = "Data";
+"Delete All Data" = "Delete All Data";
+"Remove all habits and data. Onboarding will show again on next launch." = "Remove all habits and data. Onboarding will show again on next launch.";
+"This will remove all habits, completions, and categories. Preset categories will be restored on next launch. This cannot be undone." = "This will remove all habits, completions, and categories. Preset categories will be restored on next launch. This cannot be undone.";
 "General" = "General";
 "Week starts on" = "Week starts on";
 "Language" = "Language";

@@ -251,6 +251,8 @@ struct TaskConfigurationView: View {
             }
         } header: {
             Text("Notification")
+        } footer: {
+            Text("We'll send you gentle reminders to help you build your habits.")
         }
     }
 

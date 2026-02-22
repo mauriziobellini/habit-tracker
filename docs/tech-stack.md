@@ -23,7 +23,7 @@ isProject: false
 SwiftUI is the clear winner here for several reasons:
 
 - **Native gesture system** -- FR-1 (tap-and-hold with animated progress ring + haptic) maps directly to SwiftUI's `.onLongPressGesture` and `withAnimation`. No bridging or workaround needed.
-- **Smooth, "catching" UI** -- The PRD benchmarks against Streak, which is a polished native iOS app. SwiftUI delivers 60fps animations, native transitions, and platform-consistent behavior out of the box.
+- **Smooth, "catching" UI** -- SwiftUI delivers 60fps animations, native transitions, and platform-consistent behavior out of the box.
 - **App Store readiness** -- No binary bloat from bundled runtimes (React Native ~7MB, Flutter ~5MB overhead). Smaller binary = faster review, better user perception.
 - **Zero dependency for core features** -- Push notifications (`UserNotifications`), haptics (`UIImpactFeedbackGenerator`), SF Symbols for icons, and `Charts` framework are all first-party Apple APIs.
 - **Minimum iOS 17** gives access to the latest SwiftUI navigation, animation, and observation APIs while still covering ~95% of active iPhones.
@@ -82,7 +82,7 @@ The PRD mentions "AI code generation" as a goal, which could favor JS/TS ecosyst
 | App Store binary size                      | ~5-10 MB                                    | +5-7 MB runtime overhead              |
 | Push notification scheduling (FR-6)        | Direct API access                           | Plugin wrappers with version lag      |
 | Chart library (FR-4)                       | Apple Swift Charts, zero deps               | Third-party (Victory, fl_chart)       |
-| Streak-quality polish                      | Identical to benchmark app                  | Close but never pixel-identical       |
+| Native polish                             | First-party APIs, pixel-perfect             | Close but never pixel-identical       |
 | AI code generation                         | Xcode + Copilot/Cursor support SwiftUI well | Slightly more training data for JS/TS |
 
 
