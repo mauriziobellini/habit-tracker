@@ -127,7 +127,7 @@ struct OnboardingView: View {
 
     private var demoTaskView: some View {
         let demoTask = HabitTask(
-            title: "Walk the dog",
+            title: String(localized: "Walk the dog"),
             iconName: "dog.fill",
             colorToken: "orange"
         )

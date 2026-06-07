@@ -1,9 +1,8 @@
-/* 
+/*
   Localizable.strings
   HabitTracker
-  
+
   English (base) — all user-facing strings externalized for i18n.
-  Phase 1 (MVP): English only. Infrastructure ready for P1 languages.
 */
 
 // MARK: - General
@@ -17,6 +16,11 @@
 "Remove" = "Remove";
 "Add" = "Add";
 "None" = "None";
+"OK" = "OK";
+"Skip" = "Skip";
+"Continue" = "Continue";
+"Get Started" = "Get Started";
+"Rename" = "Rename";
 
 // MARK: - Task List
 "My Habits" = "My Habits";
@@ -25,15 +29,18 @@
 "Add Habit" = "Add Habit";
 "Add new habit" = "Add new habit";
 "Settings" = "Settings";
+"General Stats" = "General Stats";
 "Delete Task" = "Delete Task";
 "Are you sure you want to delete \"%@\"? This action cannot be undone." = "Are you sure you want to delete \"%@\"? This action cannot be undone.";
 
-// MARK: - Task Status
+// MARK: - Task Status / Accessibility
 "completed" = "completed";
 "not completed" = "not completed";
 "Already completed" = "Already completed";
 "Double tap to open menu, or double tap and hold to complete" = "Double tap to open menu, or double tap and hold to complete";
 "%@ completed" = "%@ completed";
+"Task" = "Task";
+"Stats" = "Stats";
 
 // MARK: - Task Selector
 "New Task" = "New Task";
@@ -42,22 +49,26 @@
 // MARK: - Task Configuration
 "Configure Task" = "Configure Task";
 "Edit Task" = "Edit Task";
-"Task" = "Task";
 "Task name" = "Task name";
 "Change icon" = "Change icon";
 "Goal" = "Goal";
 "Goal type" = "Goal type";
-"Target" = "Target";
 "Unit" = "Unit";
 "Measurement period" = "Measurement period";
 "Schedule" = "Schedule";
 "Frequency" = "Frequency";
-"Times per day: %d" = "Times per day: %d";
+"Times per day: %lld" = "Times per day: %lld";
+"Times per week: %lld" = "Times per week: %lld";
 "Notification" = "Notification";
 "Reminder" = "Reminder";
 "Time" = "Time";
+"We'll send you gentle reminders to help you build your habits." = "We'll send you gentle reminders to help you build your habits.";
 "Appearance" = "Appearance";
 "Color" = "Color";
+"Reward" = "Reward";
+"Enable Reward" = "Enable Reward";
+"Streak to earn: %lld" = "Streak to earn: %lld";
+"Reward description" = "Reward description";
 "Category" = "Category";
 "Create New Category" = "Create New Category";
 "Category name" = "Category name";
@@ -79,6 +90,7 @@
 // MARK: - Frequency
 "Every Day" = "Every Day";
 "Specific Days" = "Specific Days";
+"Every Week" = "Every Week";
 
 // MARK: - Weekdays
 "Mon" = "Mon";
@@ -102,42 +114,46 @@
 "Imperial (mi, st, pt)" = "Imperial (mi, st, pt)";
 
 // MARK: - Stats
-"Stats" = "Stats";
 "Completions" = "Completions";
 "Completion %" = "Completion %";
+"Avg Completion %" = "Avg Completion %";
 "Trend" = "Trend";
 "No data for this period" = "No data for this period";
 "Current Streak" = "Current Streak";
-"%d days" = "%d days";
+"%lld days" = "%lld days";
 "Manage Task Completions" = "Manage Task Completions";
 "Manage Completions" = "Manage Completions";
 "Select Dates" = "Select Dates";
 
 // MARK: - Settings
-"Data" = "Data";
-"Delete All Data" = "Delete All Data";
-"Remove all habits and data. Onboarding will show again on next launch." = "Remove all habits and data. Onboarding will show again on next launch.";
-"This will remove all habits, completions, and categories. Preset categories will be restored on next launch. This cannot be undone." = "This will remove all habits, completions, and categories. Preset categories will be restored on next launch. This cannot be undone.";
 "General" = "General";
-"Week starts on" = "Week starts on";
 "Language" = "Language";
+"Week starts on" = "Week starts on";
 "Measurement Units" = "Measurement Units";
 "Units" = "Units";
 "Categories" = "Categories";
 "Built-in" = "Built-in";
 "Add Category" = "Add Category";
+"Rename Category" = "Rename Category";
+"Enter a new name for the category" = "Enter a new name for the category";
 "Delete Category" = "Delete Category";
 "Delete \"%@\"? Tasks in this category will become uncategorized." = "Delete \"%@\"? Tasks in this category will become uncategorized.";
+"Support" = "Support";
+"Privacy Policy" = "Privacy Policy";
+"Contact Support" = "Contact Support";
+"Email Copied" = "Email Copied";
+"Support email copied to clipboard. Send your message to habit-tracker@fooshi.co" = "Support email copied to clipboard. Send your message to habit-tracker@fooshi.co";
+"Data" = "Data";
+"Delete All Data" = "Delete All Data";
+"Remove all habits and data. Onboarding will show again on next launch." = "Remove all habits and data. Onboarding will show again on next launch.";
+"This will remove all habits, completions, and categories. Preset categories will be restored on next launch. This cannot be undone." = "This will remove all habits, completions, and categories. Preset categories will be restored on next launch. This cannot be undone.";
 
 // MARK: - Onboarding
-"Build Streaks.\nForm Habits." = "Build Streaks.\nForm Habits.";
-"Track your daily habits and build streaks of consecutive days to stay motivated." = "Track your daily habits and build streaks of consecutive days to stay motivated.";
-"Get Started" = "Get Started";
-"Skip" = "Skip";
+"Small habits,\nmassive change." = "Small habits,\nmassive change.";
+"Track your daily habits and stay motivated." = "Track your daily habits and stay motivated.";
 "Tap & Hold to Complete" = "Tap & Hold to Complete";
 "Press and hold the circle for 2 seconds to mark a habit as done." = "Press and hold the circle for 2 seconds to mark a habit as done.";
 "Your goal is to build a streak of consecutive days" = "Your goal is to build a streak of consecutive days";
-"Continue" = "Continue";
 "Create Your First Habit" = "Create Your First Habit";
 "Choose a preset or create a custom habit to get started." = "Choose a preset or create a custom habit to get started.";
 "Choose a Habit" = "Choose a Habit";
@@ -149,6 +165,12 @@
 // MARK: - Notifications
 "Habit Reminder" = "Habit Reminder";
 "Time to %@!" = "Time to %@!";
+
+// MARK: - Reward Celebration
+"Congratulations!" = "Congratulations!";
+"You can now reward yourself with:" = "You can now reward yourself with:";
+"Awesome!" = "Awesome!";
+"Congratulations! You can now reward yourself with: %@" = "Congratulations! You can now reward yourself with: %@";
 
 // MARK: - Preset Task Names
 "Walk" = "Walk";

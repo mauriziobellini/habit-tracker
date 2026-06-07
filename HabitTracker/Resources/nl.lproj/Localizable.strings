@@ -1,0 +1,210 @@
+/*
+  Localizable.strings
+  HabitTracker
+
+  Dutch (nl) — covers nl-NL and nl-BE
+*/
+
+// MARK: - General
+"All" = "Alles";
+"Cancel" = "Annuleer";
+"Close" = "Sluit";
+"Done" = "Klaar";
+"Save" = "Bewaar";
+"Delete" = "Verwijder";
+"Edit" = "Bewerk";
+"Remove" = "Verwijder";
+"Add" = "Voeg toe";
+"None" = "Geen";
+"OK" = "OK";
+"Skip" = "Sla over";
+"Continue" = "Ga verder";
+"Get Started" = "Aan de slag";
+"Rename" = "Hernoem";
+
+// MARK: - Task List
+"My Habits" = "Mijn Gewoontes";
+"No habits yet" = "Nog geen gewoontes";
+"Tap the + button to create your first habit" = "Tik op + om je eerste gewoonte aan te maken";
+"Add Habit" = "Gewoonte toevoegen";
+"Add new habit" = "Nieuwe gewoonte toevoegen";
+"Settings" = "Instellingen";
+"General Stats" = "Statistieken";
+"Delete Task" = "Taak verwijderen";
+"Are you sure you want to delete \"%@\"? This action cannot be undone." = "Weet je zeker dat je \"%@\" wilt verwijderen? Dit kan niet ongedaan worden.";
+
+// MARK: - Task Status / Accessibility
+"completed" = "voltooid";
+"not completed" = "niet voltooid";
+"Already completed" = "Al voltooid";
+"Double tap to open menu, or double tap and hold to complete" = "Dubbeltik voor menu, of houd ingedrukt om te voltooien";
+"%@ completed" = "%@ voltooid";
+"Task" = "Taak";
+"Stats" = "Statistieken";
+
+// MARK: - Task Selector
+"New Task" = "Nieuwe Taak";
+"Create custom task…" = "Eigen taak aanmaken…";
+
+// MARK: - Task Configuration
+"Configure Task" = "Taak instellen";
+"Edit Task" = "Taak bewerken";
+"Task name" = "Taaknaam";
+"Change icon" = "Pictogram wijzigen";
+"Goal" = "Doel";
+"Goal type" = "Doeltype";
+"Unit" = "Eenheid";
+"Measurement period" = "Meetperiode";
+"Schedule" = "Schema";
+"Frequency" = "Frequentie";
+"Times per day: %lld" = "Keer per dag: %lld";
+"Times per week: %lld" = "Keer per week: %lld";
+"Notification" = "Melding";
+"Reminder" = "Herinnering";
+"Time" = "Tijd";
+"We'll send you gentle reminders to help you build your habits." = "We sturen je herinneringen om je gewoontes op te bouwen.";
+"Appearance" = "Uiterlijk";
+"Color" = "Kleur";
+"Reward" = "Beloning";
+"Enable Reward" = "Beloning activeren";
+"Streak to earn: %lld" = "Reeks om te verdienen: %lld";
+"Reward description" = "Beschrijving van de beloning";
+"Category" = "Categorie";
+"Create New Category" = "Nieuwe Categorie";
+"Category name" = "Categorienaam";
+
+// MARK: - Goal Types
+"No Goal" = "Geen Doel";
+"Repetitions" = "Herhalingen";
+"Cups" = "Kopjes";
+"Calories" = "Calorieën";
+"Distance" = "Afstand";
+"Weight" = "Gewicht";
+"Capacity" = "Inhoud";
+
+// MARK: - Measurement Duration
+"Daily" = "Dagelijks";
+"Weekly" = "Wekelijks";
+"Monthly" = "Maandelijks";
+
+// MARK: - Frequency
+"Every Day" = "Elke Dag";
+"Specific Days" = "Specifieke Dagen";
+"Every Week" = "Elke Week";
+
+// MARK: - Weekdays
+"Mon" = "Ma";
+"Tue" = "Di";
+"Wed" = "Wo";
+"Thu" = "Do";
+"Fri" = "Vr";
+"Sat" = "Za";
+"Sun" = "Zo";
+"Monday" = "Maandag";
+"Tuesday" = "Dinsdag";
+"Wednesday" = "Woensdag";
+"Thursday" = "Donderdag";
+"Friday" = "Vrijdag";
+"Saturday" = "Zaterdag";
+"Sunday" = "Zondag";
+
+// MARK: - Measurement Systems
+"Metric (km, kg, L)" = "Metrisch (km, kg, L)";
+"US Customary (mi, lb, fl oz)" = "US (mi, lb, fl oz)";
+"Imperial (mi, st, pt)" = "Imperiaal (mi, st, pt)";
+
+// MARK: - Stats
+"Completions" = "Voltooiingen";
+"Completion %" = "% Voltooiing";
+"Avg Completion %" = "Gem. %";
+"Trend" = "Trend";
+"No data for this period" = "Geen gegevens voor deze periode";
+"Current Streak" = "Huidige Reeks";
+"%lld days" = "%lld dagen";
+"Manage Task Completions" = "Voltooiingen beheren";
+"Manage Completions" = "Voltooiingen beheren";
+"Select Dates" = "Datums selecteren";
+
+// MARK: - Settings
+"General" = "Algemeen";
+"Language" = "Taal";
+"Week starts on" = "Week begint op";
+"Measurement Units" = "Meeteenheden";
+"Units" = "Eenheden";
+"Categories" = "Categorieën";
+"Built-in" = "Standaard";
+"Add Category" = "Categorie toevoegen";
+"Rename Category" = "Categorie hernoemen";
+"Enter a new name for the category" = "Voer een nieuwe naam in voor de categorie";
+"Delete Category" = "Categorie verwijderen";
+"Delete \"%@\"? Tasks in this category will become uncategorized." = "\"%@\" verwijderen? Taken worden niet-gecategoriseerd.";
+"Support" = "Ondersteuning";
+"Privacy Policy" = "Privacybeleid";
+"Contact Support" = "Contact Ondersteuning";
+"Email Copied" = "E-mail gekopieerd";
+"Support email copied to clipboard. Send your message to habit-tracker@fooshi.co" = "E-mail gekopieerd. Stuur je bericht naar habit-tracker@fooshi.co";
+"Data" = "Gegevens";
+"Delete All Data" = "Alle gegevens wissen";
+"Remove all habits and data. Onboarding will show again on next launch." = "Verwijdert alle gewoontes en gegevens. De introductie wordt opnieuw getoond.";
+"This will remove all habits, completions, and categories. Preset categories will be restored on next launch. This cannot be undone." = "Dit verwijdert alle gewoontes, voltooiingen en categorieën. Standaardcategorieën worden hersteld. Dit kan niet ongedaan worden.";
+
+// MARK: - Onboarding
+"Small habits,\nmassive change." = "Kleine gewoontes,\ngroot verschil.";
+"Track your daily habits and stay motivated." = "Volg je dagelijkse gewoontes en blijf gemotiveerd.";
+"Tap & Hold to Complete" = "Houd ingedrukt om te voltooien";
+"Press and hold the circle for 2 seconds to mark a habit as done." = "Houd de cirkel 2 seconden ingedrukt om een gewoonte af te ronden.";
+"Your goal is to build a streak of consecutive days" = "Je doel is om een reeks opeenvolgende dagen op te bouwen";
+"Create Your First Habit" = "Maak je eerste gewoonte";
+"Choose a preset or create a custom habit to get started." = "Kies een sjabloon of maak een eigen gewoonte.";
+"Choose a Habit" = "Kies een gewoonte";
+
+// MARK: - Icon Picker
+"Choose Icon" = "Pictogram kiezen";
+"Search icons" = "Pictogrammen zoeken";
+
+// MARK: - Notifications
+"Habit Reminder" = "Herinnering";
+"Time to %@!" = "Tijd voor %@!";
+
+// MARK: - Reward Celebration
+"Congratulations!" = "Gefeliciteerd!";
+"You can now reward yourself with:" = "Je kunt jezelf nu belonen met:";
+"Awesome!" = "Geweldig!";
+"Congratulations! You can now reward yourself with: %@" = "Gefeliciteerd! Je kunt jezelf belonen met: %@";
+
+// MARK: - Preset Task Names
+"Walk" = "Wandelen";
+"Run" = "Hardlopen";
+"Bike" = "Fietsen";
+"Push ups" = "Push-ups";
+"Pull ups" = "Pull-ups";
+"Gym" = "Sportschool";
+"Swim" = "Zwemmen";
+"Meditate" = "Mediteren";
+"Eat a healthy meal" = "Gezond eten";
+"Write journal" = "Dagboek schrijven";
+"Walk the dog" = "Hond uitlaten";
+"Take vitamins" = "Vitamines nemen";
+"Drink water" = "Water drinken";
+"Decrease caffeine" = "Minder cafeïne";
+"Decrease calories intake" = "Minder calorieën";
+"Don't smoke" = "Niet roken";
+"Don't bite nails" = "Niet nagelbijten";
+"Time in daylight" = "Tijd in daglicht";
+"Bed time early" = "Vroeg naar bed";
+"Wash hands" = "Handen wassen";
+"Floss your teeth" = "Flossen";
+"Call parents" = "Ouders bellen";
+"Call a friend" = "Vriend bellen";
+"Ask a friend out" = "Vriend uitnodigen";
+"Kiss partner" = "Partner kussen";
+"Talk to a stranger" = "Met een vreemde praten";
+"Learn a language" = "Taal leren";
+"Read a book" = "Boek lezen";
+"Play instrument" = "Instrument spelen";
+
+// MARK: - Preset Categories
+"Health" = "Gezondheid";
+"Fitness" = "Fitness";
+"Learning" = "Leren";
+"Social" = "Sociaal";

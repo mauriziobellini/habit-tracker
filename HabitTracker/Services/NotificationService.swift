@@ -57,8 +57,8 @@ final class NotificationService {
             )
 
             let content = UNMutableNotificationContent()
-            content.title = "Habit Reminder"
-            content.body = "Time to \(task.title)!"
+            content.title = NSLocalizedString("Habit Reminder", comment: "")
+            content.body = String(format: NSLocalizedString("Time to %@!", comment: ""), task.title)
             content.sound = .default
 
             let identifier = notificationIdentifier(for: task, weekday: isoWeekday)

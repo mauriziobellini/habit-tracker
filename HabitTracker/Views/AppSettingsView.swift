@@ -6,6 +6,7 @@ struct AppSettingsView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @Query(sort: \Category.sortOrder) private var categories: [Category]
+    @AppStorage(AppLanguage.userDefaultsKey) private var languageCode = "en"
 
     @State private var viewModel = AppSettingsViewModel()
 
@@ -87,18 +88,17 @@ struct AppSettingsView: View {
 
     private var generalSection: some View {
         Section {
+            Picker("Language", selection: $languageCode) {
+                ForEach(AppLanguage.allCases) { lang in
+                    Text(lang.displayName).tag(lang.rawValue)
+                }
+            }
+
             Picker("Week starts on", selection: $viewModel.weekStartDay) {
                 Text("Monday").tag(1)
                 Text("Saturday").tag(6)
                 Text("Sunday").tag(7)
             }
-
-            // TODO: Re-enable when localization is implemented (see issue #10)
-            // Button("Language") {
-            //     if let url = URL(string: UIApplication.openSettingsURLString) {
-            //         UIApplication.shared.open(url)
-            //     }
-            // }
         } header: {
             Text("General")
         }
@@ -179,7 +179,7 @@ struct AppSettingsView: View {
 
     private func categoryRow(_ category: Category) -> some View {
         HStack {
-            Text(category.name)
+            Text(category.localizedDisplayName)
                 .foregroundStyle(.primary)
 
             Spacer()

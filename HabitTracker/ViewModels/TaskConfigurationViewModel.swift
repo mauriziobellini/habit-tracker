@@ -76,7 +76,7 @@ final class TaskConfigurationViewModel {
 
     /// Initialize from a preset task catalog entry.
     func applyPreset(_ preset: PresetTask, categories: [Category]) {
-        title = preset.name
+        title = preset.localizedName
         iconName = preset.iconName
         goalType = preset.goalType
         goalUnit = preset.defaultUnit

@@ -1,6 +1,6 @@
 # Acceptance Criteria
 
-Derived from the functional requirements and user journeys in [prd.md](prd.md).
+Derived from the functional requirements and user journeys in [prd.md](prd.md), and feature proposals such as [Feature injection - Multi language.md](Feature%20injection%20-%20Multi%20language.md).
 
 ---
 
@@ -365,3 +365,41 @@ Derived from the functional requirements and user journeys in [prd.md](prd.md).
 - **Given** the app is installed on a device,
   **When** the user views the home screen,
   **Then** the app icon shows a blue-to-indigo gradient with a white circular progress ring and checkmark.
+
+---
+
+### Multi-language (ref: [Feature injection - Multi language.md](Feature%20injection%20-%20Multi%20language.md))
+
+**Supported locales:** Spanish (es-ES), Portuguese (pt-PT), French (fr-FR), German Germany (de-DE), German Austria (de-AT), Italian (it-IT), Dutch Netherlands (nl-NL), Dutch Belgium (nl-BE), plus English as the fallback.
+
+- **Given** the device preferred language and region match one of the supported locales (es-ES, pt-PT, fr-FR, de-DE, de-AT, it-IT, nl-NL, nl-BE),
+  **When** the user launches the app after install (or first open),
+  **Then** the app UI uses that matching supported language.
+
+- **Given** the device preferred language and region do not match any supported locale (e.g. Japanese-Japan),
+  **When** the user launches the app,
+  **Then** the app UI is in English.
+
+- **Given** the user is on the Settings screen,
+  **When** the view loads,
+  **Then** a **Language** control is available so the user can change the app language.
+
+- **Given** the user changes the app language in Settings to another supported language,
+  **When** the change is applied,
+  **Then** user-visible strings across the app reflect the selected language (including navigation back to the main UI).
+
+- **Given** the app is displaying numeric, date, distance, or duration values,
+  **When** those values are shown,
+  **Then** formatting uses **Foundation** formatters (or equivalent) so presentation respects the active locale (numbers, dates, distances, durations).
+
+- **Given** the new task selector or preset catalog is shown,
+  **When** the active language is not English,
+  **Then** preset task names are shown in the active language (localized strings).
+
+- **Given** built-in categories (e.g. Health, Fitness, Learning, Social) are shown in the task selector, category filter, or settings,
+  **When** the active language is not English,
+  **Then** those category names are shown in the active language (localized strings).
+
+- **Given** the user opens the in-app or linked privacy policy or terms of service URLs as shipped for this release,
+  **When** the content is viewed,
+  **Then** legal pages remain as currently shipped (not translated in scope of this feature; per feature doc **Out** scope).

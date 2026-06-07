@@ -6,6 +6,15 @@ options:
   xcodeVersion: "15.0"
   generateEmptyDirectories: true
   groupSortPosition: top
+  developmentLanguage: en
+  knownRegions:
+    - en
+    - es
+    - pt-PT
+    - fr
+    - de
+    - it
+    - nl
 
 settings:
   base:
@@ -24,9 +33,10 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: co.fooshi.habitring
-        INFOPLIST_KEY_CFBundleDisplayName: "Habit Ring"
+        INFOPLIST_KEY_CFBundleDisplayName: "Ring Habits – Streak & Reward"
         INFOPLIST_KEY_UILaunchScreen_Generation: NO
         INFOPLIST_KEY_UILaunchStoryboardName: LaunchScreen
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
         INFOPLIST_KEY_LSApplicationCategoryType: "public.app-category.lifestyle"
         MARKETING_VERSION: "1.0.0"
         CURRENT_PROJECT_VERSION: "1"

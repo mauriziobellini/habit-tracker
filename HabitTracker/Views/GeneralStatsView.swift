@@ -45,6 +45,8 @@ struct GeneralStatsView: View {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
         formatter.timeStyle = .none
+        let code = UserDefaults.standard.string(forKey: AppLanguage.userDefaultsKey) ?? "en"
+        formatter.locale = Locale(identifier: code)
         return "\(formatter.string(from: windowStart)) \u{2013} \(formatter.string(from: windowEnd))"
     }
 
@@ -105,7 +107,7 @@ struct GeneralStatsView: View {
                     selectedCategoryID = category.id
                 } label: {
                     Label(
-                        category.name,
+                        category.localizedDisplayName,
                         systemImage: selectedCategoryID == category.id ? "checkmark" : ""
                     )
                 }
@@ -128,8 +130,11 @@ struct GeneralStatsView: View {
     }
 
     private var selectedCategoryName: String {
-        guard let id = selectedCategoryID else { return "All" }
-        return categories.first { $0.id == id }?.name ?? "All"
+        guard let id = selectedCategoryID else {
+            return NSLocalizedString("All", comment: "")
+        }
+        return categories.first { $0.id == id }?.localizedDisplayName
+            ?? NSLocalizedString("All", comment: "")
     }
 
     // MARK: - Time Window Button

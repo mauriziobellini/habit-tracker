@@ -1,0 +1,210 @@
+/*
+  Localizable.strings
+  HabitTracker
+
+  French (fr)
+*/
+
+// MARK: - General
+"All" = "Tous";
+"Cancel" = "Annuler";
+"Close" = "Fermer";
+"Done" = "Terminé";
+"Save" = "Enregistrer";
+"Delete" = "Supprimer";
+"Edit" = "Modifier";
+"Remove" = "Supprimer";
+"Add" = "Ajouter";
+"None" = "Aucun";
+"OK" = "OK";
+"Skip" = "Passer";
+"Continue" = "Continuer";
+"Get Started" = "Commencer";
+"Rename" = "Renommer";
+
+// MARK: - Task List
+"My Habits" = "Mes Habitudes";
+"No habits yet" = "Pas encore d'habitudes";
+"Tap the + button to create your first habit" = "Appuie sur le bouton + pour créer ta première habitude";
+"Add Habit" = "Ajouter une Habitude";
+"Add new habit" = "Ajouter une habitude";
+"Settings" = "Réglages";
+"General Stats" = "Statistiques";
+"Delete Task" = "Supprimer la Tâche";
+"Are you sure you want to delete \"%@\"? This action cannot be undone." = "Es-tu sûr de vouloir supprimer \"%@\" ? Cette action est irréversible.";
+
+// MARK: - Task Status / Accessibility
+"completed" = "terminé";
+"not completed" = "non terminé";
+"Already completed" = "Déjà terminé";
+"Double tap to open menu, or double tap and hold to complete" = "Double appui pour le menu, ou maintiens appuyé pour terminer";
+"%@ completed" = "%@ terminé";
+"Task" = "Tâche";
+"Stats" = "Statistiques";
+
+// MARK: - Task Selector
+"New Task" = "Nouvelle Tâche";
+"Create custom task…" = "Créer une tâche personnalisée…";
+
+// MARK: - Task Configuration
+"Configure Task" = "Configurer la Tâche";
+"Edit Task" = "Modifier la Tâche";
+"Task name" = "Nom de la tâche";
+"Change icon" = "Changer l'icône";
+"Goal" = "Objectif";
+"Goal type" = "Type d'objectif";
+"Unit" = "Unité";
+"Measurement period" = "Période de mesure";
+"Schedule" = "Planning";
+"Frequency" = "Fréquence";
+"Times per day: %lld" = "Fois par jour : %lld";
+"Times per week: %lld" = "Fois par semaine : %lld";
+"Notification" = "Notification";
+"Reminder" = "Rappel";
+"Time" = "Heure";
+"We'll send you gentle reminders to help you build your habits." = "Nous t'enverrons des rappels pour t'aider à construire tes habitudes.";
+"Appearance" = "Apparence";
+"Color" = "Couleur";
+"Reward" = "Récompense";
+"Enable Reward" = "Activer la Récompense";
+"Streak to earn: %lld" = "Série pour gagner : %lld";
+"Reward description" = "Description de la récompense";
+"Category" = "Catégorie";
+"Create New Category" = "Créer une Catégorie";
+"Category name" = "Nom de la catégorie";
+
+// MARK: - Goal Types
+"No Goal" = "Sans Objectif";
+"Repetitions" = "Répétitions";
+"Cups" = "Tasses";
+"Calories" = "Calories";
+"Distance" = "Distance";
+"Weight" = "Poids";
+"Capacity" = "Capacité";
+
+// MARK: - Measurement Duration
+"Daily" = "Quotidien";
+"Weekly" = "Hebdomadaire";
+"Monthly" = "Mensuel";
+
+// MARK: - Frequency
+"Every Day" = "Chaque Jour";
+"Specific Days" = "Jours Précis";
+"Every Week" = "Chaque Semaine";
+
+// MARK: - Weekdays
+"Mon" = "Lun";
+"Tue" = "Mar";
+"Wed" = "Mer";
+"Thu" = "Jeu";
+"Fri" = "Ven";
+"Sat" = "Sam";
+"Sun" = "Dim";
+"Monday" = "Lundi";
+"Tuesday" = "Mardi";
+"Wednesday" = "Mercredi";
+"Thursday" = "Jeudi";
+"Friday" = "Vendredi";
+"Saturday" = "Samedi";
+"Sunday" = "Dimanche";
+
+// MARK: - Measurement Systems
+"Metric (km, kg, L)" = "Métrique (km, kg, L)";
+"US Customary (mi, lb, fl oz)" = "US (mi, lb, fl oz)";
+"Imperial (mi, st, pt)" = "Impérial (mi, st, pt)";
+
+// MARK: - Stats
+"Completions" = "Complétions";
+"Completion %" = "% Complétion";
+"Avg Completion %" = "% Moyenne";
+"Trend" = "Tendance";
+"No data for this period" = "Aucune donnée pour cette période";
+"Current Streak" = "Série Actuelle";
+"%lld days" = "%lld jours";
+"Manage Task Completions" = "Gérer les Complétions";
+"Manage Completions" = "Gérer les Complétions";
+"Select Dates" = "Sélectionner les Dates";
+
+// MARK: - Settings
+"General" = "Général";
+"Language" = "Langue";
+"Week starts on" = "La semaine commence le";
+"Measurement Units" = "Unités de Mesure";
+"Units" = "Unités";
+"Categories" = "Catégories";
+"Built-in" = "Prédéfinie";
+"Add Category" = "Ajouter une Catégorie";
+"Rename Category" = "Renommer la Catégorie";
+"Enter a new name for the category" = "Saisis un nouveau nom pour la catégorie";
+"Delete Category" = "Supprimer la Catégorie";
+"Delete \"%@\"? Tasks in this category will become uncategorized." = "Supprimer \"%@\" ? Les tâches seront décatégorisées.";
+"Support" = "Aide";
+"Privacy Policy" = "Politique de Confidentialité";
+"Contact Support" = "Contacter le Support";
+"Email Copied" = "Email Copié";
+"Support email copied to clipboard. Send your message to habit-tracker@fooshi.co" = "Email copié. Envoie ton message à habit-tracker@fooshi.co";
+"Data" = "Données";
+"Delete All Data" = "Supprimer Toutes les Données";
+"Remove all habits and data. Onboarding will show again on next launch." = "Supprime toutes les habitudes et données. L'introduction sera de nouveau affichée.";
+"This will remove all habits, completions, and categories. Preset categories will be restored on next launch. This cannot be undone." = "Cela supprimera toutes les habitudes, complétions et catégories. Les catégories prédéfinies seront restaurées. Irréversible.";
+
+// MARK: - Onboarding
+"Small habits,\nmassive change." = "Petites habitudes,\ngrand changement.";
+"Track your daily habits and stay motivated." = "Suis tes habitudes quotidiennes et reste motivé.";
+"Tap & Hold to Complete" = "Maintiens pour Terminer";
+"Press and hold the circle for 2 seconds to mark a habit as done." = "Maintiens le cercle appuyé 2 secondes pour terminer une habitude.";
+"Your goal is to build a streak of consecutive days" = "Ton objectif est de construire une série de jours consécutifs";
+"Create Your First Habit" = "Crée Ta Première Habitude";
+"Choose a preset or create a custom habit to get started." = "Choisis un modèle ou crée une habitude personnalisée.";
+"Choose a Habit" = "Choisis une Habitude";
+
+// MARK: - Icon Picker
+"Choose Icon" = "Choisir une Icône";
+"Search icons" = "Rechercher des icônes";
+
+// MARK: - Notifications
+"Habit Reminder" = "Rappel";
+"Time to %@!" = "C'est l'heure de %@ !";
+
+// MARK: - Reward Celebration
+"Congratulations!" = "Félicitations !";
+"You can now reward yourself with:" = "Tu peux maintenant te récompenser avec :";
+"Awesome!" = "Super !";
+"Congratulations! You can now reward yourself with: %@" = "Félicitations ! Tu peux te récompenser avec : %@";
+
+// MARK: - Preset Task Names
+"Walk" = "Marcher";
+"Run" = "Courir";
+"Bike" = "Vélo";
+"Push ups" = "Pompes";
+"Pull ups" = "Tractions";
+"Gym" = "Gym";
+"Swim" = "Nager";
+"Meditate" = "Méditer";
+"Eat a healthy meal" = "Manger sainement";
+"Write journal" = "Écrire un journal";
+"Walk the dog" = "Promener le chien";
+"Take vitamins" = "Prendre des vitamines";
+"Drink water" = "Boire de l'eau";
+"Decrease caffeine" = "Réduire la caféine";
+"Decrease calories intake" = "Réduire les calories";
+"Don't smoke" = "Ne pas fumer";
+"Don't bite nails" = "Ne pas se ronger les ongles";
+"Time in daylight" = "Temps au soleil";
+"Bed time early" = "Se coucher tôt";
+"Wash hands" = "Se laver les mains";
+"Floss your teeth" = "Utiliser du fil dentaire";
+"Call parents" = "Appeler ses parents";
+"Call a friend" = "Appeler un ami";
+"Ask a friend out" = "Inviter un ami";
+"Kiss partner" = "Embrasser son partenaire";
+"Talk to a stranger" = "Parler à un inconnu";
+"Learn a language" = "Apprendre une langue";
+"Read a book" = "Lire un livre";
+"Play instrument" = "Jouer d'un instrument";
+
+// MARK: - Preset Categories
+"Health" = "Santé";
+"Fitness" = "Fitness";
+"Learning" = "Apprentissage";
+"Social" = "Social";

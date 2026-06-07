@@ -4,12 +4,16 @@ import Foundation
 /// a new `HabitTask` when the user selects a preset from the task selector.
 struct PresetTask: Identifiable {
     let id: String          // e.g. "fitness.run"
-    let name: String
+    let name: String        // English key used for localization lookup
     let iconName: String    // SF Symbol name
     let categoryName: String
     let goalType: GoalType
     let defaultUnit: String?
     let defaultGoalValue: Double?
+
+    var localizedName: String {
+        NSLocalizedString(name, comment: "")
+    }
 }
 
 /// Static catalog of 25 preset tasks (FR-3 / data-model section 4).

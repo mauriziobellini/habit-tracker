@@ -25,4 +25,10 @@ final class Category {
         self.sortOrder = sortOrder
         self.createdAt = createdAt
     }
+
+    /// Returns the localized name for preset categories, or the user's custom name otherwise.
+    var localizedDisplayName: String {
+        isPreset ? NSLocalizedString(name, comment: "") : name
+    }
 }
+

@@ -12,9 +12,9 @@ enum MeasurementDuration: String, Codable, CaseIterable, Identifiable {
 
     var displayName: String {
         switch self {
-        case .daily:   return String(localized: "Daily")
-        case .weekly:  return String(localized: "Weekly")
-        case .monthly: return String(localized: "Monthly")
+        case .daily:   return NSLocalizedString("Daily", comment: "")
+        case .weekly:  return NSLocalizedString("Weekly", comment: "")
+        case .monthly: return NSLocalizedString("Monthly", comment: "")
         }
     }
 }
@@ -36,14 +36,14 @@ enum GoalType: String, Codable, CaseIterable, Identifiable {
 
     var displayName: String {
         switch self {
-        case .none:        return String(localized: "No Goal")
-        case .repetitions: return String(localized: "Repetitions")
-        case .time:        return String(localized: "Time")
-        case .cups:        return String(localized: "Cups")
-        case .calories:    return String(localized: "Calories")
-        case .distance:    return String(localized: "Distance")
-        case .weight:      return String(localized: "Weight")
-        case .capacity:    return String(localized: "Capacity")
+        case .none:        return NSLocalizedString("No Goal", comment: "")
+        case .repetitions: return NSLocalizedString("Repetitions", comment: "")
+        case .time:        return NSLocalizedString("Time", comment: "")
+        case .cups:        return NSLocalizedString("Cups", comment: "")
+        case .calories:    return NSLocalizedString("Calories", comment: "")
+        case .distance:    return NSLocalizedString("Distance", comment: "")
+        case .weight:      return NSLocalizedString("Weight", comment: "")
+        case .capacity:    return NSLocalizedString("Capacity", comment: "")
         }
     }
 
@@ -104,9 +104,9 @@ enum FrequencyType: String, Codable, CaseIterable, Identifiable {
 
     var displayName: String {
         switch self {
-        case .daily:        return String(localized: "Every Day")
-        case .specificDays: return String(localized: "Specific Days")
-        case .everyWeek:    return String(localized: "Every Week")
+        case .daily:        return NSLocalizedString("Every Day", comment: "")
+        case .specificDays: return NSLocalizedString("Specific Days", comment: "")
+        case .everyWeek:    return NSLocalizedString("Every Week", comment: "")
         }
     }
 }
@@ -127,25 +127,25 @@ enum Weekday: Int, Codable, CaseIterable, Identifiable {
 
     var shortName: String {
         switch self {
-        case .monday:    return String(localized: "Mon")
-        case .tuesday:   return String(localized: "Tue")
-        case .wednesday: return String(localized: "Wed")
-        case .thursday:  return String(localized: "Thu")
-        case .friday:    return String(localized: "Fri")
-        case .saturday:  return String(localized: "Sat")
-        case .sunday:    return String(localized: "Sun")
+        case .monday:    return NSLocalizedString("Mon", comment: "")
+        case .tuesday:   return NSLocalizedString("Tue", comment: "")
+        case .wednesday: return NSLocalizedString("Wed", comment: "")
+        case .thursday:  return NSLocalizedString("Thu", comment: "")
+        case .friday:    return NSLocalizedString("Fri", comment: "")
+        case .saturday:  return NSLocalizedString("Sat", comment: "")
+        case .sunday:    return NSLocalizedString("Sun", comment: "")
         }
     }
 
     var fullName: String {
         switch self {
-        case .monday:    return String(localized: "Monday")
-        case .tuesday:   return String(localized: "Tuesday")
-        case .wednesday: return String(localized: "Wednesday")
-        case .thursday:  return String(localized: "Thursday")
-        case .friday:    return String(localized: "Friday")
-        case .saturday:  return String(localized: "Saturday")
-        case .sunday:    return String(localized: "Sunday")
+        case .monday:    return NSLocalizedString("Monday", comment: "")
+        case .tuesday:   return NSLocalizedString("Tuesday", comment: "")
+        case .wednesday: return NSLocalizedString("Wednesday", comment: "")
+        case .thursday:  return NSLocalizedString("Thursday", comment: "")
+        case .friday:    return NSLocalizedString("Friday", comment: "")
+        case .saturday:  return NSLocalizedString("Saturday", comment: "")
+        case .sunday:    return NSLocalizedString("Sunday", comment: "")
         }
     }
 }
@@ -162,9 +162,9 @@ enum MeasurementSystem: String, Codable, CaseIterable, Identifiable {
 
     var displayName: String {
         switch self {
-        case .metric:   return String(localized: "Metric (km, kg, L)")
-        case .us:       return String(localized: "US Customary (mi, lb, fl oz)")
-        case .imperial: return String(localized: "Imperial (mi, st, pt)")
+        case .metric:   return NSLocalizedString("Metric (km, kg, L)", comment: "")
+        case .us:       return NSLocalizedString("US Customary (mi, lb, fl oz)", comment: "")
+        case .imperial: return NSLocalizedString("Imperial (mi, st, pt)", comment: "")
         }
     }
 }

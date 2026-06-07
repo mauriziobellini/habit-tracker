@@ -136,7 +136,7 @@ struct TaskListView: View {
                     viewModel.selectedCategoryID = category.id
                 } label: {
                     Label(
-                        category.name,
+                        category.localizedDisplayName,
                         systemImage: viewModel.selectedCategoryID == category.id ? "checkmark" : ""
                     )
                 }
@@ -153,8 +153,11 @@ struct TaskListView: View {
     }
 
     private var selectedCategoryName: String {
-        guard let id = viewModel.selectedCategoryID else { return "All" }
-        return categories.first { $0.id == id }?.name ?? "All"
+        guard let id = viewModel.selectedCategoryID else {
+            return NSLocalizedString("All", comment: "")
+        }
+        return categories.first { $0.id == id }?.localizedDisplayName
+            ?? NSLocalizedString("All", comment: "")
     }
 
     // MARK: - Add Button

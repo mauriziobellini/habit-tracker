@@ -71,7 +71,7 @@ struct RewardCelebrationView: View {
             }
         }
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("Congratulations! You can now reward yourself with: \(rewardText)")
+        .accessibilityLabel(Text("Congratulations! You can now reward yourself with: \(rewardText)"))
         .accessibilityAddTraits(.isModal)
     }
 

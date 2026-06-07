@@ -53,6 +53,8 @@ final class TaskStatsViewModel {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
         formatter.timeStyle = .none
+        let code = UserDefaults.standard.string(forKey: AppLanguage.userDefaultsKey) ?? "en"
+        formatter.locale = Locale(identifier: code)
         return "\(formatter.string(from: windowStart)) \u{2013} \(formatter.string(from: windowEnd))"
     }
 

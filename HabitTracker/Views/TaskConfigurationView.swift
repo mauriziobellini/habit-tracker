@@ -185,8 +185,10 @@ struct TaskConfigurationView: View {
             }
 
             if viewModel.frequencyType == .daily {
-                Stepper("Times per day: \(viewModel.timesPerDay)",
-                        value: $viewModel.timesPerDay, in: 1...10)
+                Stepper(
+                    String(format: NSLocalizedString("Times per day: %lld", comment: ""), viewModel.timesPerDay),
+                    value: $viewModel.timesPerDay, in: 1...10
+                )
             }
 
             if viewModel.frequencyType == .specificDays {
@@ -194,8 +196,10 @@ struct TaskConfigurationView: View {
             }
 
             if viewModel.frequencyType == .everyWeek {
-                Stepper("Times per week: \(viewModel.timesPerDay)",
-                        value: $viewModel.timesPerDay, in: 1...7)
+                Stepper(
+                    String(format: NSLocalizedString("Times per week: %lld", comment: ""), viewModel.timesPerDay),
+                    value: $viewModel.timesPerDay, in: 1...7
+                )
             }
         } header: {
             Text("Schedule")
@@ -315,7 +319,7 @@ struct TaskConfigurationView: View {
             Picker("Category", selection: $viewModel.selectedCategoryID) {
                 Text("None").tag(UUID?.none)
                 ForEach(categories) { cat in
-                    Text(cat.name).tag(UUID?.some(cat.id))
+                    Text(cat.localizedDisplayName).tag(UUID?.some(cat.id))
                 }
             }
 

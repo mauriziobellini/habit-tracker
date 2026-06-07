@@ -78,7 +78,7 @@ struct NewTaskSelectorView: View {
                     Button {
                         selectedPresetCategory = name
                     } label: {
-                        Text(name)
+                        Text(LocalizedStringKey(name))
                             .font(.subheadline.weight(.medium))
                             .padding(.horizontal, 16)
                             .padding(.vertical, 8)
@@ -115,7 +115,7 @@ struct NewTaskSelectorView: View {
                             .frame(width: 32, height: 32)
 
                         VStack(alignment: .leading, spacing: 2) {
-                            Text(preset.name)
+                            Text(preset.localizedName)
                                 .font(.body)
                                 .foregroundStyle(.primary)
                             if let unit = preset.defaultUnit {

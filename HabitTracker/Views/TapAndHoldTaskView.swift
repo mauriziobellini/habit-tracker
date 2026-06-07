@@ -55,8 +55,8 @@ struct TapAndHoldTaskView: View {
         .gesture(holdGesture)
         .simultaneousGesture(tapGesture)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(task.title), \(isCompleted ? "completed" : "not completed")")
-        .accessibilityHint(isCompleted ? "Already completed" : "Double tap to open menu, or double tap and hold to complete")
+        .accessibilityLabel("\(task.title), \(isCompleted ? String(localized: "completed") : String(localized: "not completed"))")
+        .accessibilityHint(isCompleted ? Text("Already completed") : Text("Double tap to open menu, or double tap and hold to complete"))
         .accessibilityAction(.default) {
             // VoiceOver single activation → complete immediately
             if !isCompleted {
@@ -166,7 +166,7 @@ struct TapAndHoldTaskView: View {
         // VoiceOver announcement
         UIAccessibility.post(
             notification: .announcement,
-            argument: "\(task.title) completed"
+            argument: String(format: NSLocalizedString("%@ completed", comment: ""), task.title)
         )
 
         onCompleted()
