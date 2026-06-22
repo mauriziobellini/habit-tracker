@@ -1,0 +1,93 @@
+{
+  "identifier" : "B1F0E7A2-3C4D-4E5F-8A90-FREEMIUM00001",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "15.00",
+      "familyShareable" : false,
+      "internalID" : "LIFETIME0001",
+      "localizations" : [
+        {
+          "description" : "Unlock unlimited habits forever with a one-time payment.",
+          "displayName" : "Lifetime",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "co.fooshi.habitring.premium.lifetime",
+      "referenceName" : "Lifetime",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+    "_applicationInternalID" : "co.fooshi.habitring",
+    "_developerTeamID" : "VR85B5U7U4",
+    "_lastSynchronizedDate" : 0
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "PREMIUMGROUP01",
+      "localizations" : [
+
+      ],
+      "name" : "Premium",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "0.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "MONTHLY00001",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Unlimited habits, billed monthly.",
+              "displayName" : "Monthly",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "co.fooshi.habitring.premium.monthly",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Monthly",
+          "subscriptionGroupID" : "PREMIUMGROUP01",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "8.00",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "YEARLY000001",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Unlimited habits, billed yearly.",
+              "displayName" : "Yearly",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "co.fooshi.habitring.premium.yearly",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Yearly",
+          "subscriptionGroupID" : "PREMIUMGROUP01",
+          "type" : "RecurringSubscription"
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 4,
+    "minor" : 0
+  }
+}

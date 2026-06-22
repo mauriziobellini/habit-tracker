@@ -16,6 +16,29 @@ final class AppSettingsViewModel {
     var showEmailCopiedAlert = false
     var showDeleteAllDataConfirmation = false
 
+    // Premium / restore (PRD - Freemium §7)
+    var isRestoring = false
+    var showRestoreResultAlert = false
+    var restoreResultMessage = ""
+
+    @MainActor
+    func restore(entitlementManager: EntitlementManager, analytics: AnalyticsService) async {
+        guard !isRestoring else { return }
+        isRestoring = true
+        defer { isRestoring = false }
+
+        analytics.track(.restoreTapped, properties: ["source": "settings"])
+        let restored = await entitlementManager.restore()
+        if restored {
+            analytics.track(.restoreSuccess)
+            restoreResultMessage = String(localized: "Your premium access has been restored.")
+        } else {
+            analytics.track(.restoreFailed, properties: ["reason": "nothing_to_restore"])
+            restoreResultMessage = String(localized: "No previous purchases were found to restore.")
+        }
+        showRestoreResultAlert = true
+    }
+
     @MainActor
     func load(from context: ModelContext) {
         let settings = AppSettings.shared(in: context)

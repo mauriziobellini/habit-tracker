@@ -19,6 +19,42 @@ final class TaskListViewModel {
     var showingRewardCelebration = false
     var rewardCelebrationText = ""
 
+    // Freemium paywall (PRD - Freemium §6, §7)
+    var showingPaywall = false
+    var paywallSource = "add_habit"
+    private var wantsSelectorAfterUnlock = false
+    var premiumUnlocked = false
+
+    /// Decide what happens when the user taps "+": open the selector or show the paywall.
+    func handleAddTapped(currentHabitCount: Int, isPremium: Bool) {
+        if HabitAccessPolicy.shouldPresentPaywallForNewHabit(
+            currentHabitCount: currentHabitCount,
+            isPremium: isPremium
+        ) {
+            presentPaywall(source: "add_habit", openSelectorOnUnlock: true)
+        } else {
+            showingTaskSelector = true
+        }
+    }
+
+    /// Present the paywall (e.g. from the add button or a locked habit tap).
+    func presentPaywall(source: String, openSelectorOnUnlock: Bool) {
+        paywallSource = source
+        wantsSelectorAfterUnlock = openSelectorOnUnlock
+        premiumUnlocked = false
+        showingPaywall = true
+    }
+
+    /// Called when the paywall sheet finishes dismissing. Continues the add-habit flow if the
+    /// user unlocked premium while trying to create a habit (chained sheet, PRD - Freemium §8).
+    func handlePaywallDismissed() {
+        if premiumUnlocked && wantsSelectorAfterUnlock {
+            showingTaskSelector = true
+        }
+        premiumUnlocked = false
+        wantsSelectorAfterUnlock = false
+    }
+
     /// Filter tasks by the selected category. `nil` means "All".
     func filteredTasks(_ tasks: [HabitTask]) -> [HabitTask] {
         guard let categoryID = selectedCategoryID else {

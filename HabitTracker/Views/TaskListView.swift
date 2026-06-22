@@ -8,6 +8,22 @@ struct TaskListView: View {
 
     @State private var viewModel = TaskListViewModel()
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(EntitlementManager.self) private var entitlementManager
+    @Environment(PurchaseService.self) private var purchaseService
+    @Environment(\.analyticsService) private var analytics
+
+    /// IDs of habits locked behind the paywall (lapsed subscription with >2 habits).
+    private var lockedHabitIDs: Set<UUID> {
+        let allTasks = Array(tasks)
+        return Set(allTasks.map(\.id)).subtracting(
+            HabitAccessPolicy.accessibleHabitIDs(
+                habits: allTasks,
+                isPremium: entitlementManager.isPremium,
+                id: { $0.id },
+                createdAt: { $0.createdAt }
+            )
+        )
+    }
 
     /// Collapse to 1 column at accessibility text sizes (UX principles section 7).
     private var columns: [GridItem] {
@@ -55,6 +71,21 @@ struct TaskListView: View {
             }
             .sheet(isPresented: $viewModel.showingTaskSelector) {
                 NewTaskSelectorView()
+            }
+            .sheet(isPresented: $viewModel.showingPaywall, onDismiss: {
+                viewModel.handlePaywallDismissed()
+            }) {
+                PaywallView(
+                    viewModel: PaywallViewModel(
+                        purchaseService: purchaseService,
+                        entitlementManager: entitlementManager,
+                        analytics: analytics,
+                        source: viewModel.paywallSource
+                    ),
+                    onPremiumUnlocked: {
+                        viewModel.premiumUnlocked = true
+                    }
+                )
             }
             .sheet(isPresented: $viewModel.showingSettings) {
                 AppSettingsView()
@@ -164,7 +195,10 @@ struct TaskListView: View {
 
     private var addButton: some View {
         Button {
-            viewModel.showingTaskSelector = true
+            viewModel.handleAddTapped(
+                currentHabitCount: tasks.count,
+                isPremium: entitlementManager.isPremium
+            )
         } label: {
             Image(systemName: "plus")
                 .font(.title3.weight(.semibold))
@@ -227,14 +261,20 @@ struct TaskListView: View {
 
     private func taskCell(_ task: HabitTask) -> some View {
         let isCompleted = task.isCompleted(on: .now)
+        let isLocked = lockedHabitIDs.contains(task.id)
 
         return TapAndHoldTaskView(
             task: task,
             isCompleted: isCompleted,
             circleSize: 80,
+            isLocked: isLocked,
             onSingleTap: {
-                viewModel.taskForMenu = task
-                viewModel.showingTaskMenu = true
+                if isLocked {
+                    viewModel.presentPaywall(source: "locked_habit", openSelectorOnUnlock: false)
+                } else {
+                    viewModel.taskForMenu = task
+                    viewModel.showingTaskMenu = true
+                }
             },
             onCompleted: {
                 recordCompletion(for: task)
@@ -276,7 +316,10 @@ struct TaskListView: View {
                 .multilineTextAlignment(.center)
 
             Button {
-                viewModel.showingTaskSelector = true
+                viewModel.handleAddTapped(
+                    currentHabitCount: tasks.count,
+                    isPremium: entitlementManager.isPremium
+                )
             } label: {
                 Text("Add Habit")
                     .font(.headline)

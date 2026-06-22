@@ -7,14 +7,21 @@ struct AppSettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @Query(sort: \Category.sortOrder) private var categories: [Category]
     @AppStorage(AppLanguage.userDefaultsKey) private var languageCode = "en"
+    @Environment(EntitlementManager.self) private var entitlementManager
+    @Environment(\.analyticsService) private var analytics
 
     @State private var viewModel = AppSettingsViewModel()
+
+    private static let manageSubscriptionsURL = URL(string: "https://apps.apple.com/account/subscriptions")!
 
     var body: some View {
         NavigationStack {
             Form {
                 // MARK: General
                 generalSection
+
+                // MARK: Premium
+                premiumSection
 
                 // MARK: Measurement Units
                 unitsSection
@@ -45,6 +52,11 @@ struct AppSettingsView: View {
                 Button("OK", role: .cancel) {}
             } message: {
                 Text("Support email copied to clipboard. Send your message to habit-tracker@fooshi.co")
+            }
+            .alert(String(localized: "Restore Purchases"), isPresented: $viewModel.showRestoreResultAlert) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text(viewModel.restoreResultMessage)
             }
             .alert("Rename Category", isPresented: $viewModel.showRenameCategoryAlert) {
                 TextField("Category name", text: $viewModel.renameCategoryName)
@@ -101,6 +113,60 @@ struct AppSettingsView: View {
             }
         } header: {
             Text("General")
+        }
+    }
+
+    // MARK: - Premium Section
+
+    private var premiumSection: some View {
+        Section {
+            HStack {
+                Image(systemName: entitlementManager.isPremium ? "checkmark.seal.fill" : "seal")
+                    .foregroundStyle(entitlementManager.isPremium ? Color.accentColor : .secondary)
+                Text(entitlementManager.isPremium ? "Premium active" : "Free plan")
+                    .foregroundStyle(.primary)
+                Spacer()
+                if entitlementManager.isLegacyCustomer {
+                    Text("Lifetime")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+
+            Button {
+                Task { await viewModel.restore(entitlementManager: entitlementManager, analytics: analytics) }
+            } label: {
+                HStack {
+                    Image(systemName: "arrow.clockwise")
+                        .foregroundStyle(.secondary)
+                    Text("Restore Purchases")
+                        .foregroundStyle(.primary)
+                    Spacer()
+                    if viewModel.isRestoring {
+                        ProgressView()
+                    }
+                }
+            }
+            .disabled(viewModel.isRestoring)
+            .accessibilityIdentifier("restorePurchasesButton")
+
+            if entitlementManager.hasActiveSubscription {
+                Button {
+                    if UIApplication.shared.canOpenURL(Self.manageSubscriptionsURL) {
+                        UIApplication.shared.open(Self.manageSubscriptionsURL)
+                    }
+                } label: {
+                    HStack {
+                        Image(systemName: "creditcard")
+                            .foregroundStyle(.secondary)
+                        Text("Manage Subscription")
+                            .foregroundStyle(.primary)
+                    }
+                }
+                .accessibilityIdentifier("manageSubscriptionButton")
+            }
+        } header: {
+            Text("Premium")
         }
     }
 

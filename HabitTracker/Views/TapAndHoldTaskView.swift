@@ -12,6 +12,9 @@ struct TapAndHoldTaskView: View {
     let task: HabitTask
     let isCompleted: Bool
     let circleSize: CGFloat
+    /// When locked (lapsed subscription beyond the free limit), the habit is greyed out and
+    /// a single tap opens the paywall instead of completing or showing the menu.
+    var isLocked: Bool = false
     let onSingleTap: () -> Void
     let onCompleted: () -> Void
 
@@ -32,6 +35,41 @@ struct TapAndHoldTaskView: View {
     }
 
     var body: some View {
+        if isLocked {
+            lockedBody
+        } else {
+            interactiveBody
+        }
+    }
+
+    // MARK: - Locked (premium-gated) appearance
+
+    private var lockedBody: some View {
+        TaskCircleView(
+            task: task,
+            isCompleted: false,
+            circleSize: circleSize
+        )
+        .opacity(0.5)
+        .overlay(alignment: .topTrailing) {
+            Image(systemName: "lock.fill")
+                .font(.caption.weight(.bold))
+                .foregroundStyle(.white)
+                .padding(6)
+                .background(Circle().fill(Color.secondary))
+                .offset(x: 4, y: -4)
+        }
+        .contentShape(Circle())
+        .onTapGesture { onSingleTap() }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(task.title), \(String(localized: "locked"))")
+        .accessibilityHint(Text("Subscribe to unlock this habit"))
+        .accessibilityAddTraits(.isButton)
+    }
+
+    // MARK: - Interactive (tap-and-hold) appearance
+
+    private var interactiveBody: some View {
         TaskCircleView(
             task: task,
             isCompleted: isCompleted || showCompletionBurst,
