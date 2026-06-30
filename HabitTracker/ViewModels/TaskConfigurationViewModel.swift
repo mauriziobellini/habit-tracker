@@ -17,12 +17,14 @@ final class TaskConfigurationViewModel {
 
     var title: String = ""
     var iconName: String? = nil
-    var measurementDuration: MeasurementDuration = .daily
     var goalType: GoalType = .none
     var goalValue: Double? = nil
     var goalUnit: String? = nil
-    var frequencyType: FrequencyType = .daily
-    var timesPerDay: Int = 1
+    var frequencyType: FrequencyType = .daily {
+        didSet { clampTimesToFrequency() }
+    }
+    var timesPerPeriod: Int = 1
+    var tracking: TrackingMode = .eachCompletion
     var scheduledDays: Set<Int> = Set(1...7)
     var notificationEnabled: Bool = false
     var notificationTime: Date = Calendar.current.date(
@@ -53,12 +55,13 @@ final class TaskConfigurationViewModel {
         case .edit(let task):
             title = task.title
             iconName = task.iconName
-            measurementDuration = task.measurementDuration
             goalType = task.goalType
             goalValue = task.goalValue
             goalUnit = task.goalUnit
-            frequencyType = task.frequencyType
-            timesPerDay = task.timesPerDay
+            // Normalize the legacy `everyWeek` value for the editor.
+            frequencyType = task.frequencyType == .everyWeek ? .weekly : task.frequencyType
+            timesPerPeriod = task.timesPerPeriod
+            tracking = task.tracking
             scheduledDays = Set(task.scheduledDays)
             notificationEnabled = task.notificationEnabled
             notificationTime = task.notificationTime ?? Calendar.current.date(
@@ -93,7 +96,60 @@ final class TaskConfigurationViewModel {
     // MARK: - Validation
 
     var canSave: Bool {
-        !title.trimmingCharacters(in: .whitespaces).isEmpty
+        if frequencyType == .specificDays && scheduledDays.isEmpty { return false }
+        return !title.trimmingCharacters(in: .whitespaces).isEmpty
+    }
+
+    // MARK: - Schedule helpers
+
+    /// Valid range for the times-per-period stepper, per frequency (PRD §9).
+    var timesPerPeriodRange: ClosedRange<Int> {
+        switch frequencyType {
+        case .daily:        return 1...48
+        case .weekly:       return 1...7
+        case .monthly:      return 1...30
+        case .specificDays, .everyWeek: return 1...7
+        }
+    }
+
+    /// Localized label for the times-per-period stepper.
+    var timesPerPeriodLabel: String {
+        switch frequencyType {
+        case .daily:
+            return String(format: NSLocalizedString("Times per day: %lld", comment: ""), timesPerPeriod)
+        case .monthly:
+            return String(format: NSLocalizedString("Times per month: %lld", comment: ""), timesPerPeriod)
+        default:
+            return String(format: NSLocalizedString("Times per week: %lld", comment: ""), timesPerPeriod)
+        }
+    }
+
+    /// Whether the times-per-period stepper is shown (specific days uses the
+    /// weekday selector instead, so the quota is implicit).
+    var showsTimesStepper: Bool {
+        frequencyType == .daily || frequencyType == .weekly || frequencyType == .monthly
+    }
+
+    /// Whether the tracking picker is offered (PRD §9):
+    /// weekly/monthly only when `1 < N < max`; specific days only when not all 7
+    /// days are selected (and more than one day). Never for daily.
+    var showsTrackingPicker: Bool {
+        switch frequencyType {
+        case .daily, .everyWeek:
+            return false
+        case .weekly:
+            return timesPerPeriod > 1 && timesPerPeriod < 7
+        case .monthly:
+            return timesPerPeriod > 1 && timesPerPeriod < 30
+        case .specificDays:
+            return scheduledDays.count > 1 && scheduledDays.count < 7
+        }
+    }
+
+    /// Keeps `timesPerPeriod` valid when the frequency changes.
+    private func clampTimesToFrequency() {
+        let range = timesPerPeriodRange
+        timesPerPeriod = min(max(timesPerPeriod, range.lowerBound), range.upperBound)
     }
 
     // MARK: - Goal Value String Binding
@@ -114,6 +170,12 @@ final class TaskConfigurationViewModel {
 
     // MARK: - Save
 
+    /// The quota value to persist. For specific days the target is derived from
+    /// the selected weekdays, so we store that count for consistency.
+    private var resolvedTimesPerPeriod: Int {
+        frequencyType == .specificDays ? max(1, scheduledDays.count) : timesPerPeriod
+    }
+
     @MainActor
     func save(context: ModelContext, categories: [Category]) {
         switch mode {
@@ -123,12 +185,12 @@ final class TaskConfigurationViewModel {
                 iconName: iconName,
                 isPreset: isPreset,
                 presetIdentifier: presetIdentifier,
-                measurementDuration: measurementDuration,
                 goalType: goalType,
                 goalValue: goalType == .none ? nil : goalValue,
                 goalUnit: goalType == .none ? nil : goalUnit,
                 frequencyType: frequencyType,
-                timesPerDay: timesPerDay,
+                timesPerPeriod: resolvedTimesPerPeriod,
+                tracking: tracking,
                 scheduledDays: Array(scheduledDays).sorted(),
                 notificationEnabled: notificationEnabled,
                 notificationTime: notificationEnabled ? notificationTime : nil,
@@ -152,12 +214,12 @@ final class TaskConfigurationViewModel {
         case .edit(let task):
             task.title = title.trimmingCharacters(in: .whitespaces)
             task.iconName = iconName
-            task.measurementDuration = measurementDuration
             task.goalType = goalType
             task.goalValue = goalType == .none ? nil : goalValue
             task.goalUnit = goalType == .none ? nil : goalUnit
             task.frequencyType = frequencyType
-            task.timesPerDay = timesPerDay
+            task.timesPerPeriod = resolvedTimesPerPeriod
+            task.tracking = tracking
             task.scheduledDays = Array(scheduledDays).sorted()
             task.notificationEnabled = notificationEnabled
             task.notificationTime = notificationEnabled ? notificationTime : nil

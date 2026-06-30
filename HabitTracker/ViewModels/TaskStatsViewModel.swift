@@ -34,11 +34,11 @@ final class TaskStatsViewModel {
     // MARK: - Computed Stats
 
     var completionCount: Int {
-        StatisticsService.completionCount(for: task, from: windowStart, to: windowEnd)
+        StatisticsService.completionCount(for: task, from: windowStart, to: windowEnd, weekStartDay: weekStartDay)
     }
 
     var completionPercentage: Double {
-        StatisticsService.completionPercentage(for: task, from: windowStart, to: windowEnd)
+        StatisticsService.completionPercentage(for: task, from: windowStart, to: windowEnd, weekStartDay: weekStartDay)
     }
 
     var trendData: [StatisticsService.TrendPoint] {
@@ -46,7 +46,7 @@ final class TaskStatsViewModel {
     }
 
     var currentStreak: Int {
-        task.currentStreak()
+        task.currentStreak(weekStartDay: weekStartDay)
     }
 
     var windowDescription: String {

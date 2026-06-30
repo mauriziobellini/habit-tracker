@@ -107,7 +107,8 @@ struct ManageCompletionsView: View {
 
     private func dayCell(_ date: Date) -> some View {
         let dayNumber = calendar.component(.day, from: date)
-        let isCompleted = task.isCompleted(on: date, calendar: calendar)
+        let dayCompletions = task.completions(on: date, calendar: calendar).count
+        let hasCompletion = dayCompletions > 0
         let isFuture = date > Date.now
 
         return Button {
@@ -116,12 +117,24 @@ struct ManageCompletionsView: View {
         } label: {
             ZStack {
                 Circle()
-                    .fill(isCompleted ? accentColor : Color(.secondarySystemBackground))
+                    .fill(hasCompletion ? accentColor : Color(.secondarySystemBackground))
                     .frame(width: 40, height: 40)
 
                 Text("\(dayNumber)")
-                    .font(.subheadline.weight(isCompleted ? .bold : .regular))
-                    .foregroundColor(isCompleted ? .white : isFuture ? Color(.tertiaryLabel) : .primary)
+                    .font(.subheadline.weight(hasCompletion ? .bold : .regular))
+                    .foregroundColor(hasCompletion ? .white : isFuture ? Color(.tertiaryLabel) : .primary)
+            }
+            // Show a small badge when more than one completion exists on a day
+            // (multi-daily habits, or calendar edits that exceed the period quota).
+            .overlay(alignment: .topTrailing) {
+                if dayCompletions > 1 {
+                    Text("\(dayCompletions)")
+                        .font(.system(size: 10, weight: .bold, design: .rounded))
+                        .foregroundStyle(Color(.systemBackground))
+                        .frame(minWidth: 16, minHeight: 16)
+                        .background(Circle().fill(Color.primary))
+                        .offset(x: 5, y: -5)
+                }
             }
         }
         .buttonStyle(.plain)

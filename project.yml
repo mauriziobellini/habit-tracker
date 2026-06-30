@@ -67,3 +67,15 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: co.fooshi.habitring.uitests
         TEST_TARGET_NAME: HabitTracker
+
+schemes:
+  HabitTracker:
+    build:
+      targets:
+        HabitTracker: all
+    test:
+      targets:
+        - HabitTrackerTests
+        - HabitTrackerUITests
+    run:
+      config: Debug

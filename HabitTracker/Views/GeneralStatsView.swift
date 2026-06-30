@@ -30,11 +30,11 @@ struct GeneralStatsView: View {
     }
 
     private var completionCount: Int {
-        StatisticsService.totalCompletionCount(tasks: filteredTasks, from: windowStart, to: windowEnd)
+        StatisticsService.totalCompletionCount(tasks: filteredTasks, from: windowStart, to: windowEnd, weekStartDay: weekStartDay)
     }
 
     private var completionPercentage: Double {
-        StatisticsService.averageCompletionPercentage(tasks: filteredTasks, from: windowStart, to: windowEnd)
+        StatisticsService.averageCompletionPercentage(tasks: filteredTasks, from: windowStart, to: windowEnd, weekStartDay: weekStartDay)
     }
 
     private var trendData: [StatisticsService.TrendPoint] {

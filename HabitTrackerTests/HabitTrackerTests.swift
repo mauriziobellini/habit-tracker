@@ -1,19 +1,12 @@
 import Testing
 import Foundation
+import SwiftData
 @testable import HabitTracker
 
 // MARK: - Enum Tests
 
 @Suite("Enums")
 struct EnumTests {
-    @Test("MeasurementDuration raw value round-trip")
-    func measurementDurationRoundTrip() {
-        for duration in MeasurementDuration.allCases {
-            let rawValue = duration.rawValue
-            #expect(MeasurementDuration(rawValue: rawValue) == duration)
-        }
-    }
-
     @Test("GoalType raw value round-trip")
     func goalTypeRoundTrip() {
         for goalType in GoalType.allCases {
@@ -32,6 +25,20 @@ struct EnumTests {
         for freq in FrequencyType.allCases {
             #expect(FrequencyType(rawValue: freq.rawValue) == freq)
         }
+    }
+
+    @Test("FrequencyType selectable cases exclude legacy everyWeek")
+    func frequencySelectableCases() {
+        #expect(FrequencyType.selectableCases == [.daily, .weekly, .monthly, .specificDays])
+        #expect(!FrequencyType.selectableCases.contains(.everyWeek))
+    }
+
+    @Test("TrackingMode raw value round-trip")
+    func trackingModeRoundTrip() {
+        for mode in TrackingMode.allCases {
+            #expect(TrackingMode(rawValue: mode.rawValue) == mode)
+        }
+        #expect(TrackingMode.allCases.count == 2)
     }
 
     @Test("Weekday covers all 7 days")
@@ -167,10 +174,10 @@ struct HabitTaskTests {
     @Test("Default values are set correctly")
     func defaultValues() {
         let task = HabitTask(title: "Test")
-        #expect(task.measurementDuration == .daily)
         #expect(task.goalType == .none)
         #expect(task.frequencyType == .daily)
-        #expect(task.timesPerDay == 1)
+        #expect(task.timesPerPeriod == 1)
+        #expect(task.tracking == .eachCompletion)
         #expect(task.scheduledDays == [1, 2, 3, 4, 5, 6, 7])
         #expect(!task.notificationEnabled)
         #expect(task.colorToken == "blue")
@@ -229,17 +236,18 @@ struct StatisticsServiceTests {
         #expect(count == 2) // yesterday + twoDaysAgo
     }
 
-    @Test("expectedCompletions for daily task")
+    @Test("expectedCompletions for daily task = one credit per day")
     func expectedDaily() {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: .now)
         let sevenDaysAgo = calendar.date(byAdding: .day, value: -6, to: today)!
 
-        let task = HabitTask(title: "Test", frequencyType: .daily, timesPerDay: 2)
+        // Daily multi-task is forced periodComplete: at most one credit per day.
+        let task = HabitTask(title: "Test", frequencyType: .daily, timesPerPeriod: 2)
         let expected = StatisticsService.expectedCompletions(
             for: task, from: sevenDaysAgo, to: today, calendar: calendar
         )
-        #expect(expected == 14) // 7 days * 2 times
+        #expect(expected == 7) // 7 days, one credit each
     }
 
     @Test("completionPercentage returns 0 when no completions")
@@ -338,7 +346,6 @@ struct TaskConfigurationViewModelTests {
         let task = HabitTask(
             title: "Meditate",
             iconName: "brain.head.profile",
-            measurementDuration: .daily,
             goalType: .time,
             goalValue: 10,
             goalUnit: "min",
@@ -425,5 +432,308 @@ struct TaskStatsViewModelTests {
         vm.updateWindow(start: newStart, end: newEnd)
         #expect(calendar.isDate(vm.windowStart, inSameDayAs: newStart))
         #expect(calendar.isDate(vm.windowEnd, inSameDayAs: newEnd))
+    }
+}
+
+// MARK: - Test Helpers
+
+private enum TestData {
+    static let calendar = Calendar.current
+
+    static func date(_ year: Int, _ month: Int, _ day: Int, hour: Int = 12) -> Date {
+        calendar.date(from: DateComponents(year: year, month: month, day: day, hour: hour))!
+    }
+
+    /// Builds a task with completions at the given dates (not persisted).
+    static func task(
+        frequency: FrequencyType = .daily,
+        n: Int = 1,
+        tracking: TrackingMode = .eachCompletion,
+        scheduledDays: [Int] = [1, 2, 3, 4, 5, 6, 7],
+        completions: [Date] = []
+    ) -> HabitTask {
+        let t = HabitTask(
+            title: "Test",
+            frequencyType: frequency,
+            timesPerPeriod: n,
+            tracking: tracking,
+            scheduledDays: scheduledDays
+        )
+        for d in completions {
+            t.completions.append(TaskCompletion(completedAt: d, task: t))
+        }
+        return t
+    }
+}
+
+// MARK: - PeriodService Tests
+
+@Suite("PeriodService")
+struct PeriodServiceTests {
+    private let cal = Calendar.current
+
+    @Test("Daily period bounds span one calendar day")
+    func dailyBounds() {
+        let t = TestData.task(frequency: .daily, n: 1)
+        let day = TestData.date(2026, 2, 11)
+        let bounds = PeriodService.periodBounds(for: t, on: day, calendar: cal)
+        #expect(cal.isDate(bounds.start, inSameDayAs: day))
+        let expectedEnd = cal.date(byAdding: .day, value: 1, to: cal.startOfDay(for: day))!
+        #expect(bounds.end == expectedEnd)
+    }
+
+    @Test("Weekly period starts on configured week start day (Monday)")
+    func weeklyBoundsMonday() {
+        let t = TestData.task(frequency: .weekly, n: 3)
+        // 2026-02-11 is a Wednesday; Monday of that week is 2026-02-09.
+        let wed = TestData.date(2026, 2, 11)
+        let bounds = PeriodService.periodBounds(for: t, on: wed, calendar: cal, weekStartDay: 1)
+        let monday = cal.startOfDay(for: TestData.date(2026, 2, 9))
+        #expect(bounds.start == monday)
+        #expect(bounds.end == cal.date(byAdding: .day, value: 7, to: monday)!)
+    }
+
+    @Test("Monthly period spans the calendar month")
+    func monthlyBounds() {
+        let t = TestData.task(frequency: .monthly, n: 3)
+        let mid = TestData.date(2026, 2, 15)
+        let bounds = PeriodService.periodBounds(for: t, on: mid, calendar: cal)
+        #expect(bounds.start == cal.startOfDay(for: TestData.date(2026, 2, 1, hour: 0)))
+        #expect(bounds.end == cal.startOfDay(for: TestData.date(2026, 3, 1, hour: 0)))
+    }
+
+    @Test("Daily multi-task list state transitions 0/3 -> partial -> complete")
+    func dailyStates() {
+        let day = TestData.date(2026, 2, 11)
+        let t = TestData.task(frequency: .daily, n: 3, completions: [])
+
+        var p = PeriodService.periodProgress(for: t, on: day, calendar: cal)
+        #expect(p.listState == .incomplete)
+        #expect(p.current == 0)
+        #expect(p.showsCounter)
+
+        t.completions.append(TaskCompletion(completedAt: TestData.date(2026, 2, 11, hour: 8), task: t))
+        p = PeriodService.periodProgress(for: t, on: day, calendar: cal)
+        #expect(p.listState == .partial)
+        #expect(p.current == 1)
+
+        t.completions.append(TaskCompletion(completedAt: TestData.date(2026, 2, 11, hour: 12), task: t))
+        t.completions.append(TaskCompletion(completedAt: TestData.date(2026, 2, 11, hour: 18), task: t))
+        p = PeriodService.periodProgress(for: t, on: day, calendar: cal)
+        #expect(p.listState == .complete)
+        #expect(p.current == 3)
+    }
+
+    @Test("canAcceptCompletion is false once complete (over-completion blocked)")
+    func gatingAtComplete() {
+        let day = TestData.date(2026, 2, 11)
+        let t = TestData.task(frequency: .daily, n: 1, completions: [TestData.date(2026, 2, 11, hour: 9)])
+        #expect(!PeriodService.canAcceptCompletion(for: t, on: day, calendar: cal))
+    }
+
+    @Test("N=1 profiles show no counter")
+    func simpleNoCounter() {
+        let t = TestData.task(frequency: .weekly, n: 1)
+        let p = PeriodService.periodProgress(for: t, on: TestData.date(2026, 2, 11), calendar: cal)
+        #expect(!p.showsCounter)
+    }
+
+    @Test("Specific days is hidden when today is not scheduled and target = day count")
+    func specificDaysVisibility() {
+        // Mon/Wed/Fri scheduled; 2026-02-10 is a Tuesday (hidden), 02-11 Wed (visible).
+        let t = TestData.task(frequency: .specificDays, scheduledDays: [1, 3, 5])
+        #expect(PeriodService.target(for: t) == 3)
+
+        let tue = TestData.date(2026, 2, 10)
+        #expect(PeriodService.periodProgress(for: t, on: tue, calendar: cal).listState == .hidden)
+
+        let wed = TestData.date(2026, 2, 11)
+        #expect(PeriodService.periodProgress(for: t, on: wed, calendar: cal).listState != .hidden)
+    }
+
+    @Test("Legacy everyWeek behaves as weekly for period math")
+    func everyWeekActsWeekly() {
+        let t = TestData.task(frequency: .everyWeek, n: 2)
+        #expect(PeriodService.effectiveFrequency(for: t) == .weekly)
+        let bounds = PeriodService.periodBounds(for: t, on: TestData.date(2026, 2, 11), calendar: cal, weekStartDay: 1)
+        #expect(bounds.start == cal.startOfDay(for: TestData.date(2026, 2, 9)))
+    }
+}
+
+// MARK: - Stats Credit Tests
+
+@Suite("StatisticsService Tracking")
+struct StatisticsTrackingTests {
+    private let cal = Calendar.current
+
+    @Test("Weekly eachCompletion credits each raw completion")
+    func weeklyEachCompletion() {
+        let comps = [TestData.date(2026, 2, 9), TestData.date(2026, 2, 10), TestData.date(2026, 2, 11)]
+        let t = TestData.task(frequency: .weekly, n: 3, tracking: .eachCompletion, completions: comps)
+        let from = TestData.date(2026, 2, 9, hour: 0)
+        let to = TestData.date(2026, 2, 15, hour: 23)
+        #expect(StatisticsService.completionCount(for: t, from: from, to: to, weekStartDay: 1, calendar: cal) == 3)
+    }
+
+    @Test("Weekly periodComplete credits one for a completed period")
+    func weeklyPeriodComplete() {
+        let comps = [TestData.date(2026, 2, 9), TestData.date(2026, 2, 10), TestData.date(2026, 2, 11)]
+        let t = TestData.task(frequency: .weekly, n: 3, tracking: .periodComplete, completions: comps)
+        let from = TestData.date(2026, 2, 9, hour: 0)
+        let to = TestData.date(2026, 2, 15, hour: 23)
+        #expect(StatisticsService.completionCount(for: t, from: from, to: to, weekStartDay: 1, calendar: cal) == 1)
+    }
+
+    @Test("Daily multi-task is forced periodComplete (3/3 -> 1, 2/3 -> 0)")
+    func dailyForcedPeriodComplete() {
+        let from = TestData.date(2026, 2, 11, hour: 0)
+        let to = TestData.date(2026, 2, 11, hour: 23)
+
+        let full = TestData.task(frequency: .daily, n: 3, completions: [
+            TestData.date(2026, 2, 11, hour: 8),
+            TestData.date(2026, 2, 11, hour: 12),
+            TestData.date(2026, 2, 11, hour: 18),
+        ])
+        #expect(StatisticsService.completionCount(for: full, from: from, to: to, calendar: cal) == 1)
+
+        let partial = TestData.task(frequency: .daily, n: 3, completions: [
+            TestData.date(2026, 2, 11, hour: 8),
+            TestData.date(2026, 2, 11, hour: 12),
+        ])
+        #expect(StatisticsService.completionCount(for: partial, from: from, to: to, calendar: cal) == 0)
+    }
+}
+
+// MARK: - Streak Tests
+
+@Suite("Streak Logic")
+struct StreakTests {
+    private let cal = Calendar.current
+
+    @Test("Daily N=3: 5 completions across 2 days -> streak 1")
+    func dailyStreak() {
+        // Today (Wed 02-11): 2 completions; Tue 02-10: 3 completions.
+        let t = TestData.task(frequency: .daily, n: 3, completions: [
+            TestData.date(2026, 2, 11, hour: 8),
+            TestData.date(2026, 2, 11, hour: 12),
+            TestData.date(2026, 2, 10, hour: 8),
+            TestData.date(2026, 2, 10, hour: 12),
+            TestData.date(2026, 2, 10, hour: 18),
+        ])
+        let streak = PeriodService.currentStreak(for: t, on: TestData.date(2026, 2, 11), calendar: cal, weekStartDay: 1)
+        #expect(streak == 1)
+    }
+
+    @Test("Weekly eachCompletion N=3: 5 completions across 2 weeks -> streak 5")
+    func weeklyEachStreak() {
+        // Week B (current, Mon 02-09): 2; Week A (Mon 02-02): 3.
+        let t = TestData.task(frequency: .weekly, n: 3, tracking: .eachCompletion, completions: [
+            TestData.date(2026, 2, 9), TestData.date(2026, 2, 10),
+            TestData.date(2026, 2, 2), TestData.date(2026, 2, 3), TestData.date(2026, 2, 4),
+        ])
+        let streak = PeriodService.currentStreak(for: t, on: TestData.date(2026, 2, 11), calendar: cal, weekStartDay: 1)
+        #expect(streak == 5)
+    }
+
+    @Test("Weekly periodComplete N=3: 5 completions across 2 weeks -> streak 1")
+    func weeklyPeriodStreak() {
+        let t = TestData.task(frequency: .weekly, n: 3, tracking: .periodComplete, completions: [
+            TestData.date(2026, 2, 9), TestData.date(2026, 2, 10),
+            TestData.date(2026, 2, 2), TestData.date(2026, 2, 3), TestData.date(2026, 2, 4),
+        ])
+        let streak = PeriodService.currentStreak(for: t, on: TestData.date(2026, 2, 11), calendar: cal, weekStartDay: 1)
+        #expect(streak == 1)
+    }
+}
+
+// MARK: - Migration Tests
+
+@Suite("MigrationService")
+struct MigrationServiceTests {
+    @MainActor
+    @Test("Legacy everyWeek is normalized to weekly")
+    func normalizeEveryWeek() throws {
+        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        let container = try ModelContainer(
+            for: HabitTask.self, TaskCompletion.self, Category.self, AppSettings.self,
+            configurations: config
+        )
+        let context = container.mainContext
+
+        let task = HabitTask(title: "Gym", frequencyType: .everyWeek, timesPerPeriod: 3)
+        context.insert(task)
+        // Completions must be preserved.
+        let completion = TaskCompletion(completedAt: .now, task: task)
+        context.insert(completion)
+
+        MigrationService.normalizeIfNeeded(context: context)
+
+        #expect(task.frequencyType == .weekly)
+        #expect(task.tracking == .eachCompletion)
+        #expect(task.completions.count == 1)
+
+        // Idempotent: running again is a no-op.
+        MigrationService.normalizeIfNeeded(context: context)
+        #expect(task.frequencyType == .weekly)
+    }
+}
+
+// MARK: - Configuration Picker Logic Tests
+
+@Suite("TaskConfiguration Picker Logic")
+struct TaskConfigurationPickerTests {
+    @Test("Tracking picker hidden for daily, shown for weekly 1<N<7")
+    func trackingVisibility() {
+        let vm = TaskConfigurationViewModel(mode: .create)
+
+        vm.frequencyType = .daily
+        vm.timesPerPeriod = 3
+        #expect(!vm.showsTrackingPicker)
+
+        vm.frequencyType = .weekly
+        vm.timesPerPeriod = 3
+        #expect(vm.showsTrackingPicker)
+
+        vm.timesPerPeriod = 1
+        #expect(!vm.showsTrackingPicker)
+    }
+
+    @Test("Weekly with all 7 days hides tracking picker")
+    func weeklyFullHidesTracking() {
+        let vm = TaskConfigurationViewModel(mode: .create)
+        vm.frequencyType = .weekly
+        vm.timesPerPeriod = 7
+        #expect(!vm.showsTrackingPicker)
+    }
+
+    @Test("Specific days tracking shown only when not all 7 selected")
+    func specificDaysTracking() {
+        let vm = TaskConfigurationViewModel(mode: .create)
+        vm.frequencyType = .specificDays
+        vm.scheduledDays = [1, 3, 5]
+        #expect(vm.showsTrackingPicker)
+
+        vm.scheduledDays = Set(1...7)
+        #expect(!vm.showsTrackingPicker)
+
+        vm.scheduledDays = [1]
+        #expect(!vm.showsTrackingPicker)
+    }
+
+    @Test("Changing frequency clamps times-per-period into range")
+    func clampOnFrequencyChange() {
+        let vm = TaskConfigurationViewModel(mode: .create)
+        vm.frequencyType = .daily
+        vm.timesPerPeriod = 40 // valid for daily (1...48)
+        vm.frequencyType = .weekly // weekly max 7
+        #expect(vm.timesPerPeriod == 7)
+        #expect(vm.timesPerPeriodRange == 1...7)
+    }
+
+    @Test("Times stepper hidden for specific days")
+    func stepperHiddenSpecificDays() {
+        let vm = TaskConfigurationViewModel(mode: .create)
+        vm.frequencyType = .specificDays
+        #expect(!vm.showsTimesStepper)
     }
 }

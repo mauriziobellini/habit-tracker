@@ -39,6 +39,7 @@
 "Already completed" = "Already completed";
 "Double tap to open menu, or double tap and hold to complete" = "Double tap to open menu, or double tap and hold to complete";
 "%@ completed" = "%@ completed";
+"%@, %lld of %lld completed this period" = "%@, %lld of %lld completed this period";
 "Task" = "Task";
 "Stats" = "Stats";
 
@@ -59,6 +60,11 @@
 "Frequency" = "Frequency";
 "Times per day: %lld" = "Times per day: %lld";
 "Times per week: %lld" = "Times per week: %lld";
+"Times per month: %lld" = "Times per month: %lld";
+"Tracking" = "Tracking";
+"Count every completion" = "Count every completion";
+"Count when period completed" = "Count when period completed";
+"Choose whether each completion counts toward your stats, or only when the whole period is completed." = "Choose whether each completion counts toward your stats, or only when the whole period is completed.";
 "Notification" = "Notification";
 "Reminder" = "Reminder";
 "Time" = "Time";

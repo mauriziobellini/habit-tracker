@@ -59,6 +59,12 @@
 "Frequency" = "Frequentie";
 "Times per day: %lld" = "Keer per dag: %lld";
 "Times per week: %lld" = "Keer per week: %lld";
+"Times per month: %lld" = "Keer per maand: %lld";
+"Tracking" = "Bijhouden";
+"Count every completion" = "Elke voltooiing tellen";
+"Count when period completed" = "Tellen wanneer de periode is voltooid";
+"Choose whether each completion counts toward your stats, or only when the whole period is completed." = "Kies of elke voltooiing meetelt voor je statistieken, of alleen wanneer de hele periode is voltooid.";
+"%@, %lld of %lld completed this period" = "%@, %lld van %lld voltooid in deze periode";
 "Notification" = "Melding";
 "Reminder" = "Herinnering";
 "Time" = "Tijd";

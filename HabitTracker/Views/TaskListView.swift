@@ -5,6 +5,11 @@ struct TaskListView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \HabitTask.sortOrder) private var tasks: [HabitTask]
     @Query(sort: \Category.sortOrder) private var categories: [Category]
+    @Query private var allSettings: [AppSettings]
+
+    private var weekStartDay: Int {
+        allSettings.first?.weekStartDay ?? 1
+    }
 
     @State private var viewModel = TaskListViewModel()
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
@@ -246,10 +251,22 @@ struct TaskListView: View {
 
     // MARK: - Task Grid
 
+    /// Visible tasks: filtered by category, with specific-days habits hidden on
+    /// non-scheduled days (PRD §9 / state machine §7).
+    private var visibleTasks: [HabitTask] {
+        viewModel.filteredTasks(tasks).filter { task in
+            PeriodService.periodProgress(
+                for: task,
+                on: .now,
+                weekStartDay: weekStartDay
+            ).listState != .hidden
+        }
+    }
+
     private var taskGridView: some View {
         ScrollView {
             LazyVGrid(columns: columns, spacing: 24) {
-                ForEach(viewModel.filteredTasks(tasks)) { task in
+                ForEach(visibleTasks) { task in
                     taskCell(task)
                 }
             }
@@ -260,12 +277,12 @@ struct TaskListView: View {
     }
 
     private func taskCell(_ task: HabitTask) -> some View {
-        let isCompleted = task.isCompleted(on: .now)
+        let progress = PeriodService.periodProgress(for: task, on: .now, weekStartDay: weekStartDay)
         let isLocked = lockedHabitIDs.contains(task.id)
 
         return TapAndHoldTaskView(
             task: task,
-            isCompleted: isCompleted,
+            progress: progress,
             circleSize: 80,
             isLocked: isLocked,
             onSingleTap: {
@@ -283,6 +300,11 @@ struct TaskListView: View {
     }
 
     private func recordCompletion(for task: HabitTask) {
+        // Over-completion rule: the task list never records beyond the period quota.
+        guard PeriodService.canAcceptCompletion(for: task, on: .now, weekStartDay: weekStartDay) else {
+            return
+        }
+
         let completion = TaskCompletion(task: task)
         modelContext.insert(completion)
         // Suppress today's notification if task completed early
@@ -291,7 +313,7 @@ struct TaskListView: View {
         }
         // Check if this completion triggers a reward
         if task.rewardEnabled, let rewardText = task.rewardText, !rewardText.isEmpty {
-            let streak = task.currentStreak()
+            let streak = task.currentStreak(weekStartDay: weekStartDay)
             if streak > 0 && streak % task.rewardStreakCount == 0 {
                 viewModel.rewardCelebrationText = rewardText
                 viewModel.showingRewardCelebration = true

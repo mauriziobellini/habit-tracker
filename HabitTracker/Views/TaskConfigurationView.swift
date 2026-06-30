@@ -8,8 +8,18 @@ struct TaskConfigurationView: View {
     @Query(sort: \Category.sortOrder) private var categories: [Category]
     @Query private var allSettings: [AppSettings]
 
-    @Bindable var viewModel: TaskConfigurationViewModel
-    var onSave: (() -> Void)? = nil
+    /// Owned in `@State` so the instance is captured once per presentation and
+    /// survives parent re-renders. Holding it as a plain `@Bindable` property
+    /// caused the view model to be recreated (and the form reset to the task's
+    /// saved values) whenever the presenting view re-evaluated its body, which
+    /// made Frequency and the times stepper appear "stuck" while editing.
+    @State private var viewModel: TaskConfigurationViewModel
+    private let onSave: (() -> Void)?
+
+    init(viewModel: TaskConfigurationViewModel, onSave: (() -> Void)? = nil) {
+        _viewModel = State(initialValue: viewModel)
+        self.onSave = onSave
+    }
 
     private var measurementSystem: MeasurementSystem {
         allSettings.first?.measurementSystem ?? .metric
@@ -156,12 +166,6 @@ struct TaskConfigurationView: View {
                     }
                 }
             }
-
-            Picker("Measurement period", selection: $viewModel.measurementDuration) {
-                ForEach(MeasurementDuration.allCases) { duration in
-                    Text(duration.displayName).tag(duration)
-                }
-            }
         } header: {
             Text("Goal")
         }
@@ -179,30 +183,38 @@ struct TaskConfigurationView: View {
     private var scheduleSection: some View {
         Section {
             Picker("Frequency", selection: $viewModel.frequencyType) {
-                ForEach(FrequencyType.allCases) { freq in
+                ForEach(FrequencyType.selectableCases) { freq in
                     Text(freq.displayName).tag(freq)
                 }
             }
 
-            if viewModel.frequencyType == .daily {
+            if viewModel.showsTimesStepper {
                 Stepper(
-                    String(format: NSLocalizedString("Times per day: %lld", comment: ""), viewModel.timesPerDay),
-                    value: $viewModel.timesPerDay, in: 1...10
+                    viewModel.timesPerPeriodLabel,
+                    value: $viewModel.timesPerPeriod,
+                    in: viewModel.timesPerPeriodRange
                 )
+                .accessibilityIdentifier("timesPerPeriodStepper")
             }
 
             if viewModel.frequencyType == .specificDays {
                 weekdayPicker
             }
 
-            if viewModel.frequencyType == .everyWeek {
-                Stepper(
-                    String(format: NSLocalizedString("Times per week: %lld", comment: ""), viewModel.timesPerDay),
-                    value: $viewModel.timesPerDay, in: 1...7
-                )
+            if viewModel.showsTrackingPicker {
+                Picker("Tracking", selection: $viewModel.tracking) {
+                    ForEach(TrackingMode.allCases) { mode in
+                        Text(mode.displayName).tag(mode)
+                    }
+                }
+                .accessibilityIdentifier("trackingPicker")
             }
         } header: {
             Text("Schedule")
+        } footer: {
+            if viewModel.showsTrackingPicker {
+                Text("Choose whether each completion counts toward your stats, or only when the whole period is completed.")
+            }
         }
     }
 

@@ -59,6 +59,12 @@
 "Frequency" = "Häufigkeit";
 "Times per day: %lld" = "Mal pro Tag: %lld";
 "Times per week: %lld" = "Mal pro Woche: %lld";
+"Times per month: %lld" = "Mal pro Monat: %lld";
+"Tracking" = "Erfassung";
+"Count every completion" = "Jede Erledigung zählen";
+"Count when period completed" = "Zählen, wenn der Zeitraum abgeschlossen ist";
+"Choose whether each completion counts toward your stats, or only when the whole period is completed." = "Wähle, ob jede Erledigung für deine Statistik zählt oder nur, wenn der gesamte Zeitraum abgeschlossen ist.";
+"%@, %lld of %lld completed this period" = "%@, %lld von %lld in diesem Zeitraum abgeschlossen";
 "Notification" = "Benachrichtigung";
 "Reminder" = "Erinnerung";
 "Time" = "Uhrzeit";

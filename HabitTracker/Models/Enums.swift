@@ -1,24 +1,5 @@
 import Foundation
 
-// MARK: - MeasurementDuration
-
-/// The time period over which a task's goal is evaluated.
-enum MeasurementDuration: String, Codable, CaseIterable, Identifiable {
-    case daily   = "daily"
-    case weekly  = "weekly"
-    case monthly = "monthly"
-
-    var id: String { rawValue }
-
-    var displayName: String {
-        switch self {
-        case .daily:   return NSLocalizedString("Daily", comment: "")
-        case .weekly:  return NSLocalizedString("Weekly", comment: "")
-        case .monthly: return NSLocalizedString("Monthly", comment: "")
-        }
-    }
-}
-
 // MARK: - GoalType
 
 /// What the user is measuring for this task.
@@ -95,18 +76,55 @@ enum GoalType: String, Codable, CaseIterable, Identifiable {
 // MARK: - FrequencyType
 
 /// How often the task recurs.
+///
+/// `everyWeek` is a **legacy** case retained only so existing stored records
+/// (created before the weekly/monthly counter feature) can still be decoded.
+/// `MigrationService` rewrites those rows to `.weekly` at launch, and the
+/// configuration UI never offers it (see `selectableCases`).
 enum FrequencyType: String, Codable, CaseIterable, Identifiable {
     case daily        = "daily"
+    case weekly       = "weekly"
+    case monthly      = "monthly"
     case specificDays = "specificDays"
+    /// Legacy value from earlier app versions — equivalent to `.weekly`.
     case everyWeek    = "everyWeek"
+
+    var id: String { rawValue }
+
+    /// Cases offered to the user in the configuration UI (legacy values excluded).
+    static var selectableCases: [FrequencyType] {
+        [.daily, .weekly, .monthly, .specificDays]
+    }
+
+    var displayName: String {
+        switch self {
+        case .daily:        return NSLocalizedString("Every Day", comment: "")
+        case .weekly:       return NSLocalizedString("Weekly", comment: "")
+        case .monthly:      return NSLocalizedString("Monthly", comment: "")
+        case .specificDays: return NSLocalizedString("Specific Days", comment: "")
+        case .everyWeek:    return NSLocalizedString("Weekly", comment: "")
+        }
+    }
+}
+
+// MARK: - TrackingMode
+
+/// How completions are credited to statistics for multi-completion habits.
+///
+/// Applies to `weekly` / `monthly` / `specificDays`. Daily multi-task habits are
+/// always treated as `periodComplete` and do not expose this choice (PRD §9).
+enum TrackingMode: String, Codable, CaseIterable, Identifiable {
+    /// Every individual completion is credited (default).
+    case eachCompletion = "eachCompletion"
+    /// Credit is given only when the whole period quota is reached.
+    case periodComplete = "periodComplete"
 
     var id: String { rawValue }
 
     var displayName: String {
         switch self {
-        case .daily:        return NSLocalizedString("Every Day", comment: "")
-        case .specificDays: return NSLocalizedString("Specific Days", comment: "")
-        case .everyWeek:    return NSLocalizedString("Every Week", comment: "")
+        case .eachCompletion: return NSLocalizedString("Count every completion", comment: "")
+        case .periodComplete: return NSLocalizedString("Count when period completed", comment: "")
         }
     }
 }

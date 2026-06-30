@@ -131,10 +131,18 @@ struct OnboardingView: View {
             iconName: "dog.fill",
             colorToken: "orange"
         )
-        // Don't insert — this is purely visual
+        // Don't insert — this is purely visual. A simple daily (N=1) progress
+        // mirrors the tutorial's completed state.
+        let demoProgress = PeriodProgress(
+            periodStart: .now,
+            periodEnd: .now,
+            current: tutorialCompleted ? 1 : 0,
+            target: 1,
+            isScheduledToday: true
+        )
         return TapAndHoldTaskView(
             task: demoTask,
-            isCompleted: tutorialCompleted,
+            progress: demoProgress,
             circleSize: 100,
             onSingleTap: {},
             onCompleted: {

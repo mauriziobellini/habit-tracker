@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 63;
+	objectVersion = 77;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -15,8 +15,10 @@
 		2915E12FA3CD194AD57283E3 /* TaskStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760F5BD62C8A9159CF944253 /* TaskStatsView.swift */; };
 		2B6215F1DAA858821847C5C2 /* TaskConfigurationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 770BA6BADD427DA34662E4D1 /* TaskConfigurationView.swift */; };
 		32DE2123B12045A7CDAEEFE5 /* TaskCircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C8A86B481D189412D02753 /* TaskCircleView.swift */; };
+		390BC428919E9E0075648555 /* PeriodService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2D5C26261A97F8AEA697A0 /* PeriodService.swift */; };
 		3C99A81F37FA46A07C09C606 /* NewTaskSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85D78856B1AA5B60B94314CC /* NewTaskSelectorView.swift */; };
 		3F51E0330B5A606BE57DF9E2 /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4C0E2AD31A3D8C1D8DBDE9C /* ColorPalette.swift */; };
+		4346C928EEABCCF3311BB1D3 /* FreemiumTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8826365D301D57762C7FBEDF /* FreemiumTests.swift */; };
 		438540AAEBDEB376E5BD0559 /* SeedDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C06726021EC1DB7825BB17A /* SeedDataService.swift */; };
 		46F6B52561012B6906DD40BC /* TaskCompletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3F97097BD77488EA01F5D87 /* TaskCompletion.swift */; };
 		4D1E8BC6EDDF1059F82120B7 /* HabitTrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D1C3FBE6B96E8200AAB9DE3 /* HabitTrackerTests.swift */; };
@@ -27,32 +29,33 @@
 		63765DE9A44DBA6E44975536 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6FAB075483301B3B1B5A77E /* Category.swift */; };
 		63E4BD62F7B622DBD22D93AA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FF9D38D77EB078C801B84738 /* Assets.xcassets */; };
 		673B7A3D650A54893ED75106 /* RewardCelebrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCAB5EFECF9A9ABB342CD71F /* RewardCelebrationView.swift */; };
+		6C427F52F91F05B8D870AE48 /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D498414D8E001B51C8D50C7D /* AnalyticsService.swift */; };
+		7621EB0CC4061DE4280FFFA0 /* PaywallViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 041ADFA30C1500D53BA12ED8 /* PaywallViewModel.swift */; };
 		76A839142D5EA91A70C8EDF6 /* TaskListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 088A603458A879AAB25AE424 /* TaskListViewModel.swift */; };
+		7EDED6903C610FDB03EB6812 /* HabitAccessPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 076E47CE1B6D933D87554B99 /* HabitAccessPolicy.swift */; };
 		80875B57F9F20ADA20143EA3 /* CompletionRingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01D3B2F0CE1E28873802DF5 /* CompletionRingView.swift */; };
 		80D5834BBA338DE8B5FE9151 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE09BE65A43EAAC056D676D /* NotificationService.swift */; };
 		83652705EF62FB8E658FE3EF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 51992F5324EEC01BD3E91120 /* LaunchScreen.storyboard */; };
 		8FD490931E9356CD4D7E247D /* HabitTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004D5DF10775A860CE77FD04 /* HabitTrackerApp.swift */; };
 		9637AB7A33C2E73124110FED /* TaskListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C35731CAF743F7ECAA2089 /* TaskListView.swift */; };
+		9B3B1CCBFA3751C45B53E23A /* Configuration.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 6DFAE23DA1FC14884E439BC4 /* Configuration.storekit */; };
+		A2F7F0B7845C42A907A160B7 /* ProductIDs.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0AFE389303C4ED22BD5B7EE /* ProductIDs.swift */; };
+		AFCA6CE2018F1CE7711AAE98 /* PremiumPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB15D387F47D8EB72B9393F /* PremiumPlan.swift */; };
+		BB52B361DD4CE02F6B8520DD /* EntitlementManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25DFC8475CDD905A8ACDB25C /* EntitlementManager.swift */; };
+		BED2329B44CCD2EFB90E71B1 /* PurchaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE59FC72262F1083852E292 /* PurchaseService.swift */; };
 		BF8A0E3B8BB67721D0F04E5D /* HabitTrackerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BB4A35ADC8069CE789471A /* HabitTrackerUITests.swift */; };
+		C24607AF93BE4F262F02AAC2 /* MigrationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E37FBBD441F5E42CA30E03F /* MigrationService.swift */; };
+		C32977F94511CD44D6F4F611 /* FreemiumUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C039C5A0ADC54C15AF1BC2C7 /* FreemiumUITests.swift */; };
 		D416AB5F73B6BA227A4C1B2F /* GeneralStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02655527C1279F2B7FD2787 /* GeneralStatsView.swift */; };
 		D8096E689FF5EEB9CE54A3F2 /* AppSettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78CE7047859F7D0BC91CF3FD /* AppSettingsViewModel.swift */; };
 		D82D52073629334DFD5AC59F /* ManageCompletionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB249180B1715966263AFEAB /* ManageCompletionsView.swift */; };
 		E2B1FC0A9B2DBBD8C4DDAB83 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C263A762A24C0CF39FA8168 /* AppSettings.swift */; };
+		E61EFA25773A80C44CD5229F /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A49159B704A886DD014105 /* PaywallView.swift */; };
 		E6B30D35E25C9AE7E69955C6 /* PresetTaskCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15D2972F7DBB5A098D908460 /* PresetTaskCatalog.swift */; };
 		EAF1BE4C4BB5649483885136 /* IconPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B705C0BE80977C6E0153F2A4 /* IconPickerView.swift */; };
 		EDD200C451CDE27EB45ECFB8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 138C611BFA4D4ACC1F3C36CB /* Localizable.strings */; };
 		F23263948587519EB627F317 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AE8528969D8819227990018 /* OnboardingView.swift */; };
 		F3423CF38E297CCABF912DEA /* HabitTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE6BFFF12E7DB747A20A8D03 /* HabitTask.swift */; };
-		DECA00000000000000000001 /* ProductIDs.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACE00000000000000000001 /* ProductIDs.swift */; };
-		DECA00000000000000000002 /* PremiumPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACE00000000000000000002 /* PremiumPlan.swift */; };
-		DECA00000000000000000003 /* EntitlementManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACE00000000000000000003 /* EntitlementManager.swift */; };
-		DECA00000000000000000004 /* PurchaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACE00000000000000000004 /* PurchaseService.swift */; };
-		DECA00000000000000000005 /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACE00000000000000000005 /* AnalyticsService.swift */; };
-		DECA00000000000000000006 /* HabitAccessPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACE00000000000000000006 /* HabitAccessPolicy.swift */; };
-		DECA00000000000000000007 /* PaywallViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACE00000000000000000007 /* PaywallViewModel.swift */; };
-		DECA00000000000000000008 /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACE00000000000000000008 /* PaywallView.swift */; };
-		DECA0000000000000000000A /* FreemiumTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACE0000000000000000000A /* FreemiumTests.swift */; };
-		DECA0000000000000000000B /* FreemiumUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FACE0000000000000000000B /* FreemiumUITests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +77,8 @@
 
 /* Begin PBXFileReference section */
 		004D5DF10775A860CE77FD04 /* HabitTrackerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitTrackerApp.swift; sourceTree = "<group>"; };
+		041ADFA30C1500D53BA12ED8 /* PaywallViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallViewModel.swift; sourceTree = "<group>"; };
+		076E47CE1B6D933D87554B99 /* HabitAccessPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitAccessPolicy.swift; sourceTree = "<group>"; };
 		088A603458A879AAB25AE424 /* TaskListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskListViewModel.swift; sourceTree = "<group>"; };
 		0C06726021EC1DB7825BB17A /* SeedDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedDataService.swift; sourceTree = "<group>"; };
 		0D1C3FBE6B96E8200AAB9DE3 /* HabitTrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitTrackerTests.swift; sourceTree = "<group>"; };
@@ -82,13 +87,17 @@
 		15D2972F7DBB5A098D908460 /* PresetTaskCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetTaskCatalog.swift; sourceTree = "<group>"; };
 		17D68C555DDB8A7BDCCEB716 /* StatisticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsService.swift; sourceTree = "<group>"; };
 		1D8BB79D76463C3FC92070D0 /* TapAndHoldTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapAndHoldTaskView.swift; sourceTree = "<group>"; };
+		25DFC8475CDD905A8ACDB25C /* EntitlementManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntitlementManager.swift; sourceTree = "<group>"; };
 		28C8A86B481D189412D02753 /* TaskCircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCircleView.swift; sourceTree = "<group>"; };
 		2AE8528969D8819227990018 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		46A49159B704A886DD014105 /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
 		51992F5324EEC01BD3E91120 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5C263A762A24C0CF39FA8168 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		5DD74874FBEB847710646B55 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5E37FBBD441F5E42CA30E03F /* MigrationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MigrationService.swift; sourceTree = "<group>"; };
 		60B405D8517768C23C7EC846 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		65BEF1AD62BB1488E356A032 /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
+		6DFAE23DA1FC14884E439BC4 /* Configuration.storekit */ = {isa = PBXFileReference; path = Configuration.storekit; sourceTree = "<group>"; };
 		6EF5FB924106AAB464465CBF /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		760F5BD62C8A9159CF944253 /* TaskStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskStatsView.swift; sourceTree = "<group>"; };
 		770BA6BADD427DA34662E4D1 /* TaskConfigurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskConfigurationView.swift; sourceTree = "<group>"; };
@@ -96,7 +105,8 @@
 		80227CD8B3F96576B475864C /* HabitTrackerUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = HabitTrackerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		851B74AA932C567FAF6F1A28 /* AppSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsView.swift; sourceTree = "<group>"; };
 		85D78856B1AA5B60B94314CC /* NewTaskSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTaskSelectorView.swift; sourceTree = "<group>"; };
-		934C18A7F2EB31512CEB4A4E /* HabitTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HabitTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8826365D301D57762C7FBEDF /* FreemiumTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreemiumTests.swift; sourceTree = "<group>"; };
+		934C18A7F2EB31512CEB4A4E /* HabitTracker.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = HabitTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94CFAAA3CFF314D9E33E4397 /* TaskStatsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskStatsViewModel.swift; sourceTree = "<group>"; };
 		9E02CDB17D07392A97E71D78 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A01D3B2F0CE1E28873802DF5 /* CompletionRingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletionRingView.swift; sourceTree = "<group>"; };
@@ -105,38 +115,33 @@
 		B6FAB075483301B3B1B5A77E /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		B705C0BE80977C6E0153F2A4 /* IconPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconPickerView.swift; sourceTree = "<group>"; };
 		BB249180B1715966263AFEAB /* ManageCompletionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageCompletionsView.swift; sourceTree = "<group>"; };
+		C039C5A0ADC54C15AF1BC2C7 /* FreemiumUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreemiumUITests.swift; sourceTree = "<group>"; };
 		C5612E6E870411A6E0334E5E /* LanguageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageManager.swift; sourceTree = "<group>"; };
 		C5C35731CAF743F7ECAA2089 /* TaskListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskListView.swift; sourceTree = "<group>"; };
+		CE2D5C26261A97F8AEA697A0 /* PeriodService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeriodService.swift; sourceTree = "<group>"; };
 		CE6BFFF12E7DB747A20A8D03 /* HabitTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitTask.swift; sourceTree = "<group>"; };
 		CEE09BE65A43EAAC056D676D /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		D02655527C1279F2B7FD2787 /* GeneralStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralStatsView.swift; sourceTree = "<group>"; };
+		D498414D8E001B51C8D50C7D /* AnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
+		DBE59FC72262F1083852E292 /* PurchaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseService.swift; sourceTree = "<group>"; };
 		E2253EB5AE49A593FD2B617F /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		F0AFE389303C4ED22BD5B7EE /* ProductIDs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductIDs.swift; sourceTree = "<group>"; };
 		F24414004E5E02018196388D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		F3F97097BD77488EA01F5D87 /* TaskCompletion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCompletion.swift; sourceTree = "<group>"; };
 		F4C0E2AD31A3D8C1D8DBDE9C /* ColorPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
 		FA2B740D6EC85B6E9989605C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		FCAB5EFECF9A9ABB342CD71F /* RewardCelebrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardCelebrationView.swift; sourceTree = "<group>"; };
+		FCB15D387F47D8EB72B9393F /* PremiumPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumPlan.swift; sourceTree = "<group>"; };
 		FCFA7262F739D0FAED7FD0F2 /* TaskConfigurationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskConfigurationViewModel.swift; sourceTree = "<group>"; };
 		FF9D38D77EB078C801B84738 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		FACE00000000000000000001 /* ProductIDs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductIDs.swift; sourceTree = "<group>"; };
-		FACE00000000000000000002 /* PremiumPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumPlan.swift; sourceTree = "<group>"; };
-		FACE00000000000000000003 /* EntitlementManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntitlementManager.swift; sourceTree = "<group>"; };
-		FACE00000000000000000004 /* PurchaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseService.swift; sourceTree = "<group>"; };
-		FACE00000000000000000005 /* AnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
-		FACE00000000000000000006 /* HabitAccessPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitAccessPolicy.swift; sourceTree = "<group>"; };
-		FACE00000000000000000007 /* PaywallViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallViewModel.swift; sourceTree = "<group>"; };
-		FACE00000000000000000008 /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
-		FACE00000000000000000009 /* Configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Configuration.storekit; sourceTree = "<group>"; };
-		FACE0000000000000000000A /* FreemiumTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreemiumTests.swift; sourceTree = "<group>"; };
-		FACE0000000000000000000B /* FreemiumUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreemiumUITests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
 		205CA1387EBF37732F8D43CC /* HabitTrackerTests */ = {
 			isa = PBXGroup;
 			children = (
+				8826365D301D57762C7FBEDF /* FreemiumTests.swift */,
 				0D1C3FBE6B96E8200AAB9DE3 /* HabitTrackerTests.swift */,
-				FACE0000000000000000000A /* FreemiumTests.swift */,
 			);
 			path = HabitTrackerTests;
 			sourceTree = "<group>";
@@ -145,7 +150,7 @@
 			isa = PBXGroup;
 			children = (
 				78CE7047859F7D0BC91CF3FD /* AppSettingsViewModel.swift */,
-				FACE00000000000000000007 /* PaywallViewModel.swift */,
+				041ADFA30C1500D53BA12ED8 /* PaywallViewModel.swift */,
 				FCFA7262F739D0FAED7FD0F2 /* TaskConfigurationViewModel.swift */,
 				088A603458A879AAB25AE424 /* TaskListViewModel.swift */,
 				94CFAAA3CFF314D9E33E4397 /* TaskStatsViewModel.swift */,
@@ -158,7 +163,7 @@
 			children = (
 				F4C0E2AD31A3D8C1D8DBDE9C /* ColorPalette.swift */,
 				C5612E6E870411A6E0334E5E /* LanguageManager.swift */,
-				FACE00000000000000000001 /* ProductIDs.swift */,
+				F0AFE389303C4ED22BD5B7EE /* ProductIDs.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -170,7 +175,7 @@
 				B6FAB075483301B3B1B5A77E /* Category.swift */,
 				65BEF1AD62BB1488E356A032 /* Enums.swift */,
 				CE6BFFF12E7DB747A20A8D03 /* HabitTask.swift */,
-				FACE00000000000000000002 /* PremiumPlan.swift */,
+				FCB15D387F47D8EB72B9393F /* PremiumPlan.swift */,
 				15D2972F7DBB5A098D908460 /* PresetTaskCatalog.swift */,
 				F3F97097BD77488EA01F5D87 /* TaskCompletion.swift */,
 			);
@@ -180,8 +185,8 @@
 		2ED89AB54C94174F68FE2B71 /* HabitTrackerUITests */ = {
 			isa = PBXGroup;
 			children = (
+				C039C5A0ADC54C15AF1BC2C7 /* FreemiumUITests.swift */,
 				A7BB4A35ADC8069CE789471A /* HabitTrackerUITests.swift */,
-				FACE0000000000000000000B /* FreemiumUITests.swift */,
 			);
 			path = HabitTrackerUITests;
 			sourceTree = "<group>";
@@ -204,7 +209,7 @@
 				235E42B14336039F7D129B71 /* ViewModels */,
 				FB4A59153CF6B03ACFF1A5F5 /* Views */,
 				FF9D38D77EB078C801B84738 /* Assets.xcassets */,
-				FACE00000000000000000009 /* Configuration.storekit */,
+				6DFAE23DA1FC14884E439BC4 /* Configuration.storekit */,
 				004D5DF10775A860CE77FD04 /* HabitTrackerApp.swift */,
 				51992F5324EEC01BD3E91120 /* LaunchScreen.storyboard */,
 			);
@@ -224,11 +229,13 @@
 		C31E65DCE16EF06192345FA0 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				FACE00000000000000000005 /* AnalyticsService.swift */,
-				FACE00000000000000000003 /* EntitlementManager.swift */,
-				FACE00000000000000000006 /* HabitAccessPolicy.swift */,
+				D498414D8E001B51C8D50C7D /* AnalyticsService.swift */,
+				25DFC8475CDD905A8ACDB25C /* EntitlementManager.swift */,
+				076E47CE1B6D933D87554B99 /* HabitAccessPolicy.swift */,
+				5E37FBBD441F5E42CA30E03F /* MigrationService.swift */,
 				CEE09BE65A43EAAC056D676D /* NotificationService.swift */,
-				FACE00000000000000000004 /* PurchaseService.swift */,
+				CE2D5C26261A97F8AEA697A0 /* PeriodService.swift */,
+				DBE59FC72262F1083852E292 /* PurchaseService.swift */,
 				0C06726021EC1DB7825BB17A /* SeedDataService.swift */,
 				17D68C555DDB8A7BDCCEB716 /* StatisticsService.swift */,
 			);
@@ -256,7 +263,7 @@
 				BB249180B1715966263AFEAB /* ManageCompletionsView.swift */,
 				85D78856B1AA5B60B94314CC /* NewTaskSelectorView.swift */,
 				2AE8528969D8819227990018 /* OnboardingView.swift */,
-				FACE00000000000000000008 /* PaywallView.swift */,
+				46A49159B704A886DD014105 /* PaywallView.swift */,
 				FCAB5EFECF9A9ABB342CD71F /* RewardCelebrationView.swift */,
 				1D8BB79D76463C3FC92070D0 /* TapAndHoldTaskView.swift */,
 				28C8A86B481D189412D02753 /* TaskCircleView.swift */,
@@ -355,6 +362,7 @@
 			);
 			mainGroup = D6ECF9B08F98D87F6F44C8AD;
 			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -371,6 +379,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				63E4BD62F7B622DBD22D93AA /* Assets.xcassets in Resources */,
+				9B3B1CCBFA3751C45B53E23A /* Configuration.storekit in Resources */,
 				83652705EF62FB8E658FE3EF /* LaunchScreen.storyboard in Resources */,
 				EDD200C451CDE27EB45ECFB8 /* Localizable.strings in Resources */,
 			);
@@ -383,8 +392,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4346C928EEABCCF3311BB1D3 /* FreemiumTests.swift in Sources */,
 				4D1E8BC6EDDF1059F82120B7 /* HabitTrackerTests.swift in Sources */,
-				DECA0000000000000000000A /* FreemiumTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -392,32 +401,34 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6C427F52F91F05B8D870AE48 /* AnalyticsService.swift in Sources */,
 				E2B1FC0A9B2DBBD8C4DDAB83 /* AppSettings.swift in Sources */,
 				075289C46729BE6E69637194 /* AppSettingsView.swift in Sources */,
 				D8096E689FF5EEB9CE54A3F2 /* AppSettingsViewModel.swift in Sources */,
-				DECA00000000000000000005 /* AnalyticsService.swift in Sources */,
-				DECA00000000000000000003 /* EntitlementManager.swift in Sources */,
-				DECA00000000000000000006 /* HabitAccessPolicy.swift in Sources */,
-				DECA00000000000000000002 /* PremiumPlan.swift in Sources */,
-				DECA00000000000000000001 /* ProductIDs.swift in Sources */,
-				DECA00000000000000000004 /* PurchaseService.swift in Sources */,
-				DECA00000000000000000007 /* PaywallViewModel.swift in Sources */,
-				DECA00000000000000000008 /* PaywallView.swift in Sources */,
 				63765DE9A44DBA6E44975536 /* Category.swift in Sources */,
 				3F51E0330B5A606BE57DF9E2 /* ColorPalette.swift in Sources */,
 				80875B57F9F20ADA20143EA3 /* CompletionRingView.swift in Sources */,
 				63075D02E92E0F7CC35392F0 /* ContentView.swift in Sources */,
+				BB52B361DD4CE02F6B8520DD /* EntitlementManager.swift in Sources */,
 				07BE1CDB495E028DA4ED5E28 /* Enums.swift in Sources */,
 				D416AB5F73B6BA227A4C1B2F /* GeneralStatsView.swift in Sources */,
+				7EDED6903C610FDB03EB6812 /* HabitAccessPolicy.swift in Sources */,
 				F3423CF38E297CCABF912DEA /* HabitTask.swift in Sources */,
 				8FD490931E9356CD4D7E247D /* HabitTrackerApp.swift in Sources */,
 				EAF1BE4C4BB5649483885136 /* IconPickerView.swift in Sources */,
 				225FDFA8053F939AB43F7E65 /* LanguageManager.swift in Sources */,
 				D82D52073629334DFD5AC59F /* ManageCompletionsView.swift in Sources */,
+				C24607AF93BE4F262F02AAC2 /* MigrationService.swift in Sources */,
 				3C99A81F37FA46A07C09C606 /* NewTaskSelectorView.swift in Sources */,
 				80D5834BBA338DE8B5FE9151 /* NotificationService.swift in Sources */,
 				F23263948587519EB627F317 /* OnboardingView.swift in Sources */,
+				E61EFA25773A80C44CD5229F /* PaywallView.swift in Sources */,
+				7621EB0CC4061DE4280FFFA0 /* PaywallViewModel.swift in Sources */,
+				390BC428919E9E0075648555 /* PeriodService.swift in Sources */,
+				AFCA6CE2018F1CE7711AAE98 /* PremiumPlan.swift in Sources */,
 				E6B30D35E25C9AE7E69955C6 /* PresetTaskCatalog.swift in Sources */,
+				A2F7F0B7845C42A907A160B7 /* ProductIDs.swift in Sources */,
+				BED2329B44CCD2EFB90E71B1 /* PurchaseService.swift in Sources */,
 				673B7A3D650A54893ED75106 /* RewardCelebrationView.swift in Sources */,
 				438540AAEBDEB376E5BD0559 /* SeedDataService.swift in Sources */,
 				1B2BAE892F57DDB2AE6EA908 /* StatisticsService.swift in Sources */,
@@ -438,8 +449,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C32977F94511CD44D6F4F611 /* FreemiumUITests.swift in Sources */,
 				BF8A0E3B8BB67721D0F04E5D /* HabitTrackerUITests.swift in Sources */,
-				DECA0000000000000000000B /* FreemiumUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -482,7 +493,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 2;
-				DEVELOPMENT_TEAM = VR85B5U7U4;
 				INFOPLIST_KEY_CFBundleDisplayName = "Ring Habits – Streak & Reward";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_UILaunchScreen_Generation = NO;
@@ -573,7 +583,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 2;
-				DEVELOPMENT_TEAM = VR85B5U7U4;
 				INFOPLIST_KEY_CFBundleDisplayName = "Ring Habits – Streak & Reward";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_UILaunchScreen_Generation = NO;

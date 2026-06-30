@@ -31,15 +31,17 @@ final class NotificationService {
         let hour = calendar.component(.hour, from: notificationTime)
         let minute = calendar.component(.minute, from: notificationTime)
 
-        // Determine which weekdays to schedule
+        // Determine which weekdays to schedule.
+        // Weekly/monthly habits are visible every day until their period quota is
+        // met, so a daily reminder is appropriate; specific-days reminders fire
+        // only on the scheduled weekdays. (v1: reminders are not suppressed once a
+        // weekly/monthly period is complete — tracked as a future enhancement.)
         let weekdays: [Int] // ISO 8601: 1=Mon...7=Sun
         switch task.frequencyType {
-        case .daily:
+        case .daily, .weekly, .monthly, .everyWeek:
             weekdays = Array(1...7)
         case .specificDays:
             weekdays = task.scheduledDays
-        case .everyWeek:
-            weekdays = Array(1...7)
         }
 
         for isoWeekday in weekdays {

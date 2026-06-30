@@ -10,7 +10,8 @@ import SwiftData
 /// - Reduce Motion → instant fill instead of animation.
 struct TapAndHoldTaskView: View {
     let task: HabitTask
-    let isCompleted: Bool
+    /// Progress for the current period; drives the counter, partial highlight and gating.
+    let progress: PeriodProgress
     let circleSize: CGFloat
     /// When locked (lapsed subscription beyond the free limit), the habit is greyed out and
     /// a single tap opens the paywall instead of completing or showing the menu.
@@ -18,7 +19,10 @@ struct TapAndHoldTaskView: View {
     let onSingleTap: () -> Void
     let onCompleted: () -> Void
 
-    @State private var progress: CGFloat = 0
+    /// Whether the habit is fully completed for the current period.
+    private var isCompleted: Bool { progress.isComplete }
+
+    @State private var holdProgress: CGFloat = 0
     @State private var isHolding = false
     @State private var holdTimer: Timer?
     @State private var showCompletionBurst = false
@@ -48,7 +52,8 @@ struct TapAndHoldTaskView: View {
         TaskCircleView(
             task: task,
             isCompleted: false,
-            circleSize: circleSize
+            circleSize: circleSize,
+            progress: progress
         )
         .opacity(0.5)
         .overlay(alignment: .topTrailing) {
@@ -73,14 +78,15 @@ struct TapAndHoldTaskView: View {
         TaskCircleView(
             task: task,
             isCompleted: isCompleted || showCompletionBurst,
-            circleSize: circleSize
+            circleSize: circleSize,
+            progress: progress
         )
         .scaleEffect(showCompletionBurst ? 1.15 : 1.0)
         .overlay(alignment: .top) {
             // Progress ring overlay (only while holding and not yet completed)
-            if !isCompleted && progress > 0 {
+            if !isCompleted && holdProgress > 0 {
                 CompletionRingView(
-                    progress: progress,
+                    progress: holdProgress,
                     color: accentColor,
                     lineWidth: 4,
                     size: circleSize + 4
@@ -138,7 +144,7 @@ struct TapAndHoldTaskView: View {
     private func startHold() {
         guard !isHolding else { return }
         isHolding = true
-        progress = 0
+        holdProgress = 0
 
         if reduceMotion {
             // Instant completion for Reduce Motion
@@ -149,10 +155,10 @@ struct TapAndHoldTaskView: View {
         let increment = CGFloat(tickInterval / holdDuration)
 
         holdTimer = Timer.scheduledTimer(withTimeInterval: tickInterval, repeats: true) { timer in
-            progress += increment
+            holdProgress += increment
 
-            if progress >= 1.0 {
-                progress = 1.0
+            if holdProgress >= 1.0 {
+                holdProgress = 1.0
                 timer.invalidate()
                 holdTimer = nil
                 completeTask()
@@ -166,13 +172,13 @@ struct TapAndHoldTaskView: View {
         holdTimer?.invalidate()
         holdTimer = nil
 
-        if progress < 1.0 {
+        if holdProgress < 1.0 {
             // Smooth retraction
             if reduceMotion {
-                progress = 0
+                holdProgress = 0
             } else {
                 withAnimation(.easeOut(duration: 0.3)) {
-                    progress = 0
+                    holdProgress = 0
                 }
             }
         }
@@ -182,7 +188,7 @@ struct TapAndHoldTaskView: View {
         isHolding = false
         holdTimer?.invalidate()
         holdTimer = nil
-        progress = 0
+        holdProgress = 0
 
         // Haptic feedback
         let generator = UINotificationFeedbackGenerator()

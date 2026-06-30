@@ -22,6 +22,7 @@ struct ContentView: View {
             }
         }
         .onAppear {
+            MigrationService.normalizeIfNeeded(context: modelContext)
             SeedDataService.seedIfNeeded(context: modelContext)
             applyUITestingSeedIfNeeded()
             let settings = AppSettings.shared(in: modelContext)
