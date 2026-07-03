@@ -5,7 +5,7 @@
   ],
   "products" : [
     {
-      "displayPrice" : "15.00",
+      "displayPrice" : "14.99",
       "familyShareable" : false,
       "internalID" : "LIFETIME0001",
       "localizations" : [
@@ -65,7 +65,7 @@
           "codeOffers" : [
 
           ],
-          "displayPrice" : "8.00",
+          "displayPrice" : "7.99",
           "familyShareable" : false,
           "groupNumber" : 1,
           "internalID" : "YEARLY000001",

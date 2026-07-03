@@ -2,7 +2,7 @@
 
 > Multi-agent delivery plan derived from [PRD - Freemium.md](/Users/maurizio.bellini/Documents/Vault/Product/Ring%20habit/PRD%20-%20Freemium.md) and supporting project docs.
 
-**Feature:** Convert Ringhabit from €0.99 paid download to freemium (2 free habits, paywall on 3rd) with monthly €0.99, yearly €8, and lifetime €15 options.
+**Feature:** Convert Ringhabit from €0.99 paid download to freemium (2 free habits, paywall on 3rd) with monthly €0.99, yearly €7.99, and lifetime €14.99 options.
 
 **Target repo:** `habit-tracker` (bundle ID `co.fooshi.habitring`)
 
@@ -29,8 +29,8 @@
 | Product | Type | Price | Product ID |
 |---------|------|-------|------------|
 | Monthly | Auto-renewable subscription | €0.99/mo | `co.fooshi.habitring.premium.monthly` |
-| Yearly | Auto-renewable subscription | €8/yr | `co.fooshi.habitring.premium.yearly` |
-| Lifetime | Non-consumable | €15 | `co.fooshi.habitring.premium.lifetime` |
+| Yearly | Auto-renewable subscription | €7.99/yr | `co.fooshi.habitring.premium.yearly` |
+| Lifetime | Non-consumable | €14.99 | `co.fooshi.habitring.premium.lifetime` |
 
 **Entitlement logic:** `isPremium = hasActiveSubscription OR hasLifetimePurchase`  
 **Legacy mapping:** €0.99 paid-app download owners → `hasLifetimePurchase` via `AppTransaction` / original app receipt.
@@ -98,8 +98,8 @@ You are a release engineer. Using PRD - Freemium.md §7 and §10:
 1. Document step-by-step App Store Connect setup for subscription group + monthly/yearly + lifetime non-consumable.
 2. Create HabitTracker/Configuration.storekit in the Xcode project with product IDs:
    - co.fooshi.habitring.premium.monthly (€0.99)
-   - co.fooshi.habitring.premium.yearly (€8)
-   - co.fooshi.habitring.premium.lifetime (€15)
+   - co.fooshi.habitring.premium.yearly (€7.99)
+   - co.fooshi.habitring.premium.lifetime (€14.99)
 3. Add StoreKit Configuration to the HabitTracker scheme for local testing.
 Output a checklist markdown section in docs/app-store-connect-metadata.md for freemium products.
 Note: ASC web UI steps must be done manually; provide exact field values.
@@ -134,7 +134,7 @@ Requirements (from PRD - Freemium.md §7, §9):
 - Product IDs: co.fooshi.habitring.premium.monthly, .yearly, .lifetime
 - EntitlementManager (@Observable): isPremium, hasActiveSubscription, hasLifetimePurchase
 - On launch: async check Transaction.currentEntitlements + legacy paid-app via AppTransaction
-- Legacy: map €0.99 paid-app download owners to hasLifetimePurchase (same as €15 lifetime IAP)
+- Legacy: map €0.99 paid-app download owners to hasLifetimePurchase (same as €14.99 lifetime IAP)
 - PurchaseService: load products, purchase(plan), restore() via AppStore.sync()
 - Inject EntitlementManager via @Environment or app-level @State in HabitTrackerApp.swift
 - Use Configuration.storekit for local dev
@@ -465,7 +465,7 @@ Verify:
 - Free: 2 habits OK, paywall on 3rd, all 3 plans purchasable
 - Each plan grants unlimited habits
 - Expired sub: greyed habits behavior
-- Legacy user NOT prompted for €15 lifetime
+- Legacy user NOT prompted for €14.99 lifetime
 
 Document results in docs/freemium-sandbox-test-results.md.
 File bugs for any failure before submission.
