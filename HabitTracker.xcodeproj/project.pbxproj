@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 63;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -97,7 +97,7 @@
 		5E37FBBD441F5E42CA30E03F /* MigrationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MigrationService.swift; sourceTree = "<group>"; };
 		60B405D8517768C23C7EC846 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		65BEF1AD62BB1488E356A032 /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
-		6DFAE23DA1FC14884E439BC4 /* Configuration.storekit */ = {isa = PBXFileReference; path = Configuration.storekit; sourceTree = "<group>"; };
+		6DFAE23DA1FC14884E439BC4 /* Configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Configuration.storekit; sourceTree = "<group>"; };
 		6EF5FB924106AAB464465CBF /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		760F5BD62C8A9159CF944253 /* TaskStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskStatsView.swift; sourceTree = "<group>"; };
 		770BA6BADD427DA34662E4D1 /* TaskConfigurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskConfigurationView.swift; sourceTree = "<group>"; };
@@ -106,7 +106,7 @@
 		851B74AA932C567FAF6F1A28 /* AppSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsView.swift; sourceTree = "<group>"; };
 		85D78856B1AA5B60B94314CC /* NewTaskSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTaskSelectorView.swift; sourceTree = "<group>"; };
 		8826365D301D57762C7FBEDF /* FreemiumTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreemiumTests.swift; sourceTree = "<group>"; };
-		934C18A7F2EB31512CEB4A4E /* HabitTracker.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = HabitTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		934C18A7F2EB31512CEB4A4E /* HabitTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HabitTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94CFAAA3CFF314D9E33E4397 /* TaskStatsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskStatsViewModel.swift; sourceTree = "<group>"; };
 		9E02CDB17D07392A97E71D78 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A01D3B2F0CE1E28873802DF5 /* CompletionRingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletionRingView.swift; sourceTree = "<group>"; };
@@ -362,7 +362,6 @@
 			);
 			mainGroup = D6ECF9B08F98D87F6F44C8AD;
 			minimizedProjectReferenceProxies = 1;
-			preferredProjectObjectVersion = 77;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -492,7 +491,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
+				DEVELOPMENT_TEAM = VR85B5U7U4;
 				INFOPLIST_KEY_CFBundleDisplayName = "Ring Habits – Streak & Reward";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_UILaunchScreen_Generation = NO;
@@ -502,7 +502,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 2.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = co.fooshi.habitring;
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -582,7 +582,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
+				DEVELOPMENT_TEAM = VR85B5U7U4;
 				INFOPLIST_KEY_CFBundleDisplayName = "Ring Habits – Streak & Reward";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_UILaunchScreen_Generation = NO;
@@ -592,7 +593,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 2.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = co.fooshi.habitring;
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;

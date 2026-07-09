@@ -101,6 +101,11 @@ final class EntitlementManager {
         do {
             let result = try await AppTransaction.shared
             guard let appTransaction = try? Self.checkVerified(result) else { return false }
+            // In the sandbox, TestFlight, and Xcode environments `originalAppVersion` is
+            // always "1.0" and does not reflect real purchase history. Trusting it there
+            // would incorrectly grant lifetime premium to App Review, hiding the paywall
+            // and IAPs (App Review Guideline 2.1). Legacy mapping is production-only.
+            guard appTransaction.environment == .production else { return false }
             return Self.isLegacyVersion(
                 appTransaction.originalAppVersion,
                 firstFreemiumVersion: FreemiumConfig.firstFreemiumVersion
