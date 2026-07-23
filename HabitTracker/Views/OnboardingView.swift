@@ -5,6 +5,7 @@ import SwiftData
 /// Screen 1: Welcome  |  Screen 2: Interactive tutorial  |  Screen 3: First task creation
 struct OnboardingView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.analyticsService) private var analytics
     @State private var currentPage = 0
     @State private var tutorialCompleted = false
     @State private var taskCreated = false
@@ -29,7 +30,7 @@ struct OnboardingView: View {
                 HStack {
                     Spacer()
                     Button("Skip") {
-                        completeOnboarding()
+                        completeOnboarding(outcome: "skipped")
                     }
                     .font(.subheadline.weight(.medium))
                     .foregroundStyle(.secondary)
@@ -191,7 +192,7 @@ struct OnboardingView: View {
             // Check if a task was created
             let descriptor = FetchDescriptor<HabitTask>()
             if let count = try? modelContext.fetchCount(descriptor), count > 0 {
-                completeOnboarding()
+                completeOnboarding(outcome: "completed")
             }
         }) {
             NewTaskSelectorView()
@@ -200,9 +201,10 @@ struct OnboardingView: View {
 
     // MARK: - Helpers
 
-    private func completeOnboarding() {
+    private func completeOnboarding(outcome: String) {
         let settings = AppSettings.shared(in: modelContext)
         settings.hasCompletedOnboarding = true
+        analytics.track(.onboardingCompleted, properties: ["outcome": outcome])
         onFinish()
     }
 }

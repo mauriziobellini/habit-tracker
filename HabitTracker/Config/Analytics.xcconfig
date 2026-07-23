@@ -1,0 +1,15 @@
+// Analytics configuration (Measurement PRD).
+//
+// These values are read at runtime from the app's Info.plist (see HabitTracker/Info.plist,
+// which references $(POSTHOG_API_KEY) and $(POSTHOG_HOST)).
+//
+// Do NOT commit a real PostHog project API key. Replace the placeholder below locally or
+// via a CI secret / local override that is not tracked in git. The PostHog *project* key is
+// publishable (client-side), but we still avoid committing it.
+
+// PostHog project API key (publishable client key). Placeholder — replace before shipping.
+POSTHOG_API_KEY = phc_yQF9DqnVVg34C6gSjeEQaEsaH9Q9c2Givuuq2VNSYKiD
+
+// PostHog Cloud host authority. EU region per PRD. The "https://" scheme is added in Info.plist
+// (xcconfig treats "//" as a comment, so the scheme cannot live here directly).
+POSTHOG_HOST = eu.i.posthog.com

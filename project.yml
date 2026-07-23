@@ -24,15 +24,32 @@ settings:
     INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: "UIInterfaceOrientationPortrait"
     ENABLE_USER_SCRIPT_SANDBOXING: YES
 
+packages:
+  PostHog:
+    url: https://github.com/PostHog/posthog-ios
+    from: "3.0.0"
+  Firebase:
+    url: https://github.com/firebase/firebase-ios-sdk
+    from: "11.14.0"
+
 targets:
   HabitTracker:
     type: application
     platform: iOS
     sources:
       - path: HabitTracker
+    configFiles:
+      Debug: HabitTracker/Config/Analytics.xcconfig
+      Release: HabitTracker/Config/Analytics.xcconfig
+    dependencies:
+      - package: PostHog
+        product: PostHog
+      - package: Firebase
+        product: FirebaseAnalytics
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: co.fooshi.habitring
+        INFOPLIST_FILE: HabitTracker/Info.plist
         INFOPLIST_KEY_CFBundleDisplayName: "Ring Habits – Streak & Reward"
         INFOPLIST_KEY_UILaunchScreen_Generation: NO
         INFOPLIST_KEY_UILaunchStoryboardName: LaunchScreen

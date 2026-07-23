@@ -26,7 +26,11 @@ final class TaskListViewModel {
     var premiumUnlocked = false
 
     /// Decide what happens when the user taps "+": open the selector or show the paywall.
-    func handleAddTapped(currentHabitCount: Int, isPremium: Bool) {
+    func handleAddTapped(currentHabitCount: Int, isPremium: Bool, analytics: AnalyticsService = NoOpAnalyticsService()) {
+        analytics.track(.addHabitTapped, properties: [
+            "habit_count_before": AnalyticsBucket.habitCount(currentHabitCount),
+            "is_premium": String(isPremium),
+        ])
         if HabitAccessPolicy.shouldPresentPaywallForNewHabit(
             currentHabitCount: currentHabitCount,
             isPremium: isPremium
@@ -47,7 +51,12 @@ final class TaskListViewModel {
 
     /// Called when the paywall sheet finishes dismissing. Continues the add-habit flow if the
     /// user unlocked premium while trying to create a habit (chained sheet, PRD - Freemium §8).
-    func handlePaywallDismissed() {
+    func handlePaywallDismissed(analytics: AnalyticsService = NoOpAnalyticsService()) {
+        // Measurement PRD §9: `paywall_dismissed` fires only when the sheet closed without a
+        // successful purchase/restore in that session (abandon signal).
+        if !premiumUnlocked {
+            analytics.track(.paywallDismissed, properties: ["source": paywallSource])
+        }
         if premiumUnlocked && wantsSelectorAfterUnlock {
             showingTaskSelector = true
         }
@@ -70,8 +79,9 @@ final class TaskListViewModel {
         showDeleteConfirmation = true
     }
 
-    func deleteTask(context: ModelContext) {
+    func deleteTask(context: ModelContext, analytics: AnalyticsService = NoOpAnalyticsService()) {
         guard let task = taskToDelete else { return }
+        analytics.track(.habitDeleted, properties: ["frequency": task.frequencyType.analyticsValue])
         context.delete(task)
         taskToDelete = nil
     }

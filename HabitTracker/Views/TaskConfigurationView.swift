@@ -5,6 +5,7 @@ import SwiftData
 struct TaskConfigurationView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.analyticsService) private var analytics
     @Query(sort: \Category.sortOrder) private var categories: [Category]
     @Query private var allSettings: [AppSettings]
 
@@ -57,7 +58,7 @@ struct TaskConfigurationView: View {
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Button("Save") {
-                    viewModel.save(context: modelContext, categories: categories)
+                    viewModel.save(context: modelContext, categories: categories, analytics: analytics)
                     onSave?()
                     dismiss()
                 }

@@ -78,7 +78,7 @@ struct TaskListView: View {
                 NewTaskSelectorView()
             }
             .sheet(isPresented: $viewModel.showingPaywall, onDismiss: {
-                viewModel.handlePaywallDismissed()
+                viewModel.handlePaywallDismissed(analytics: analytics)
             }) {
                 PaywallView(
                     viewModel: PaywallViewModel(
@@ -108,7 +108,7 @@ struct TaskListView: View {
             .alert("Delete Task", isPresented: $viewModel.showDeleteConfirmation) {
                 Button("Cancel", role: .cancel) {}
                 Button("Delete", role: .destructive) {
-                    viewModel.deleteTask(context: modelContext)
+                    viewModel.deleteTask(context: modelContext, analytics: analytics)
                 }
             } message: {
                 if let task = viewModel.taskToDelete {
@@ -122,6 +122,7 @@ struct TaskListView: View {
             ) {
                 Button("Stats") {
                     if let task = viewModel.taskForMenu {
+                        analytics.track(.statsOpened, properties: ["scope": "habit"])
                         viewModel.taskForStats = task
                     }
                 }
@@ -202,7 +203,8 @@ struct TaskListView: View {
         Button {
             viewModel.handleAddTapped(
                 currentHabitCount: tasks.count,
-                isPremium: entitlementManager.isPremium
+                isPremium: entitlementManager.isPremium,
+                analytics: analytics
             )
         } label: {
             Image(systemName: "plus")
@@ -225,6 +227,7 @@ struct TaskListView: View {
 
     private var settingsButton: some View {
         Button {
+            analytics.track(.settingsOpened)
             viewModel.showingSettings = true
         } label: {
             Image(systemName: "gearshape.fill")
@@ -239,6 +242,7 @@ struct TaskListView: View {
 
     private var generalStatsButton: some View {
         Button {
+            analytics.track(.statsOpened, properties: ["scope": "general"])
             viewModel.showingGeneralStats = true
         } label: {
             Image(systemName: "chart.bar.fill")
@@ -307,6 +311,7 @@ struct TaskListView: View {
 
         let completion = TaskCompletion(task: task)
         modelContext.insert(completion)
+        analytics.track(.habitCompleted, properties: task.analyticsStructuralProperties)
         // Suppress today's notification if task completed early
         if task.notificationEnabled {
             NotificationService.shared.suppressTodayNotification(for: task)
@@ -317,6 +322,7 @@ struct TaskListView: View {
             if streak > 0 && streak % task.rewardStreakCount == 0 {
                 viewModel.rewardCelebrationText = rewardText
                 viewModel.showingRewardCelebration = true
+                analytics.track(.rewardUnlocked, properties: ["streak_count": AnalyticsBucket.streak(streak)])
             }
         }
     }
@@ -340,7 +346,8 @@ struct TaskListView: View {
             Button {
                 viewModel.handleAddTapped(
                     currentHabitCount: tasks.count,
-                    isPremium: entitlementManager.isPremium
+                    isPremium: entitlementManager.isPremium,
+                    analytics: analytics
                 )
             } label: {
                 Text("Add Habit")

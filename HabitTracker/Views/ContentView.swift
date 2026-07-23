@@ -3,6 +3,8 @@ import SwiftData
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.appOpenTracker) private var appOpenTracker
     @Environment(EntitlementManager.self) private var entitlementManager
     @State private var hasSeeded = false
     @State private var showOnboarding = false
@@ -28,6 +30,13 @@ struct ContentView: View {
             let settings = AppSettings.shared(in: modelContext)
             showOnboarding = !settings.hasCompletedOnboarding
             hasSeeded = true
+        }
+        .onChange(of: scenePhase, initial: true) { _, phase in
+            // Observe scenePhase on a View (not App) so the environment is valid and
+            // launch UI is not blocked by App-level scene wiring.
+            if phase == .active {
+                appOpenTracker?.trackOpenIfNeeded()
+            }
         }
         .onChange(of: entitlementManager.isPremium) { _, isPremium in
             // Persist the latest entitlement state for optimistic launch UI (PRD - Freemium §9).

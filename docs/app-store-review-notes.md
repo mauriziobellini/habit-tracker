@@ -13,7 +13,7 @@ Press and **hold** a habit circle for about 2 seconds. A progress ring fills aro
 New users see an onboarding flow that teaches the tap-and-hold gesture and prompts them to create their first habit. You can tap "Skip" to go straight to the task list.
 
 **Architecture:**  
-The app is fully local. No account, no server, no analytics. All data is stored on-device with SwiftData. Notifications are local only (UserNotifications), no push service.
+The app is local-first and has no account or user login. All habit data is stored on-device with SwiftData and is never uploaded. Notifications are local only (UserNotifications), no push service. The app uses anonymous product analytics (PostHog) to understand aggregate usage, and Firebase Analytics to measure app installs and purchases for advertising (Google Ads) conversion tracking. No habit content (titles, notes, reward text) and no personal identifiers are sent; in-app purchases are processed by Apple.
 
 **Support:**  
 Support URL: https://habit-ring.lovable.app  

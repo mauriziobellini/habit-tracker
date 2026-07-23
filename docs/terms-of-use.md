@@ -10,7 +10,7 @@ We grant you a personal, non-transferable, non-exclusive, revocable license to u
 
 ## 2. The App
 
-Habit Ring helps you build habits, track streaks, and set reminders. The App is local-first: your habit data, streaks, and preferences are stored on your device. No account or sign-up is required. See our [Privacy Policy](https://habit-ring.lovable.app/privacy) for details on data handling.
+Habit Ring helps you build habits, track streaks, and set reminders. The App is local-first: your habit data, streaks, and preferences are stored on your device. No account or sign-up is required. The App uses third-party analytics providers — PostHog (anonymous product analytics) and Google Firebase (install and purchase measurement for advertising) — which never receive your habit content or personal identifiers. See our [Privacy Policy](https://habit-ring.lovable.app/privacy) for details on data handling.
 
 ## 3. Free Tier and Premium
 

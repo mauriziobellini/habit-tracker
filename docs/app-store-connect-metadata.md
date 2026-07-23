@@ -27,7 +27,7 @@ Habit Ring helps you build lasting habits with a simple, beautiful interface. Tr
 
 • Rewards — Set milestone rewards (e.g. “3-day streak: treat yourself”) and get a celebration when you hit them.
 
-• Fully private — All data stays on your device. No account, no cloud, no tracking.
+• Privacy-first — Your habits stay on your device; there is no account and no cloud sync of habit data. We use anonymous analytics to improve the app and measure ads; we never send your habit titles, notes, or personal identifiers.
 
 Habit Ring is local-first: no sign-up, no subscription, no ads. Perfect for daily habits like exercise, meditation, reading, or anything you want to do consistently.
 ```

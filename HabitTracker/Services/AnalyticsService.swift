@@ -1,8 +1,10 @@
 import Foundation
 import os
 
-/// Analytics events for the freemium paywall funnel (PRD - Freemium §5, §9).
+/// Analytics events for the freemium funnel and product usage (PRD - Measurement §9).
+/// Names must match the taxonomy in the Measurement PRD exactly so PostHog insights stay stable.
 enum AnalyticsEvent: String {
+    // Freemium / monetisation (already wired at call sites).
     case paywallShown = "paywall_shown"
     case planSelected = "plan_selected"
     case purchaseStarted = "purchase_started"
@@ -12,6 +14,21 @@ enum AnalyticsEvent: String {
     case restoreSuccess = "restore_success"
     case restoreFailed = "restore_failed"
     case legacyPremiumDetected = "legacy_premium_detected"
+
+    // Activation & monetisation (Measurement PRD §9).
+    case appOpen = "app_open"
+    case onboardingCompleted = "onboarding_completed"
+    case habitCreated = "habit_created"
+    case paywallDismissed = "paywall_dismissed"
+    case addHabitTapped = "add_habit_tapped"
+
+    // App usage & engagement (Measurement PRD §9).
+    case habitCompleted = "habit_completed"
+    case habitEdited = "habit_edited"
+    case habitDeleted = "habit_deleted"
+    case statsOpened = "stats_opened"
+    case settingsOpened = "settings_opened"
+    case rewardUnlocked = "reward_unlocked"
 }
 
 /// Abstraction over analytics so the provider (TelemetryDeck, Firebase, etc.) can be swapped

@@ -177,9 +177,10 @@ final class TaskConfigurationViewModel {
     }
 
     @MainActor
-    func save(context: ModelContext, categories: [Category]) {
+    func save(context: ModelContext, categories: [Category], analytics: AnalyticsService = NoOpAnalyticsService()) {
         switch mode {
         case .create:
+            let existingCount = (try? context.fetchCount(FetchDescriptor<HabitTask>())) ?? 0
             let task = HabitTask(
                 title: title.trimmingCharacters(in: .whitespaces),
                 iconName: iconName,
@@ -211,6 +212,12 @@ final class TaskConfigurationViewModel {
                 }
             }
 
+            var createProps = task.analyticsStructuralProperties
+            createProps["is_first"] = String(existingCount == 0)
+            createProps["habit_count_after"] = AnalyticsBucket.habitCount(existingCount + 1)
+            createProps["source"] = isPreset ? "preset" : "manual"
+            analytics.track(.habitCreated, properties: createProps)
+
         case .edit(let task):
             task.title = title.trimmingCharacters(in: .whitespaces)
             task.iconName = iconName
@@ -231,6 +238,8 @@ final class TaskConfigurationViewModel {
             task.updatedAt = .now
             // Reschedule notifications on edit
             NotificationService.shared.rescheduleNotifications(for: task)
+
+            analytics.track(.habitEdited, properties: task.analyticsStructuralProperties)
         }
     }
 
