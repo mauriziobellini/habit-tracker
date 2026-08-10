@@ -19,6 +19,11 @@ final class TaskListViewModel {
     var showingRewardCelebration = false
     var rewardCelebrationText = ""
 
+    // First completion celebration (Experiment - Opt out notifications)
+    var showingFirstCompletionPrompt = false
+    var firstCompletionOffersReminderOptIn = false
+    private var firstCompletionTask: HabitTask?
+
     // Freemium paywall (PRD - Freemium §6, §7)
     var showingPaywall = false
     var paywallSource = "add_habit"
@@ -62,6 +67,59 @@ final class TaskListViewModel {
         }
         premiumUnlocked = false
         wantsSelectorAfterUnlock = false
+    }
+
+    // MARK: - First completion celebration
+
+    /// Celebrate the very first completion and, when that habit has no reminder, use the
+    /// moment to offer one (Experiment - Opt out notifications).
+    func presentFirstCompletionPrompt(for task: HabitTask, analytics: AnalyticsService = NoOpAnalyticsService()) {
+        firstCompletionTask = task
+        firstCompletionOffersReminderOptIn = !task.notificationEnabled
+        showingFirstCompletionPrompt = true
+        analytics.track(.firstCompletionPromptShown, properties: [
+            "variant": firstCompletionOffersReminderOptIn ? "with_optin" : "congrats_only",
+        ])
+    }
+
+    /// Turns the reminder on for the celebrated habit and schedules it once the system grants
+    /// permission. The habit keeps `notificationEnabled` even if permission is denied, so the
+    /// intent survives if the user later allows notifications in Settings.
+    @MainActor
+    func enableReminderFromFirstCompletionPrompt(
+        at time: Date,
+        analytics: AnalyticsService = NoOpAnalyticsService()
+    ) {
+        guard let task = firstCompletionTask else { return }
+
+        task.notificationEnabled = true
+        task.notificationTime = time
+        task.updatedAt = .now
+
+        analytics.track(.firstCompletionPromptAction, properties: ["action": "enable_reminder"])
+
+        Task { @MainActor in
+            let wasPrompted = await NotificationService.shared.authorizationStatus() == .notDetermined
+            let granted = await NotificationService.shared.requestAuthorization()
+            if granted {
+                NotificationService.shared.rescheduleNotifications(for: task)
+            }
+            analytics.track(.notificationPermissionResult, properties: [
+                "source": "first_completion_prompt",
+                "granted": String(granted),
+                "was_prompted": String(wasPrompted),
+            ])
+        }
+
+        dismissFirstCompletionPrompt()
+    }
+
+    func dismissFirstCompletionPrompt(analytics: AnalyticsService? = nil) {
+        analytics?.track(.firstCompletionPromptAction, properties: [
+            "action": firstCompletionOffersReminderOptIn ? "dismiss" : "acknowledge",
+        ])
+        showingFirstCompletionPrompt = false
+        firstCompletionTask = nil
     }
 
     /// Filter tasks by the selected category. `nil` means "All".

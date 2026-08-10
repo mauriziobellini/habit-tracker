@@ -11,6 +11,12 @@ final class NotificationService {
 
     // MARK: - Permission
 
+    /// Current system authorization status. The system only shows the prompt while the status
+    /// is `.notDetermined`, so call sites read this first to tell a real prompt from a no-op.
+    func authorizationStatus() async -> UNAuthorizationStatus {
+        await center.notificationSettings().authorizationStatus
+    }
+
     /// Request notification authorization. Call early (e.g., when user enables a notification).
     func requestAuthorization() async -> Bool {
         do {

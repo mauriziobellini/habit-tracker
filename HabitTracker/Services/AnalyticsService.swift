@@ -29,6 +29,12 @@ enum AnalyticsEvent: String {
     case statsOpened = "stats_opened"
     case settingsOpened = "settings_opened"
     case rewardUnlocked = "reward_unlocked"
+
+    // Retention experiment: opt-out reminders + first-completion prime
+    // (Experiment - Opt out notifications).
+    case notificationPermissionResult = "notification_permission_result"
+    case firstCompletionPromptShown = "first_completion_prompt_shown"
+    case firstCompletionPromptAction = "first_completion_prompt_action"
 }
 
 /// Abstraction over analytics so the provider (TelemetryDeck, Firebase, etc.) can be swapped

@@ -359,6 +359,19 @@ struct TaskConfigurationViewModelTests {
         #expect(vm.colorToken == "purple")
     }
 
+    @Test("Create mode defaults the reminder to on")
+    func createModeRemindersOptOut() {
+        let vm = TaskConfigurationViewModel(mode: .create)
+        #expect(vm.notificationEnabled)
+    }
+
+    @Test("Edit mode keeps a habit without reminders opted out")
+    func editModeKeepsReminderSetting() {
+        let task = HabitTask(title: "Meditate", notificationEnabled: false)
+        let vm = TaskConfigurationViewModel(mode: .edit(task))
+        #expect(!vm.notificationEnabled)
+    }
+
     @Test("goalValueString converts correctly")
     func goalValueString() {
         let vm = TaskConfigurationViewModel(mode: .create)
@@ -403,6 +416,30 @@ struct TaskListViewModelTests {
         let filtered = vm.filteredTasks([task1, task2])
         #expect(filtered.count == 1)
         #expect(filtered[0].title == "A")
+    }
+
+    @Test("First completion prompt offers the reminder opt-in when the habit has none")
+    func firstCompletionPromptOffersOptIn() {
+        let vm = TaskListViewModel()
+        vm.presentFirstCompletionPrompt(for: HabitTask(title: "A", notificationEnabled: false))
+        #expect(vm.showingFirstCompletionPrompt)
+        #expect(vm.firstCompletionOffersReminderOptIn)
+    }
+
+    @Test("First completion prompt only congratulates when the reminder is already on")
+    func firstCompletionPromptCongratulatesOnly() {
+        let vm = TaskListViewModel()
+        vm.presentFirstCompletionPrompt(for: HabitTask(title: "A", notificationEnabled: true))
+        #expect(vm.showingFirstCompletionPrompt)
+        #expect(!vm.firstCompletionOffersReminderOptIn)
+    }
+
+    @Test("Dismissing the first completion prompt hides it")
+    func firstCompletionPromptDismiss() {
+        let vm = TaskListViewModel()
+        vm.presentFirstCompletionPrompt(for: HabitTask(title: "A"))
+        vm.dismissFirstCompletionPrompt()
+        #expect(!vm.showingFirstCompletionPrompt)
     }
 }
 

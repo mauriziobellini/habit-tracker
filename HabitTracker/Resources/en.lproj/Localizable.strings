@@ -178,6 +178,13 @@
 "Awesome!" = "Awesome!";
 "Congratulations! You can now reward yourself with: %@" = "Congratulations! You can now reward yourself with: %@";
 
+// MARK: - First Completion Celebration
+"Congratulations on your first completion!" = "Congratulations on your first completion!";
+"Keep it going — we'll remind you at your chosen time." = "Keep it going — we'll remind you at your chosen time.";
+"People who turn on reminders complete their habits 40% more often." = "People who turn on reminders complete their habits 40% more often.";
+"Turn on reminders" = "Turn on reminders";
+"Not now" = "Not now";
+
 // MARK: - Preset Task Names
 "Walk" = "Walk";
 "Run" = "Run";

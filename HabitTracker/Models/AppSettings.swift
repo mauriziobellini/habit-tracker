@@ -16,6 +16,10 @@ final class AppSettings {
     /// Timestamp of the last successful StoreKit entitlement check.
     var lastEntitlementCheckAt: Date?
 
+    /// The first-completion celebration is shown once per install
+    /// (Experiment - Opt out notifications).
+    var hasSeenFirstCompletionPrompt: Bool = false
+
     init(
         id: UUID = UUID(),
         hasCompletedOnboarding: Bool = false,
@@ -23,6 +27,7 @@ final class AppSettings {
         measurementSystem: MeasurementSystem = .metric,
         cachedIsPremium: Bool = false,
         lastEntitlementCheckAt: Date? = nil,
+        hasSeenFirstCompletionPrompt: Bool = false,
         createdAt: Date = .now
     ) {
         self.id = id
@@ -31,6 +36,7 @@ final class AppSettings {
         self.measurementSystem = measurementSystem
         self.cachedIsPremium = cachedIsPremium
         self.lastEntitlementCheckAt = lastEntitlementCheckAt
+        self.hasSeenFirstCompletionPrompt = hasSeenFirstCompletionPrompt
         self.createdAt = createdAt
     }
 }

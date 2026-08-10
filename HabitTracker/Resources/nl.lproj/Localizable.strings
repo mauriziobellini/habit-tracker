@@ -178,6 +178,13 @@
 "Awesome!" = "Geweldig!";
 "Congratulations! You can now reward yourself with: %@" = "Gefeliciteerd! Je kunt jezelf belonen met: %@";
 
+// MARK: - First Completion Celebration
+"Congratulations on your first completion!" = "Gefeliciteerd met je eerste voltooiing!";
+"Keep it going — we'll remind you at your chosen time." = "Hou vol: we herinneren je op het tijdstip dat je hebt gekozen.";
+"People who turn on reminders complete their habits 40% more often." = "Mensen die herinneringen aanzetten voltooien hun gewoontes 40% vaker.";
+"Turn on reminders" = "Herinneringen aanzetten";
+"Not now" = "Niet nu";
+
 // MARK: - Preset Task Names
 "Walk" = "Wandelen";
 "Run" = "Hardlopen";

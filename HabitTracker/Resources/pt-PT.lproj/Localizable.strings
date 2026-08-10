@@ -178,6 +178,13 @@
 "Awesome!" = "Fantástico!";
 "Congratulations! You can now reward yourself with: %@" = "Parabéns! Agora podes recompensar-te com: %@";
 
+// MARK: - First Completion Celebration
+"Congratulations on your first completion!" = "Parabéns pela tua primeira conclusão!";
+"Keep it going — we'll remind you at your chosen time." = "Continua assim: lembramos-te à hora que escolheste.";
+"People who turn on reminders complete their habits 40% more often." = "Quem ativa lembretes conclui os seus hábitos mais 40% das vezes.";
+"Turn on reminders" = "Ativar lembretes";
+"Not now" = "Agora não";
+
 // MARK: - Preset Task Names
 "Walk" = "Caminhar";
 "Run" = "Correr";

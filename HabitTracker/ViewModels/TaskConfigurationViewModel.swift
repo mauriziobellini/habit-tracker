@@ -26,7 +26,10 @@ final class TaskConfigurationViewModel {
     var timesPerPeriod: Int = 1
     var tracking: TrackingMode = .eachCompletion
     var scheduledDays: Set<Int> = Set(1...7)
-    var notificationEnabled: Bool = false
+    /// New habits opt out of reminders rather than in: without a return cue most users never
+    /// come back after the first session (Experiment - Opt out notifications). Edit mode
+    /// overwrites this with the habit's stored value, so existing habits keep their setting.
+    var notificationEnabled: Bool = true
     var notificationTime: Date = Calendar.current.date(
         from: DateComponents(hour: 9, minute: 0)
     ) ?? .now
@@ -204,11 +207,17 @@ final class TaskConfigurationViewModel {
             context.insert(task)
             // Schedule notifications for new task
             if task.notificationEnabled {
-                Task {
+                Task { @MainActor in
+                    let wasPrompted = await NotificationService.shared.authorizationStatus() == .notDetermined
                     let granted = await NotificationService.shared.requestAuthorization()
                     if granted {
                         NotificationService.shared.scheduleNotifications(for: task)
                     }
+                    analytics.track(.notificationPermissionResult, properties: [
+                        "source": "habit_create",
+                        "granted": String(granted),
+                        "was_prompted": String(wasPrompted),
+                    ])
                 }
             }
 

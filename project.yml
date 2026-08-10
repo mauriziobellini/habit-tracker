@@ -27,7 +27,8 @@ settings:
 packages:
   PostHog:
     url: https://github.com/PostHog/posthog-ios
-    from: "3.0.0"
+    # Session replay for iOS requires 3.6.0+.
+    from: "3.6.0"
   Firebase:
     url: https://github.com/firebase/firebase-ios-sdk
     from: "11.14.0"

@@ -39,6 +39,12 @@ final class PostHogAnalyticsService: AnalyticsService {
         // control (PRD §9). We send our own `app_open`, so lifecycle/screen autocapture is off.
         phConfig.captureApplicationLifecycleEvents = false
         phConfig.captureScreenViews = false
+        // Session replay backs the qualitative side of the retention work: the funnel says
+        // users don't return, replays show where they get stuck. Masking stays on so no habit
+        // titles, reward text or other typed content leaves the device.
+        phConfig.sessionReplay = true
+        phConfig.sessionReplayConfig.maskAllTextInputs = true
+        phConfig.sessionReplayConfig.maskAllImages = true
         PostHogSDK.shared.setup(phConfig)
     }
 

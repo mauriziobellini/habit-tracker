@@ -12,6 +12,11 @@ struct TaskListView: View {
     }
 
     @State private var viewModel = TaskListViewModel()
+    /// Reference date for everything the grid renders. Kept in state (instead of reading
+    /// `.now` inline) so resuming the app after midnight re-evaluates the grid for the new
+    /// day — otherwise the list keeps yesterday's completion state until a cold start.
+    @State private var dayReferenceDate: Date = .now
+    @Environment(\.scenePhase) private var scenePhase
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(EntitlementManager.self) private var entitlementManager
     @Environment(PurchaseService.self) private var purchaseService
@@ -152,8 +157,50 @@ struct TaskListView: View {
                     .zIndex(100)
                 }
             }
+            .overlay {
+                if viewModel.showingFirstCompletionPrompt {
+                    FirstCompletionCelebrationView(
+                        offersReminderOptIn: viewModel.firstCompletionOffersReminderOptIn,
+                        onEnableReminder: { time in
+                            viewModel.enableReminderFromFirstCompletionPrompt(
+                                at: time,
+                                analytics: analytics
+                            )
+                        },
+                        onDismiss: {
+                            viewModel.dismissFirstCompletionPrompt(analytics: analytics)
+                        }
+                    )
+                    .transition(.opacity)
+                    .zIndex(101)
+                }
+            }
             .animation(.easeInOut(duration: 0.3), value: viewModel.showingRewardCelebration)
+            .animation(.easeInOut(duration: 0.3), value: viewModel.showingFirstCompletionPrompt)
+            .onChange(of: scenePhase) { _, phase in
+                if phase == .active { refreshDayIfNeeded() }
+            }
+            .onReceive(
+                NotificationCenter.default
+                    .publisher(for: .NSCalendarDayChanged)
+                    .receive(on: RunLoop.main)
+            ) { _ in
+                refreshDayIfNeeded()
+            }
+            .onReceive(
+                NotificationCenter.default
+                    .publisher(for: UIApplication.significantTimeChangeNotification)
+                    .receive(on: RunLoop.main)
+            ) { _ in
+                refreshDayIfNeeded()
+            }
         }
+    }
+
+    private func refreshDayIfNeeded() {
+        let now = Date.now
+        guard !Calendar.current.isDate(dayReferenceDate, inSameDayAs: now) else { return }
+        dayReferenceDate = now
     }
 
     // MARK: - Category Dropdown
@@ -261,7 +308,7 @@ struct TaskListView: View {
         viewModel.filteredTasks(tasks).filter { task in
             PeriodService.periodProgress(
                 for: task,
-                on: .now,
+                on: dayReferenceDate,
                 weekStartDay: weekStartDay
             ).listState != .hidden
         }
@@ -281,7 +328,7 @@ struct TaskListView: View {
     }
 
     private func taskCell(_ task: HabitTask) -> some View {
-        let progress = PeriodService.periodProgress(for: task, on: .now, weekStartDay: weekStartDay)
+        let progress = PeriodService.periodProgress(for: task, on: dayReferenceDate, weekStartDay: weekStartDay)
         let isLocked = lockedHabitIDs.contains(task.id)
 
         return TapAndHoldTaskView(
@@ -309,13 +356,30 @@ struct TaskListView: View {
             return
         }
 
+        let isFirstCompletionEver = tasks.allSatisfy { $0.completions.isEmpty }
+
         let completion = TaskCompletion(task: task)
         modelContext.insert(completion)
-        analytics.track(.habitCompleted, properties: task.analyticsStructuralProperties)
+        var completionProps = task.analyticsStructuralProperties
+        completionProps["is_first"] = String(isFirstCompletionEver)
+        analytics.track(.habitCompleted, properties: completionProps)
         // Suppress today's notification if task completed early
         if task.notificationEnabled {
             NotificationService.shared.suppressTodayNotification(for: task)
         }
+
+        // First completion ever: celebrate and, if this habit has no reminder, offer one —
+        // shown once per install (Experiment - Opt out notifications). The celebration takes
+        // the screen, so the reward check below is skipped for this completion.
+        if isFirstCompletionEver {
+            let settings = AppSettings.shared(in: modelContext)
+            if !settings.hasSeenFirstCompletionPrompt {
+                settings.hasSeenFirstCompletionPrompt = true
+                viewModel.presentFirstCompletionPrompt(for: task, analytics: analytics)
+                return
+            }
+        }
+
         // Check if this completion triggers a reward
         if task.rewardEnabled, let rewardText = task.rewardText, !rewardText.isEmpty {
             let streak = task.currentStreak(weekStartDay: weekStartDay)
