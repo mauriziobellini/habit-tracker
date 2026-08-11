@@ -42,10 +42,20 @@ final class PostHogAnalyticsService: AnalyticsService {
         // Session replay backs the qualitative side of the retention work: the funnel says
         // users don't return, replays show where they get stuck. Masking stays on so no habit
         // titles, reward text or other typed content leaves the device.
+        // screenshotMode is required for SwiftUI — without it the SDK records session metadata
+        // but skips every snapshot ("SwiftUI snapshot not supported"), which matches the
+        // "This recording can't be played" empty sessions in PostHog.
         phConfig.sessionReplay = true
+        phConfig.sessionReplayConfig.screenshotMode = true
         phConfig.sessionReplayConfig.maskAllTextInputs = true
         phConfig.sessionReplayConfig.maskAllImages = true
+        #if DEBUG
+        phConfig.debug = true
+        #endif
         PostHogSDK.shared.setup(phConfig)
+        #if DEBUG
+        logger.debug("PostHog session replay configured (screenshotMode=true, host=\(config.host, privacy: .public))")
+        #endif
     }
 
     func track(_ event: AnalyticsEvent, properties: [String: String]) {

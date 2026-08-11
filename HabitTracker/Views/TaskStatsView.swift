@@ -6,6 +6,7 @@ struct TaskStatsView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @State var viewModel: TaskStatsViewModel
+    @State private var selectedTrendDate: Date?
 
     private var accentColor: Color {
         TaskColor.from(token: viewModel.task.colorToken).color
@@ -170,6 +171,44 @@ struct TaskStatsView: View {
         return dates
     }
 
+    /// The data point closest to the date the user tapped on the chart.
+    private var selectedTrendPoint: StatisticsService.TrendPoint? {
+        guard let selectedTrendDate else { return nil }
+        return viewModel.trendData.min {
+            abs($0.date.timeIntervalSince(selectedTrendDate)) < abs($1.date.timeIntervalSince(selectedTrendDate))
+        }
+    }
+
+    private func trendDateLabel(for date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        let code = UserDefaults.standard.string(forKey: AppLanguage.userDefaultsKey) ?? "en"
+        formatter.locale = Locale(identifier: code)
+        return formatter.string(from: date)
+    }
+
+    private func trendCallout(for point: StatisticsService.TrendPoint) -> some View {
+        VStack(spacing: 2) {
+            Text(trendDateLabel(for: point.date))
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+            Text("\(point.count)")
+                .font(.headline)
+            Text("Completions")
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+        }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 6)
+        .background(
+            RoundedRectangle(cornerRadius: 8)
+                .fill(Color(.systemBackground))
+                .shadow(color: .black.opacity(0.15), radius: 4, y: 2)
+        )
+        .accessibilityElement(children: .combine)
+    }
+
     private var trendChart: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Trend")
@@ -182,27 +221,51 @@ struct TaskStatsView: View {
                     .frame(height: 200)
                     .frame(maxWidth: .infinity)
             } else {
-                Chart(viewModel.trendData) { point in
-                    LineMark(
-                        x: .value("Date", point.date),
-                        y: .value("Completions", point.count)
-                    )
-                    .foregroundStyle(accentColor)
-                    .interpolationMethod(.catmullRom)
+                Chart {
+                    ForEach(viewModel.trendData) { point in
+                        LineMark(
+                            x: .value("Date", point.date),
+                            y: .value("Completions", point.count)
+                        )
+                        .foregroundStyle(accentColor)
+                        .interpolationMethod(.catmullRom)
 
-                    AreaMark(
-                        x: .value("Date", point.date),
-                        y: .value("Completions", point.count)
-                    )
-                    .foregroundStyle(accentColor.opacity(0.1))
-                    .interpolationMethod(.catmullRom)
+                        AreaMark(
+                            x: .value("Date", point.date),
+                            y: .value("Completions", point.count)
+                        )
+                        .foregroundStyle(accentColor.opacity(0.1))
+                        .interpolationMethod(.catmullRom)
 
-                    PointMark(
-                        x: .value("Date", point.date),
-                        y: .value("Completions", point.count)
-                    )
-                    .foregroundStyle(accentColor)
+                        PointMark(
+                            x: .value("Date", point.date),
+                            y: .value("Completions", point.count)
+                        )
+                        .foregroundStyle(accentColor)
+                    }
+
+                    if let selectedTrendPoint {
+                        RuleMark(x: .value("Date", selectedTrendPoint.date))
+                            .foregroundStyle(accentColor.opacity(0.35))
+                            .zIndex(-1)
+                            .annotation(
+                                position: .top,
+                                spacing: 4,
+                                overflowResolution: .init(x: .fit(to: .chart), y: .fit(to: .chart))
+                            ) {
+                                trendCallout(for: selectedTrendPoint)
+                            }
+
+                        PointMark(
+                            x: .value("Date", selectedTrendPoint.date),
+                            y: .value("Completions", selectedTrendPoint.count)
+                        )
+                        .foregroundStyle(accentColor)
+                        .symbolSize(130)
+                    }
                 }
+                .chartXSelection(value: $selectedTrendDate)
+                .sensoryFeedback(.selection, trigger: selectedTrendPoint?.date)
                 .chartXAxis {
                     AxisMarks(values: chartXAxisDates) { _ in
                         AxisGridLine()
@@ -220,6 +283,8 @@ struct TaskStatsView: View {
             RoundedRectangle(cornerRadius: 12)
                 .fill(Color(.secondarySystemBackground))
         )
+        .onChange(of: viewModel.windowStart) { selectedTrendDate = nil }
+        .onChange(of: viewModel.windowEnd) { selectedTrendDate = nil }
     }
 
     // MARK: - Streak Card

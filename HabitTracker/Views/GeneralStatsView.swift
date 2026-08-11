@@ -14,6 +14,7 @@ struct GeneralStatsView: View {
     @State private var windowEnd: Date
     @State private var weekStartDay: Int = 1
     @State private var showingTimeWindowPicker = false
+    @State private var selectedTrendDate: Date?
 
     init() {
         let cal = Calendar.current
@@ -48,6 +49,15 @@ struct GeneralStatsView: View {
         let code = UserDefaults.standard.string(forKey: AppLanguage.userDefaultsKey) ?? "en"
         formatter.locale = Locale(identifier: code)
         return "\(formatter.string(from: windowStart)) \u{2013} \(formatter.string(from: windowEnd))"
+    }
+
+    private func trendDateLabel(for date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        let code = UserDefaults.standard.string(forKey: AppLanguage.userDefaultsKey) ?? "en"
+        formatter.locale = Locale(identifier: code)
+        return formatter.string(from: date)
     }
 
     var body: some View {
@@ -221,6 +231,35 @@ struct GeneralStatsView: View {
         return dates
     }
 
+    /// The data point closest to the date the user tapped on the chart.
+    private var selectedTrendPoint: StatisticsService.TrendPoint? {
+        guard let selectedTrendDate else { return nil }
+        return trendData.min {
+            abs($0.date.timeIntervalSince(selectedTrendDate)) < abs($1.date.timeIntervalSince(selectedTrendDate))
+        }
+    }
+
+    private func trendCallout(for point: StatisticsService.TrendPoint) -> some View {
+        VStack(spacing: 2) {
+            Text(trendDateLabel(for: point.date))
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+            Text("\(point.count)")
+                .font(.headline)
+            Text("Completions")
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+        }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 6)
+        .background(
+            RoundedRectangle(cornerRadius: 8)
+                .fill(Color(.systemBackground))
+                .shadow(color: .black.opacity(0.15), radius: 4, y: 2)
+        )
+        .accessibilityElement(children: .combine)
+    }
+
     private var trendChart: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Trend")
@@ -233,27 +272,51 @@ struct GeneralStatsView: View {
                     .frame(height: 200)
                     .frame(maxWidth: .infinity)
             } else {
-                Chart(trendData) { point in
-                    LineMark(
-                        x: .value("Date", point.date),
-                        y: .value("Completions", point.count)
-                    )
-                    .foregroundStyle(Color.accentColor)
-                    .interpolationMethod(.catmullRom)
+                Chart {
+                    ForEach(trendData) { point in
+                        LineMark(
+                            x: .value("Date", point.date),
+                            y: .value("Completions", point.count)
+                        )
+                        .foregroundStyle(Color.accentColor)
+                        .interpolationMethod(.catmullRom)
 
-                    AreaMark(
-                        x: .value("Date", point.date),
-                        y: .value("Completions", point.count)
-                    )
-                    .foregroundStyle(Color.accentColor.opacity(0.1))
-                    .interpolationMethod(.catmullRom)
+                        AreaMark(
+                            x: .value("Date", point.date),
+                            y: .value("Completions", point.count)
+                        )
+                        .foregroundStyle(Color.accentColor.opacity(0.1))
+                        .interpolationMethod(.catmullRom)
 
-                    PointMark(
-                        x: .value("Date", point.date),
-                        y: .value("Completions", point.count)
-                    )
-                    .foregroundStyle(Color.accentColor)
+                        PointMark(
+                            x: .value("Date", point.date),
+                            y: .value("Completions", point.count)
+                        )
+                        .foregroundStyle(Color.accentColor)
+                    }
+
+                    if let selectedTrendPoint {
+                        RuleMark(x: .value("Date", selectedTrendPoint.date))
+                            .foregroundStyle(Color.accentColor.opacity(0.35))
+                            .zIndex(-1)
+                            .annotation(
+                                position: .top,
+                                spacing: 4,
+                                overflowResolution: .init(x: .fit(to: .chart), y: .fit(to: .chart))
+                            ) {
+                                trendCallout(for: selectedTrendPoint)
+                            }
+
+                        PointMark(
+                            x: .value("Date", selectedTrendPoint.date),
+                            y: .value("Completions", selectedTrendPoint.count)
+                        )
+                        .foregroundStyle(Color.accentColor)
+                        .symbolSize(130)
+                    }
                 }
+                .chartXSelection(value: $selectedTrendDate)
+                .sensoryFeedback(.selection, trigger: selectedTrendPoint?.date)
                 .chartXAxis {
                     AxisMarks(values: chartXAxisDates) { _ in
                         AxisGridLine()
@@ -271,5 +334,8 @@ struct GeneralStatsView: View {
             RoundedRectangle(cornerRadius: 12)
                 .fill(Color(.secondarySystemBackground))
         )
+        .onChange(of: selectedCategoryID) { selectedTrendDate = nil }
+        .onChange(of: windowStart) { selectedTrendDate = nil }
+        .onChange(of: windowEnd) { selectedTrendDate = nil }
     }
 }
