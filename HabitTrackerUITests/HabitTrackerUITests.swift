@@ -197,6 +197,17 @@ final class HabitTrackerUITests: XCTestCase {
             "Consistency grid is missing"
         )
         attachScreenshot(named: "Habit summary sheet")
+
+        // The sheet opens at a single content-sized detent, so the grid and the link
+        // below it must both be on screen without any dragging.
+        let manageLink = app.buttons["habitSummary_manageCompletionsButton"]
+        XCTAssertTrue(manageLink.exists, "Manage completions link is missing")
+        manageLink.tap()
+
+        XCTAssertTrue(
+            app.navigationBars["Manage Completions"].waitForExistence(timeout: 5),
+            "Manage completions link did not open the completions calendar"
+        )
     }
 
     // MARK: - FR-7: Settings
