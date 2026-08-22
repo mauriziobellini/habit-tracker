@@ -158,7 +158,6 @@
 "Small habits,\nmassive change." = "Small habits,\nmassive change.";
 "Track your daily habits and stay motivated." = "Track your daily habits and stay motivated.";
 "Tap & Hold to Complete" = "Tap & Hold to Complete";
-"Press and hold the circle for 2 seconds to mark a habit as done." = "Press and hold the circle for 2 seconds to mark a habit as done.";
 "Your goal is to build a streak of consecutive days" = "Your goal is to build a streak of consecutive days";
 "Create Your First Habit" = "Create Your First Habit";
 "Choose a preset or create a custom habit to get started." = "Choose a preset or create a custom habit to get started.";
@@ -221,3 +220,35 @@
 "Fitness" = "Fitness";
 "Learning" = "Learning";
 "Social" = "Social";
+
+// MARK: - Habit Strength
+"Starting" = "Starting";
+"Developing" = "Developing";
+"Building" = "Building";
+"Strong" = "Strong";
+"Established" = "Established";
+"Mastering" = "Mastering";
+"Habit strength" = "Habit strength";
+"Habit strength will be shown after 3 completions" = "Habit strength will be shown after 3 completions";
+"Habit strength, %lld" = "Habit strength, %lld";
+"Consistency grid, %lld days completed" = "Consistency grid, %lld days completed";
+"Keep going" = "Keep going";
+"Your brain is wiring the cue" = "Your brain is wiring the cue";
+"Repetition is linking this action to its context. The first neural pathway is forming — keep showing up and the association will deepen." = "Repetition is linking this action to its context. The first neural pathway is forming — keep showing up and the association will deepen.";
+"Automaticity is taking root" = "Automaticity is taking root";
+"Your mind needs less deliberate effort to start. Context cues are beginning to trigger the behavior on their own — consistency locks this in." = "Your mind needs less deliberate effort to start. Context cues are beginning to trigger the behavior on their own — consistency locks this in.";
+"Habit control is shifting" = "Habit control is shifting";
+"Goal-directed effort is giving way to habitual control. The behavior is settling into a reliable loop — protect this streak and it will stick." = "Goal-directed effort is giving way to habitual control. The behavior is settling into a reliable loop — protect this streak and it will stick.";
+"The loop is becoming stable" = "The loop is becoming stable";
+"Cue, routine, and reward are aligning with growing automaticity. Missing a day won't erase progress — returning promptly keeps the pathway strong." = "Cue, routine, and reward are aligning with growing automaticity. Missing a day won't erase progress — returning promptly keeps the pathway strong.";
+"Near-automatic mastery" = "Near-automatic mastery";
+"This habit is approaching high automaticity. Your brain retrieves it with little conscious push — continue the rhythm and make it part of who you are." = "This habit is approaching high automaticity. Your brain retrieves it with little conscious push — continue the rhythm and make it part of who you are.";
+"Every repetition counts" = "Every repetition counts";
+"Keep showing up — consistency is what turns an intention into a habit." = "Keep showing up — consistency is what turns an intention into a habit.";
+"One check-in today makes you leap to the next stage" = "One check-in today makes you leap to the next stage";
+"One check-in today keeps your habit formation on track." = "One check-in today keeps your habit formation on track.";
+"Mark done" = "Mark done";
+"Later" = "Later";
+"Tap and hold to complete, single tap for details" = "Tap and hold to complete, single tap for details";
+"Your plan" = "Your plan";
+"Press and hold the circle to mark a habit as done." = "Press and hold the circle to mark a habit as done.";

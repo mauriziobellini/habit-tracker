@@ -1,7 +1,7 @@
 import SwiftUI
 
 /// The animated ring-fill overlay used for the tap-and-hold gesture (FR-1).
-/// Shows a circular progress stroke that fills over 2 seconds.
+/// Shows a circular progress stroke that fills over the hold duration.
 struct CompletionRingView: View {
     let progress: CGFloat   // 0.0 ... 1.0
     let color: Color

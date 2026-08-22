@@ -158,7 +158,6 @@
 "Small habits,\nmassive change." = "Piccole abitudini,\ngrande cambiamento.";
 "Track your daily habits and stay motivated." = "Registra le tue abitudini quotidiane e resta motivato.";
 "Tap & Hold to Complete" = "Tieni Premuto per Completare";
-"Press and hold the circle for 2 seconds to mark a habit as done." = "Tieni premuto il cerchio per 2 secondi per completare un'abitudine.";
 "Your goal is to build a streak of consecutive days" = "Il tuo obiettivo è costruire una serie di giorni consecutivi";
 "Create Your First Habit" = "Crea la Tua Prima Abitudine";
 "Choose a preset or create a custom habit to get started." = "Scegli un modello o crea un'abitudine personalizzata.";
@@ -221,3 +220,35 @@
 "Fitness" = "Fitness";
 "Learning" = "Apprendimento";
 "Social" = "Sociale";
+
+// MARK: - Habit Strength
+"Starting" = "Inizio";
+"Developing" = "In sviluppo";
+"Building" = "In costruzione";
+"Strong" = "Forte";
+"Established" = "Consolidata";
+"Mastering" = "Padronanza";
+"Habit strength" = "Forza dell'abitudine";
+"Habit strength will be shown after 3 completions" = "La forza dell'abitudine sarà mostrata dopo 3 completamenti";
+"Habit strength, %lld" = "Forza dell'abitudine, %lld";
+"Consistency grid, %lld days completed" = "Griglia di costanza, %lld giorni completati";
+"Keep going" = "Continua così";
+"Your brain is wiring the cue" = "Il tuo cervello sta fissando il segnale";
+"Repetition is linking this action to its context. The first neural pathway is forming — keep showing up and the association will deepen." = "La ripetizione collega questa azione al suo contesto. Il primo percorso neurale si sta formando: continua e l'associazione si rafforzerà.";
+"Automaticity is taking root" = "L'automatismo mette radici";
+"Your mind needs less deliberate effort to start. Context cues are beginning to trigger the behavior on their own — consistency locks this in." = "La tua mente ha bisogno di meno sforzo deliberato per iniziare. I segnali del contesto cominciano ad attivare il comportamento da soli: la costanza lo consolida.";
+"Habit control is shifting" = "Il controllo dell'abitudine sta cambiando";
+"Goal-directed effort is giving way to habitual control. The behavior is settling into a reliable loop — protect this streak and it will stick." = "Lo sforzo orientato all'obiettivo lascia spazio al controllo automatico. Il comportamento si sta assestando in un ciclo affidabile: proteggi questa serie e resterà.";
+"The loop is becoming stable" = "Il ciclo si sta stabilizzando";
+"Cue, routine, and reward are aligning with growing automaticity. Missing a day won't erase progress — returning promptly keeps the pathway strong." = "Segnale, routine e ricompensa si allineano con un automatismo crescente. Saltare un giorno non cancella i progressi: tornare subito mantiene forte il percorso.";
+"Near-automatic mastery" = "Padronanza quasi automatica";
+"This habit is approaching high automaticity. Your brain retrieves it with little conscious push — continue the rhythm and make it part of who you are." = "Questa abitudine si avvicina a un alto automatismo. Il tuo cervello la richiama con poco sforzo consapevole: mantieni il ritmo e rendila parte di chi sei.";
+"Every repetition counts" = "Ogni ripetizione conta";
+"Keep showing up — consistency is what turns an intention into a habit." = "Continua: è la costanza che trasforma un'intenzione in un'abitudine.";
+"One check-in today makes you leap to the next stage" = "Un check-in oggi ti fa salire allo stadio successivo";
+"One check-in today keeps your habit formation on track." = "Un check-in oggi mantiene in carreggiata la tua abitudine.";
+"Mark done" = "Segna come fatto";
+"Later" = "Più tardi";
+"Tap and hold to complete, single tap for details" = "Tieni premuto per completare, tocca per i dettagli";
+"Your plan" = "Il tuo piano";
+"Press and hold the circle to mark a habit as done." = "Tieni premuto il cerchio per segnare un'abitudine come completata.";

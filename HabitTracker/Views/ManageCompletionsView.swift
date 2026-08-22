@@ -6,6 +6,9 @@ import SwiftData
 struct ManageCompletionsView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    /// Optional so this view stays usable in previews and any host that has not
+    /// injected the cache.
+    @Environment(HabitStrengthCache.self) private var strengthCache: HabitStrengthCache?
 
     let task: HabitTask
 
@@ -157,6 +160,12 @@ struct ManageCompletionsView: View {
                 modelContext.delete(completion)
             }
         }
+
+        // Habit strength is memoized per habit per day, so an edit here has to drop
+        // the entry or the dashboard and summary sheet keep showing the score from
+        // before the edit. Done here rather than at each presenting view: this screen
+        // is reached from both the summary sheet and the stats screen.
+        strengthCache?.invalidate(taskID: task.id)
     }
 
     // MARK: - Helpers

@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import UserNotifications
 
 @main
 struct HabitTrackerApp: App {
@@ -9,6 +10,12 @@ struct HabitTrackerApp: App {
     @State private var entitlementManager: EntitlementManager
     @State private var purchaseService: PurchaseService
     private let appOpenTracker: AppOpenTracker
+    private let modelContainer: ModelContainer
+    @State private var strengthCache = HabitStrengthCache()
+    /// Retained for the lifetime of the app: `UNUserNotificationCenter` holds its
+    /// delegate weakly, so a local would be deallocated and the actions would
+    /// silently stop working.
+    private let notificationActionHandler: NotificationActionHandler
 
     init() {
         if UserDefaults.standard.string(forKey: AppLanguage.userDefaultsKey) == nil {
@@ -23,6 +30,30 @@ struct HabitTrackerApp: App {
         _entitlementManager = State(initialValue: entitlements)
         _purchaseService = State(initialValue: PurchaseService(entitlementManager: entitlements, analytics: analytics))
         appOpenTracker = AppOpenTracker(analytics: analytics)
+        let container = Self.makeModelContainer()
+        modelContainer = container
+
+        let handler = NotificationActionHandler(container: container)
+        notificationActionHandler = handler
+        UNUserNotificationCenter.current().delegate = handler
+    }
+
+    /// UI tests run against an in-memory store so every launch starts from an empty database.
+    /// Without this, habits created by one test leak into the next through the on-disk store.
+    private static func makeModelContainer(processInfo: ProcessInfo = .processInfo) -> ModelContainer {
+        let schema = Schema([
+            Category.self,
+            HabitTask.self,
+            TaskCompletion.self,
+            AppSettings.self,
+        ])
+        let isUITesting = processInfo.arguments.contains { $0.hasPrefix("--uitesting") }
+        let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: isUITesting)
+        do {
+            return try ModelContainer(for: schema, configurations: configuration)
+        } catch {
+            fatalError("Failed to create ModelContainer: \(error)")
+        }
     }
 
     var body: some Scene {
@@ -33,21 +64,18 @@ struct HabitTrackerApp: App {
                 .environment(purchaseService)
                 .environment(\.analyticsService, analytics)
                 .environment(\.appOpenTracker, appOpenTracker)
+                .environment(strengthCache)
                 .id(languageCode)
                 .onChange(of: languageCode) { _, newValue in
                     Bundle.setLanguage(newValue)
                 }
                 .task {
+                    NotificationService.shared.registerNotificationCategories()
                     entitlementManager.startObservingTransactions()
                     await entitlementManager.refresh()
                 }
         }
-        .modelContainer(for: [
-            Category.self,
-            HabitTask.self,
-            TaskCompletion.self,
-            AppSettings.self,
-        ])
+        .modelContainer(modelContainer)
     }
 }
 

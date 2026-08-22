@@ -6,6 +6,7 @@ struct TaskConfigurationView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @Environment(\.analyticsService) private var analytics
+    @Environment(HabitStrengthCache.self) private var strengthCache
     @Query(sort: \Category.sortOrder) private var categories: [Category]
     @Query private var allSettings: [AppSettings]
 
@@ -58,7 +59,12 @@ struct TaskConfigurationView: View {
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Button("Save") {
-                    viewModel.save(context: modelContext, categories: categories, analytics: analytics)
+                    viewModel.save(
+                        context: modelContext,
+                        categories: categories,
+                        analytics: analytics,
+                        strengthCache: strengthCache
+                    )
                     onSave?()
                     dismiss()
                 }

@@ -168,6 +168,98 @@ enum Weekday: Int, Codable, CaseIterable, Identifiable {
     }
 }
 
+// MARK: - HabitStage
+
+/// How far along the habit-formation path a habit is, derived from its
+/// Habit Strength score (PRD - Habit strength §7).
+///
+/// The score is never stored — the stage is recomputed from completions on
+/// demand. Only the *last observed* stage is persisted, so the daily evaluator
+/// can tell an advance from a reversion.
+enum HabitStage: String, Codable, CaseIterable, Identifiable, Comparable {
+    case starting    = "starting"
+    case developing  = "developing"
+    case building    = "building"
+    case strong      = "strong"
+    case established = "established"
+    case mastering   = "mastering"
+
+    var id: String { rawValue }
+
+    var displayName: String {
+        switch self {
+        case .starting:    return NSLocalizedString("Starting", comment: "")
+        case .developing:  return NSLocalizedString("Developing", comment: "")
+        case .building:    return NSLocalizedString("Building", comment: "")
+        case .strong:      return NSLocalizedString("Strong", comment: "")
+        case .established: return NSLocalizedString("Established", comment: "")
+        case .mastering:   return NSLocalizedString("Mastering", comment: "")
+        }
+    }
+
+    // MARK: Ordering
+
+    /// Position along the formation path. Declared explicitly rather than derived
+    /// from `allCases.firstIndex(of:)` so comparison stays O(1) — the dashboard
+    /// compares stages for every habit on every evaluation.
+    private var sortIndex: Int {
+        switch self {
+        case .starting:    return 0
+        case .developing:  return 1
+        case .building:    return 2
+        case .strong:      return 3
+        case .established: return 4
+        case .mastering:   return 5
+        }
+    }
+
+    static func < (lhs: HabitStage, rhs: HabitStage) -> Bool {
+        lhs.sortIndex < rhs.sortIndex
+    }
+
+    // MARK: Score mapping
+
+    /// Maps a Habit Strength score onto a stage (PRD §7 mapping table).
+    /// Scores outside `0...100` are clamped rather than rejected.
+    static func stage(forScore score: Int) -> HabitStage {
+        switch min(100, max(0, score)) {
+        case 0...19:   return .starting
+        case 20...39:  return .developing
+        case 40...59:  return .building
+        case 60...79:  return .strong
+        case 80...94:  return .established
+        default:       return .mastering
+        }
+    }
+
+    // MARK: Presentation
+
+    /// One progressive "growth path" SF Symbol family, so the stages read as a
+    /// sequence even at badge size (PRD §8 iconography).
+    var sfSymbolName: String {
+        switch self {
+        case .starting:    return "circle.dotted"
+        case .developing:  return "leaf"
+        case .building:    return "leaf.fill"
+        case .strong:      return "flame.fill"
+        case .established: return "checkmark.seal.fill"
+        case .mastering:   return "crown.fill"
+        }
+    }
+
+    /// From Strong upward the badge is rendered larger and tinted with the habit
+    /// colour; earlier stages stay quieter (PRD §8 display rules).
+    var isProminentBadge: Bool {
+        self >= .strong
+    }
+
+    /// The dashboard ring badge is shown from Developing upward. The bottom sheet
+    /// always shows a stage row, including Starting (PRD §8 display rules).
+    var showsDashboardBadge: Bool {
+        self > .starting
+    }
+}
+
 // MARK: - MeasurementSystem
 
 /// System of units for display purposes (FR-7).

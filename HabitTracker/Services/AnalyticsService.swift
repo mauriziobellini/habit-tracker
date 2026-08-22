@@ -35,12 +35,23 @@ enum AnalyticsEvent: String {
     case notificationPermissionResult = "notification_permission_result"
     case firstCompletionPromptShown = "first_completion_prompt_shown"
     case firstCompletionPromptAction = "first_completion_prompt_action"
+
+    // Habit strength (PRD - Habit strength §11).
+    case stageAdvanceCelebrationShown = "stage_advance_celebration_shown"
+    case stageAdvanceCelebrationAction = "stage_advance_celebration_action"
+    case habitSummaryOpened = "habit_summary_opened"
+    case stageReverted = "stage_reverted"
 }
 
 /// Abstraction over analytics so the provider (TelemetryDeck, Firebase, etc.) can be swapped
 /// without touching call sites. Events carry no PII and no habit content (PRD - Freemium §9).
+///
+/// Values are `Any` rather than `String` so numeric properties stay numeric:
+/// `strength_score` sent as a string would land in PostHog as a string and break
+/// averages and percentiles, which is the whole point of tracking a score
+/// (PRD - Habit strength §11).
 protocol AnalyticsService: AnyObject {
-    func track(_ event: AnalyticsEvent, properties: [String: String])
+    func track(_ event: AnalyticsEvent, properties: [String: Any])
 }
 
 extension AnalyticsService {
@@ -55,13 +66,13 @@ extension AnalyticsService {
 final class NoOpAnalyticsService: AnalyticsService {
     private let logger = Logger(subsystem: "co.fooshi.habitring", category: "analytics")
 
-    func track(_ event: AnalyticsEvent, properties: [String: String]) {
+    func track(_ event: AnalyticsEvent, properties: [String: Any]) {
         if properties.isEmpty {
             logger.debug("event: \(event.rawValue, privacy: .public)")
         } else {
             let rendered = properties
                 .sorted { $0.key < $1.key }
-                .map { "\($0.key)=\($0.value)" }
+                .map { "\($0.key)=\(String(describing: $0.value))" }
                 .joined(separator: ",")
             logger.debug("event: \(event.rawValue, privacy: .public) [\(rendered, privacy: .public)]")
         }

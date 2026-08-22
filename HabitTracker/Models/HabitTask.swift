@@ -46,6 +46,44 @@ final class HabitTask {
     var rewardStreakCount: Int
     var rewardText: String?
 
+    // MARK: Habit strength bookkeeping
+
+    // The Habit Strength score and stage are *derived* from completions and are
+    // never stored — storing them would leave stale values behind whenever past
+    // completions are edited in `ManageCompletionsView`. The fields below persist
+    // only what is needed to detect change over time.
+    //
+    // Both enum-typed fields use the same optional-backing pattern as
+    // `trackingRaw` above: a non-optional stored enum crashes on a force-cast of
+    // `Optional<Any>` for rows created before the column existed.
+
+    /// Backing storage for `lastObservedStage`.
+    private var lastObservedStageRaw: HabitStage?
+
+    /// Backing storage for `lastCelebratedStage`.
+    private var lastCelebratedStageRaw: HabitStage?
+
+    /// Stage at the last daily evaluation — the baseline for telling an advance
+    /// from a reversion. Stays optional at the accessor level too: `nil` means
+    /// "never evaluated", which is meaningfully different from `.starting`.
+    var lastObservedStage: HabitStage? {
+        get { lastObservedStageRaw }
+        set { lastObservedStageRaw = newValue }
+    }
+
+    /// Highest stage already celebrated. A high-water mark that never decreases,
+    /// so a score oscillating across a boundary cannot re-trigger the pop-up.
+    var lastCelebratedStage: HabitStage? {
+        get { lastCelebratedStageRaw }
+        set { lastCelebratedStageRaw = newValue }
+    }
+
+    /// Cooldown guard against repeated celebrations.
+    var lastCelebratedAt: Date?
+
+    /// Last daily evaluation timestamp — makes the evaluator idempotent per day.
+    var strengthEvaluatedAt: Date?
+
     var category: Category?
 
     @Relationship(deleteRule: .cascade, inverse: \TaskCompletion.task)
@@ -97,6 +135,12 @@ final class HabitTask {
         self.category = category
         self.createdAt = createdAt
         self.updatedAt = updatedAt
+        // Not exposed as init parameters: a freshly created habit has never been
+        // evaluated, and every call site would otherwise have to pass nil.
+        self.lastObservedStageRaw = nil
+        self.lastCelebratedStageRaw = nil
+        self.lastCelebratedAt = nil
+        self.strengthEvaluatedAt = nil
     }
 }
 
@@ -125,6 +169,19 @@ extension HabitTask {
     /// Returns completions for a specific calendar day.
     func completions(on date: Date, calendar: Calendar = .current) -> [TaskCompletion] {
         completions.filter { calendar.isDate($0.completedAt, inSameDayAs: date) }
+    }
+
+    /// Start of the day from which this habit has tracked history.
+    ///
+    /// Usually `createdAt`, but `ManageCompletionsView` accepts *any* past day, so a
+    /// habit can hold completions from before it was created. Bounding history at
+    /// `createdAt` would hide those rows from the counting engine — a habit could be
+    /// backfilled well past the strength eligibility threshold and still report
+    /// having no completions at all.
+    func historyStart(calendar: Calendar = .current) -> Date {
+        let created = calendar.startOfDay(for: createdAt)
+        guard let earliest = completions.map(\.completedAt).min() else { return created }
+        return min(created, calendar.startOfDay(for: earliest))
     }
 
     /// Whether the task's per-day quota is reached on a given date.

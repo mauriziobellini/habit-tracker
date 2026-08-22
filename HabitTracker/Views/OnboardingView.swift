@@ -56,6 +56,7 @@ struct OnboardingView: View {
             Text("Small habits,\nmassive change.")
                 .font(.largeTitle.weight(.bold))
                 .multilineTextAlignment(.center)
+                .accessibilityIdentifier("onboardingWelcomeTitle")
 
             Text("Track your daily habits and stay motivated.")
                 .font(.body)
@@ -89,7 +90,7 @@ struct OnboardingView: View {
             Text("Tap & Hold to Complete")
                 .font(.title2.weight(.bold))
 
-            Text("Press and hold the circle for 2 seconds to mark a habit as done.")
+            Text("Press and hold the circle to mark a habit as done.")
                 .font(.body)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)

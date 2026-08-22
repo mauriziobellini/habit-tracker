@@ -179,8 +179,16 @@ final class TaskConfigurationViewModel {
         frequencyType == .specificDays ? max(1, scheduledDays.count) : timesPerPeriod
     }
 
+    /// - Parameter strengthCache: invalidated on edit, because frequency, quota,
+    ///   tracking mode and scheduled days all change how completions are credited
+    ///   and therefore the habit's strength.
     @MainActor
-    func save(context: ModelContext, categories: [Category], analytics: AnalyticsService = NoOpAnalyticsService()) {
+    func save(
+        context: ModelContext,
+        categories: [Category],
+        analytics: AnalyticsService = NoOpAnalyticsService(),
+        strengthCache: HabitStrengthCache? = nil
+    ) {
         switch mode {
         case .create:
             let existingCount = (try? context.fetchCount(FetchDescriptor<HabitTask>())) ?? 0
@@ -210,7 +218,10 @@ final class TaskConfigurationViewModel {
                 Task { @MainActor in
                     let wasPrompted = await NotificationService.shared.authorizationStatus() == .notDetermined
                     let granted = await NotificationService.shared.requestAuthorization()
-                    if granted {
+                    // The permission round-trip suspends, and the habit can be deleted
+                    // while it is in flight. Scheduling then would leave a repeating
+                    // reminder for a habit that no longer exists.
+                    if granted, !task.isDeleted {
                         NotificationService.shared.scheduleNotifications(for: task)
                     }
                     analytics.track(.notificationPermissionResult, properties: [
@@ -221,7 +232,7 @@ final class TaskConfigurationViewModel {
                 }
             }
 
-            var createProps = task.analyticsStructuralProperties
+            var createProps = task.analyticsStructuralProperties()
             createProps["is_first"] = String(existingCount == 0)
             createProps["habit_count_after"] = AnalyticsBucket.habitCount(existingCount + 1)
             createProps["source"] = isPreset ? "preset" : "manual"
@@ -248,7 +259,8 @@ final class TaskConfigurationViewModel {
             // Reschedule notifications on edit
             NotificationService.shared.rescheduleNotifications(for: task)
 
-            analytics.track(.habitEdited, properties: task.analyticsStructuralProperties)
+            strengthCache?.invalidate(taskID: task.id)
+            analytics.track(.habitEdited, properties: task.analyticsStructuralProperties())
         }
     }
 

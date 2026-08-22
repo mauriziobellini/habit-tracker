@@ -12,12 +12,23 @@ final class TaskListViewModel {
     var taskForStats: HabitTask?
     var taskToDelete: HabitTask?
     var showDeleteConfirmation = false
-    var taskForMenu: HabitTask?
-    var showingTaskMenu = false
+
+    // Habit summary bottom sheet (PRD - Habit strength §8). Replaces the tap-to-menu
+    // confirmation dialog; Stats / Edit / Remove now live inside the sheet.
+    var taskForSummary: HabitTask?
+    var taskForCompletions: HabitTask?
+    private var pendingSummaryAction: (action: HabitSummarySheetView.Action, task: HabitTask)?
 
     // Reward celebration
     var showingRewardCelebration = false
     var rewardCelebrationText = ""
+
+    // Stage advance celebration (PRD - Habit strength §8)
+    var showingStageCelebration = false
+    var stageCelebration: HabitStageEvaluator.Transition?
+    /// Advances waiting their turn. Several habits can cross a boundary on the same
+    /// completion pass, and stacking overlays would bury them.
+    private var queuedStageCelebrations: [HabitStageEvaluator.Transition] = []
 
     // First completion celebration (Experiment - Opt out notifications)
     var showingFirstCompletionPrompt = false
@@ -67,6 +78,127 @@ final class TaskListViewModel {
         }
         premiumUnlocked = false
         wantsSelectorAfterUnlock = false
+    }
+
+    // MARK: - Habit summary bottom sheet
+
+    func presentSummary(for task: HabitTask, isEligible: Bool, analytics: AnalyticsService = NoOpAnalyticsService()) {
+        analytics.track(.habitSummaryOpened, properties: ["is_eligible": String(isEligible)])
+        taskForSummary = task
+    }
+
+    /// Records the chosen action and dismisses the sheet. The action itself runs in
+    /// `performPendingSummaryAction` once the sheet is gone — presenting a second
+    /// sheet while this one is still on screen silently drops it.
+    func requestSummaryAction(_ action: HabitSummarySheetView.Action, for task: HabitTask) {
+        pendingSummaryAction = (action, task)
+        taskForSummary = nil
+    }
+
+    func performPendingSummaryAction(analytics: AnalyticsService = NoOpAnalyticsService()) {
+        guard let pending = pendingSummaryAction else { return }
+        pendingSummaryAction = nil
+
+        switch pending.action {
+        case .stats:
+            // Kept as the existing event so historical insights stay comparable.
+            analytics.track(.statsOpened, properties: ["scope": "habit"])
+            taskForStats = pending.task
+        case .edit:
+            taskToEdit = pending.task
+        case .remove:
+            confirmDelete(pending.task)
+        case .manageCompletions:
+            taskForCompletions = pending.task
+        }
+    }
+
+    // MARK: - Stage advance celebration
+
+    /// Queues celebratable advances and shows the first one.
+    func enqueueStageCelebrations(
+        _ transitions: [HabitStageEvaluator.Transition],
+        analytics: AnalyticsService = NoOpAnalyticsService()
+    ) {
+        for transition in transitions where !transition.isAdvance {
+            // Reversions are never celebrated, but they are worth measuring.
+            analytics.track(.stageReverted, properties: [
+                "from_stage": transition.from.rawValue,
+                "to_stage": transition.to.rawValue,
+            ])
+        }
+
+        queuedStageCelebrations.append(contentsOf: transitions.filter { $0.isCelebratable })
+        showNextStageCelebrationIfIdle(analytics: analytics)
+    }
+
+    private func showNextStageCelebrationIfIdle(analytics: AnalyticsService) {
+        // Never stack overlays. If a reward or first-completion celebration owns the
+        // screen, the advance waits — their dismiss handlers drain this queue. An
+        // advance dropped here is not lost for good either: the evaluator re-offers
+        // anything above the celebrated high-water mark.
+        guard !showingStageCelebration,
+              !showingRewardCelebration,
+              !showingFirstCompletionPrompt,
+              !queuedStageCelebrations.isEmpty else { return }
+        let next = queuedStageCelebrations.removeFirst()
+        stageCelebration = next
+        showingStageCelebration = true
+        analytics.track(.stageAdvanceCelebrationShown, properties: [
+            "from_stage": next.from.rawValue,
+            "to_stage": next.to.rawValue,
+            "notification_prompt_shown": String(!next.task.notificationEnabled),
+        ])
+    }
+
+    /// Turns the reminder on for the habit that just advanced, reusing the same
+    /// permission path as the first-completion prompt.
+    @MainActor
+    func enableNotificationsFromStageCelebration(
+        at time: Date,
+        context: ModelContext,
+        analytics: AnalyticsService = NoOpAnalyticsService()
+    ) {
+        guard let transition = stageCelebration else { return }
+        let task = transition.task
+
+        task.notificationEnabled = true
+        task.notificationTime = time
+        task.updatedAt = .now
+
+        analytics.track(.stageAdvanceCelebrationAction, properties: ["action": "enabled_notifications"])
+
+        Task { @MainActor in
+            let wasPrompted = await NotificationService.shared.authorizationStatus() == .notDetermined
+            let granted = await NotificationService.shared.requestAuthorization()
+            if granted {
+                NotificationService.shared.rescheduleNotifications(for: task)
+            }
+            analytics.track(.notificationPermissionResult, properties: [
+                "source": "stage_celebration",
+                "granted": String(granted),
+                "was_prompted": String(wasPrompted),
+            ])
+        }
+
+        dismissStageCelebration(context: context, analytics: analytics, trackAction: false)
+    }
+
+    @MainActor
+    func dismissStageCelebration(
+        context: ModelContext,
+        analytics: AnalyticsService = NoOpAnalyticsService(),
+        trackAction: Bool = true
+    ) {
+        if let transition = stageCelebration {
+            HabitStageEvaluator.markCelebrated(transition, context: context)
+            if trackAction {
+                analytics.track(.stageAdvanceCelebrationAction, properties: ["action": "dismissed"])
+            }
+        }
+        stageCelebration = nil
+        showingStageCelebration = false
+        showNextStageCelebrationIfIdle(analytics: analytics)
     }
 
     // MARK: - First completion celebration
@@ -120,6 +252,12 @@ final class TaskListViewModel {
         ])
         showingFirstCompletionPrompt = false
         firstCompletionTask = nil
+        showNextStageCelebrationIfIdle(analytics: analytics ?? NoOpAnalyticsService())
+    }
+
+    func dismissRewardCelebration(analytics: AnalyticsService = NoOpAnalyticsService()) {
+        showingRewardCelebration = false
+        showNextStageCelebrationIfIdle(analytics: analytics)
     }
 
     /// Filter tasks by the selected category. `nil` means "All".
@@ -137,9 +275,18 @@ final class TaskListViewModel {
         showDeleteConfirmation = true
     }
 
-    func deleteTask(context: ModelContext, analytics: AnalyticsService = NoOpAnalyticsService()) {
+    @MainActor
+    func deleteTask(
+        context: ModelContext,
+        analytics: AnalyticsService = NoOpAnalyticsService(),
+        strengthCache: HabitStrengthCache? = nil
+    ) {
         guard let task = taskToDelete else { return }
         analytics.track(.habitDeleted, properties: ["frequency": task.frequencyType.analyticsValue])
+        // Deleting a habit previously left its notifications pending, so a reminder
+        // or strength nudge could arrive naming a habit that no longer exists.
+        NotificationService.shared.cancelAllNotifications(for: task)
+        strengthCache?.invalidate(taskID: task.id)
         context.delete(task)
         taskToDelete = nil
     }

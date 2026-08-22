@@ -1,5 +1,7 @@
 import SwiftUI
 import SwiftData
+// For `\.requestReview` (PRD - Habit strength §11).
+import StoreKit
 
 struct TaskListView: View {
     @Environment(\.modelContext) private var modelContext
@@ -21,6 +23,8 @@ struct TaskListView: View {
     @Environment(EntitlementManager.self) private var entitlementManager
     @Environment(PurchaseService.self) private var purchaseService
     @Environment(\.analyticsService) private var analytics
+    @Environment(HabitStrengthCache.self) private var strengthCache
+    @Environment(\.requestReview) private var requestReview
 
     /// IDs of habits locked behind the paywall (lapsed subscription with >2 habits).
     private var lockedHabitIDs: Set<UUID> {
@@ -113,35 +117,33 @@ struct TaskListView: View {
             .alert("Delete Task", isPresented: $viewModel.showDeleteConfirmation) {
                 Button("Cancel", role: .cancel) {}
                 Button("Delete", role: .destructive) {
-                    viewModel.deleteTask(context: modelContext, analytics: analytics)
+                    viewModel.deleteTask(
+                        context: modelContext,
+                        analytics: analytics,
+                        strengthCache: strengthCache
+                    )
                 }
             } message: {
                 if let task = viewModel.taskToDelete {
                     Text("Are you sure you want to delete \"\(task.title)\"? This action cannot be undone.")
                 }
             }
-            .confirmationDialog(
-                viewModel.taskForMenu?.title ?? "Task",
-                isPresented: $viewModel.showingTaskMenu,
-                titleVisibility: .visible
-            ) {
-                Button("Stats") {
-                    if let task = viewModel.taskForMenu {
-                        analytics.track(.statsOpened, properties: ["scope": "habit"])
-                        viewModel.taskForStats = task
-                    }
-                }
-                Button("Edit") {
-                    if let task = viewModel.taskForMenu {
-                        viewModel.taskToEdit = task
-                    }
-                }
-                Button("Remove", role: .destructive) {
-                    if let task = viewModel.taskForMenu {
-                        viewModel.confirmDelete(task)
-                    }
-                }
-                Button("Cancel", role: .cancel) {}
+            .sheet(item: $viewModel.taskForSummary, onDismiss: {
+                // The chosen action runs only once this sheet is gone — presenting a
+                // second sheet on top of a dismissing one silently drops it.
+                viewModel.performPendingSummaryAction(analytics: analytics)
+            }) { task in
+                HabitSummarySheetView(
+                    task: task,
+                    strength: strengthCache.strength(
+                        for: task, on: dayReferenceDate, weekStartDay: weekStartDay
+                    ),
+                    weekStartDay: weekStartDay,
+                    onAction: { viewModel.requestSummaryAction($0, for: task) }
+                )
+            }
+            .sheet(item: $viewModel.taskForCompletions) { task in
+                ManageCompletionsView(task: task)
             }
             .sheet(isPresented: $viewModel.showingGeneralStats) {
                 GeneralStatsView()
@@ -151,7 +153,7 @@ struct TaskListView: View {
                     RewardCelebrationView(
                         rewardText: viewModel.rewardCelebrationText
                     ) {
-                        viewModel.showingRewardCelebration = false
+                        viewModel.dismissRewardCelebration(analytics: analytics)
                     }
                     .transition(.opacity)
                     .zIndex(100)
@@ -175,10 +177,40 @@ struct TaskListView: View {
                     .zIndex(101)
                 }
             }
+            .overlay {
+                if viewModel.showingStageCelebration, let transition = viewModel.stageCelebration {
+                    StageCelebrationView(
+                        stage: transition.to,
+                        offersNotificationOptIn: !transition.task.notificationEnabled,
+                        accentColor: TaskColor.from(token: transition.task.colorToken).color,
+                        onEnableNotifications: { time in
+                            viewModel.enableNotificationsFromStageCelebration(
+                                at: time, context: modelContext, analytics: analytics
+                            )
+                        },
+                        onDismiss: {
+                            viewModel.dismissStageCelebration(
+                                context: modelContext, analytics: analytics
+                            )
+                        }
+                    )
+                    .transition(.opacity)
+                    .zIndex(102)
+                }
+            }
             .animation(.easeInOut(duration: 0.3), value: viewModel.showingRewardCelebration)
             .animation(.easeInOut(duration: 0.3), value: viewModel.showingFirstCompletionPrompt)
+            .animation(.easeInOut(duration: 0.3), value: viewModel.showingStageCelebration)
+            .task {
+                // Cold launch does not always register as a scenePhase change. The
+                // evaluator is idempotent per day, so an overlapping call is a no-op.
+                evaluateStagesOnForeground()
+            }
             .onChange(of: scenePhase) { _, phase in
-                if phase == .active { refreshDayIfNeeded() }
+                if phase == .active {
+                    refreshDayIfNeeded()
+                    evaluateStagesOnForeground()
+                }
             }
             .onReceive(
                 NotificationCenter.default
@@ -201,6 +233,41 @@ struct TaskListView: View {
         let now = Date.now
         guard !Calendar.current.isDate(dayReferenceDate, inSameDayAs: now) else { return }
         dayReferenceDate = now
+    }
+
+    // MARK: - Habit strength evaluation
+
+    /// Opportunistic daily evaluation. iOS will not reliably run code at a fixed
+    /// time and there is no background refresh task in this project, so foreground
+    /// is the dependable trigger (PRD - Habit strength §10.9).
+    private func evaluateStagesOnForeground() {
+        strengthCache.invalidateAll()
+        let transitions = HabitStageEvaluator.evaluate(
+            tasks: Array(tasks),
+            context: modelContext,
+            cache: strengthCache,
+            weekStartDay: weekStartDay
+        )
+        viewModel.enqueueStageCelebrations(transitions, analytics: analytics)
+        scheduleStrengthNotifications()
+    }
+
+    private func scheduleStrengthNotifications() {
+        let habits = Array(tasks)
+        let day = weekStartDay
+        let context = modelContext
+        Task { @MainActor in
+            await StrengthNotificationScheduler.refresh(tasks: habits, weekStartDay: day)
+            // After the refresh, so the requests it just added are already visible to
+            // the sweep. Clears reminders stranded by earlier builds, which deleted a
+            // habit without cancelling its repeating weekly triggers.
+            await NotificationService.shared.removeOrphanedNotifications {
+                // Re-fetched rather than reusing `habits`: that snapshot can be stale
+                // by the time the sweep reads it.
+                let living = (try? context.fetch(FetchDescriptor<HabitTask>())) ?? []
+                return Set(living.map(\.id))
+            }
+        }
     }
 
     // MARK: - Category Dropdown
@@ -316,9 +383,13 @@ struct TaskListView: View {
 
     private var taskGridView: some View {
         ScrollView {
-            LazyVGrid(columns: columns, spacing: 24) {
-                ForEach(visibleTasks) { task in
-                    taskCell(task)
+            VStack(spacing: 0) {
+                gridHint
+
+                LazyVGrid(columns: columns, spacing: 24) {
+                    ForEach(visibleTasks) { task in
+                        taskCell(task)
+                    }
                 }
             }
             .padding(.horizontal, 16)
@@ -327,21 +398,38 @@ struct TaskListView: View {
         }
     }
 
+    /// The two gestures are not discoverable on their own, and guessing wrong on the
+    /// hold leads to repeated taps (PRD - Habit strength §11).
+    private var gridHint: some View {
+        Text("Tap and hold to complete, single tap for details")
+            .font(.caption)
+            .foregroundStyle(.secondary)
+            .multilineTextAlignment(.center)
+            .frame(maxWidth: .infinity)
+            .padding(.bottom, 16)
+            .accessibilityIdentifier("taskListHint")
+    }
+
     private func taskCell(_ task: HabitTask) -> some View {
         let progress = PeriodService.periodProgress(for: task, on: dayReferenceDate, weekStartDay: weekStartDay)
         let isLocked = lockedHabitIDs.contains(task.id)
+        let strength = strengthCache.strength(
+            for: task, on: dayReferenceDate, weekStartDay: weekStartDay
+        )
 
         return TapAndHoldTaskView(
             task: task,
             progress: progress,
             circleSize: 80,
             isLocked: isLocked,
+            strength: strength,
             onSingleTap: {
                 if isLocked {
                     viewModel.presentPaywall(source: "locked_habit", openSelectorOnUnlock: false)
                 } else {
-                    viewModel.taskForMenu = task
-                    viewModel.showingTaskMenu = true
+                    viewModel.presentSummary(
+                        for: task, isEligible: strength.isEligible, analytics: analytics
+                    )
                 }
             },
             onCompleted: {
@@ -360,13 +448,34 @@ struct TaskListView: View {
 
         let completion = TaskCompletion(task: task)
         modelContext.insert(completion)
-        var completionProps = task.analyticsStructuralProperties
+
+        // Invalidate before reading strength: the score attached to a completion must
+        // be the value *after* it is recorded, or the funnel reads one step behind
+        // (PRD - Habit strength §11).
+        strengthCache.invalidate(taskID: task.id)
+        let strength = strengthCache.strength(
+            for: task, on: .now, weekStartDay: weekStartDay
+        )
+
+        var completionProps = task.analyticsStructuralProperties(strength: strength)
         completionProps["is_first"] = String(isFirstCompletionEver)
         analytics.track(.habitCompleted, properties: completionProps)
         // Suppress today's notification if task completed early
         if task.notificationEnabled {
             NotificationService.shared.suppressTodayNotification(for: task)
         }
+
+        // Re-evaluate this habit right away (force, because today was already
+        // evaluated) so the celebration lands in the same session as the completion
+        // that earned it.
+        let transitions = HabitStageEvaluator.evaluate(
+            tasks: [task],
+            context: modelContext,
+            cache: strengthCache,
+            weekStartDay: weekStartDay,
+            force: true
+        )
+        scheduleStrengthNotifications()
 
         // First completion ever: celebrate and, if this habit has no reminder, offer one —
         // shown once per install (Experiment - Opt out notifications). The celebration takes
@@ -376,6 +485,7 @@ struct TaskListView: View {
             if !settings.hasSeenFirstCompletionPrompt {
                 settings.hasSeenFirstCompletionPrompt = true
                 viewModel.presentFirstCompletionPrompt(for: task, analytics: analytics)
+                viewModel.enqueueStageCelebrations(transitions, analytics: analytics)
                 return
             }
         }
@@ -389,6 +499,43 @@ struct TaskListView: View {
                 analytics.track(.rewardUnlocked, properties: ["streak_count": AnalyticsBucket.streak(streak)])
             }
         }
+
+        // Queued last so the reward celebration, if any, takes the screen first.
+        viewModel.enqueueStageCelebrations(transitions, analytics: analytics)
+        requestReviewIfEarned()
+    }
+
+    /// Asks for an App Store review once the user has three completions to their
+    /// name (PRD - Habit strength §11). Deferred until no celebration owns the
+    /// screen: iOS silently suppresses a prompt behind a modal, and the one-shot
+    /// flag would be spent for nothing.
+    private func requestReviewIfEarned() {
+        guard !ProcessInfo.processInfo.arguments.contains(where: { $0.hasPrefix("--uitesting") }) else {
+            return
+        }
+        let settings = AppSettings.shared(in: modelContext)
+        guard !settings.hasRequestedAppReview else { return }
+        guard !viewModel.showingRewardCelebration,
+              !viewModel.showingFirstCompletionPrompt,
+              !viewModel.showingStageCelebration else { return }
+
+        // Bounded per habit by its own history: a shared `.distantPast` start would
+        // make the period enumerator walk millennia to answer a question about the
+        // number three.
+        var total = 0
+        for task in tasks {
+            total += StatisticsService.completionCount(
+                for: task,
+                from: task.historyStart(),
+                to: .now,
+                weekStartDay: weekStartDay
+            )
+            if total >= 3 { break }
+        }
+        guard total >= 3 else { return }
+
+        settings.hasRequestedAppReview = true
+        requestReview()
     }
 
     // MARK: - Empty State

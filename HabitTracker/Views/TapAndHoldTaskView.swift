@@ -3,7 +3,7 @@ import SwiftData
 
 /// Wraps a `TaskCircleView` with the tap-and-hold completion gesture (FR-1).
 ///
-/// - Press and hold for 2 seconds → ring fills, completion recorded, haptic fires.
+/// - Press and hold for 1.4 seconds → ring fills, completion recorded, haptic fires.
 /// - Release early → ring smoothly retracts to zero.
 /// - Single tap → triggers `onSingleTap` (for task menu).
 /// - VoiceOver → single activation completes the task immediately.
@@ -16,6 +16,8 @@ struct TapAndHoldTaskView: View {
     /// When locked (lapsed subscription beyond the free limit), the habit is greyed out and
     /// a single tap opens the paywall instead of completing or showing the menu.
     var isLocked: Bool = false
+    /// Habit strength driving the inner ring and the stage badge.
+    var strength: HabitStrength? = nil
     let onSingleTap: () -> Void
     let onCompleted: () -> Void
 
@@ -29,8 +31,10 @@ struct TapAndHoldTaskView: View {
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-    /// Hold duration in seconds.
-    private let holdDuration: TimeInterval = 2.0
+    /// Hold duration in seconds. Shortened from 2.0 because the original felt slow
+    /// enough that users released early and tapped again (PRD - Habit strength §11).
+    /// `OnboardingView` does not override this, so the tutorial matches automatically.
+    private let holdDuration: TimeInterval = 1.4
     /// Timer tick interval for smooth animation.
     private let tickInterval: TimeInterval = 1.0 / 60.0
 
@@ -53,7 +57,8 @@ struct TapAndHoldTaskView: View {
             task: task,
             isCompleted: false,
             circleSize: circleSize,
-            progress: progress
+            progress: progress,
+            strength: strength
         )
         .opacity(0.5)
         .overlay(alignment: .topTrailing) {
@@ -79,7 +84,8 @@ struct TapAndHoldTaskView: View {
             task: task,
             isCompleted: isCompleted || showCompletionBurst,
             circleSize: circleSize,
-            progress: progress
+            progress: progress,
+            strength: strength
         )
         .scaleEffect(showCompletionBurst ? 1.15 : 1.0)
         .overlay(alignment: .top) {

@@ -158,7 +158,6 @@
 "Small habits,\nmassive change." = "Kleine gewoontes,\ngroot verschil.";
 "Track your daily habits and stay motivated." = "Volg je dagelijkse gewoontes en blijf gemotiveerd.";
 "Tap & Hold to Complete" = "Houd ingedrukt om te voltooien";
-"Press and hold the circle for 2 seconds to mark a habit as done." = "Houd de cirkel 2 seconden ingedrukt om een gewoonte af te ronden.";
 "Your goal is to build a streak of consecutive days" = "Je doel is om een reeks opeenvolgende dagen op te bouwen";
 "Create Your First Habit" = "Maak je eerste gewoonte";
 "Choose a preset or create a custom habit to get started." = "Kies een sjabloon of maak een eigen gewoonte.";
@@ -221,3 +220,35 @@
 "Fitness" = "Fitness";
 "Learning" = "Leren";
 "Social" = "Sociaal";
+
+// MARK: - Habit Strength
+"Starting" = "Beginnend";
+"Developing" = "In ontwikkeling";
+"Building" = "In opbouw";
+"Strong" = "Sterk";
+"Established" = "Gevestigd";
+"Mastering" = "Meesterschap";
+"Habit strength" = "Gewoontekracht";
+"Habit strength will be shown after 3 completions" = "De gewoontekracht wordt weergegeven na 3 voltooiingen";
+"Habit strength, %lld" = "Gewoontekracht, %lld";
+"Consistency grid, %lld days completed" = "Consistentieraster, %lld dagen voltooid";
+"Keep going" = "Ga zo door";
+"Your brain is wiring the cue" = "Je brein legt de trigger vast";
+"Repetition is linking this action to its context. The first neural pathway is forming — keep showing up and the association will deepen." = "Herhaling verbindt deze actie met de context. De eerste zenuwbaan wordt aangelegd — blijf opdagen en de associatie wordt sterker.";
+"Automaticity is taking root" = "Automatisme krijgt wortel";
+"Your mind needs less deliberate effort to start. Context cues are beginning to trigger the behavior on their own — consistency locks this in." = "Je hoofd heeft minder bewuste moeite nodig om te beginnen. Signalen uit de context zetten het gedrag zelf in gang — consistentie zet dit vast.";
+"Habit control is shifting" = "De controle over de gewoonte verschuift";
+"Goal-directed effort is giving way to habitual control. The behavior is settling into a reliable loop — protect this streak and it will stick." = "Doelgerichte inspanning maakt plaats voor automatische controle. Het gedrag wordt een betrouwbare lus — bescherm deze reeks en hij blijft.";
+"The loop is becoming stable" = "De lus wordt stabiel";
+"Cue, routine, and reward are aligning with growing automaticity. Missing a day won't erase progress — returning promptly keeps the pathway strong." = "Signaal, routine en belofte komen samen met groeiend automatisme. Één dag missen wist je voortgang niet — snel terugkeren houdt de baan sterk.";
+"Near-automatic mastery" = "Bijna automatisch meesterschap";
+"This habit is approaching high automaticity. Your brain retrieves it with little conscious push — continue the rhythm and make it part of who you are." = "Deze gewoonte nadert een hoog automatisme. Je brein haalt hem op met weinig bewuste inspanning — houd het ritme vast en maak hem deel van wie je bent.";
+"Every repetition counts" = "Elke herhaling telt";
+"Keep showing up — consistency is what turns an intention into a habit." = "Blijf opdagen — consistentie maakt van een intentie een gewoonte.";
+"One check-in today makes you leap to the next stage" = "Één check-in vandaag brengt je naar de volgende fase";
+"One check-in today keeps your habit formation on track." = "Één check-in vandaag houdt je gewoonte op koers.";
+"Mark done" = "Markeer als gedaan";
+"Later" = "Later";
+"Tap and hold to complete, single tap for details" = "Houd ingedrukt om te voltooien, tik voor details";
+"Your plan" = "Jouw plan";
+"Press and hold the circle to mark a habit as done." = "Houd de cirkel ingedrukt om een gewoonte als gedaan te markeren.";

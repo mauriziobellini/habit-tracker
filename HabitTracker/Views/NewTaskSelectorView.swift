@@ -52,6 +52,7 @@ struct NewTaskSelectorView: View {
             TextField("Create custom task…", text: $customTaskName)
                 .textFieldStyle(.roundedBorder)
                 .font(.body)
+                .accessibilityIdentifier("customTaskField")
 
             Button {
                 let vm = TaskConfigurationViewModel(mode: .create)
@@ -90,6 +91,7 @@ struct NewTaskSelectorView: View {
                             )
                             .foregroundStyle(selectedPresetCategory == name ? .white : .primary)
                     }
+                    .accessibilityIdentifier("presetCategory_\(name)")
                 }
             }
             .padding(.horizontal, 16)
@@ -133,6 +135,7 @@ struct NewTaskSelectorView: View {
                     }
                     .padding(.vertical, 4)
                 }
+                .accessibilityIdentifier("preset_\(preset.id)")
             }
         }
         .listStyle(.plain)

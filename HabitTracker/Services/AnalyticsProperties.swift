@@ -48,8 +48,16 @@ extension HabitTask {
     /// Structural habit-shape properties reused across `habit_created`, `habit_completed`,
     /// and `habit_edited` so PostHog breakdowns stay consistent (PRD §9). Contains no PII
     /// and no free-text habit content.
-    var analyticsStructuralProperties: [String: String] {
-        [
+    ///
+    /// A function rather than a property because habit strength needs a calendar and
+    /// the configured week start to compute, which a model extension has no business
+    /// reaching for. Callers that have a strength on hand pass it in; the rest omit it.
+    ///
+    /// - Parameter strength: when supplied, adds `strength_score` (numeric, so PostHog
+    ///   can average it) and `strength_stage`. Both are structural and safe to send —
+    ///   unlike the celebration copy, which must never be attached.
+    func analyticsStructuralProperties(strength: HabitStrength? = nil) -> [String: Any] {
+        var properties: [String: Any] = [
             "frequency": frequencyType.analyticsValue,
             "tracking": tracking.rawValue,
             "goal_type": goalType.rawValue,
@@ -58,5 +66,10 @@ extension HabitTask {
             "has_reward": String(rewardEnabled),
             "is_preset": String(isPreset),
         ]
+        if let strength {
+            properties["strength_score"] = strength.score
+            properties["strength_stage"] = strength.stage.rawValue
+        }
+        return properties
     }
 }

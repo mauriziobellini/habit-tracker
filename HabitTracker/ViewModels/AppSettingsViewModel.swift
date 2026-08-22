@@ -108,7 +108,7 @@ final class AppSettingsViewModel {
               let categories = try? context.fetch(categoryDescriptor) else { return }
 
         for task in tasks {
-            NotificationService.shared.cancelNotifications(for: task)
+            NotificationService.shared.cancelAllNotifications(for: task)
         }
         for task in tasks {
             context.delete(task)

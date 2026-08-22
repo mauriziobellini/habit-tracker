@@ -8,9 +8,11 @@ struct AppSettingsView: View {
     @Query(sort: \Category.sortOrder) private var categories: [Category]
     @AppStorage(AppLanguage.userDefaultsKey) private var languageCode = "en"
     @Environment(EntitlementManager.self) private var entitlementManager
+    @Environment(PurchaseService.self) private var purchaseService
     @Environment(\.analyticsService) private var analytics
 
     @State private var viewModel = AppSettingsViewModel()
+    @State private var showingPaywall = false
 
     private static let manageSubscriptionsURL = URL(string: "https://apps.apple.com/account/subscriptions")!
 
@@ -47,6 +49,17 @@ struct AppSettingsView: View {
             }
             .onAppear {
                 viewModel.load(from: modelContext)
+            }
+            .sheet(isPresented: $showingPaywall) {
+                PaywallView(
+                    viewModel: PaywallViewModel(
+                        purchaseService: purchaseService,
+                        entitlementManager: entitlementManager,
+                        analytics: analytics,
+                        source: "settings_plan_row"
+                    ),
+                    onPremiumUnlocked: {}
+                )
             }
             .alert("Email Copied", isPresented: $viewModel.showEmailCopiedAlert) {
                 Button("OK", role: .cancel) {}
@@ -120,17 +133,23 @@ struct AppSettingsView: View {
 
     private var premiumSection: some View {
         Section {
-            HStack {
-                Image(systemName: entitlementManager.isPremium ? "checkmark.seal.fill" : "seal")
-                    .foregroundStyle(entitlementManager.isPremium ? Color.accentColor : .secondary)
-                Text(entitlementManager.isPremium ? "Premium active" : "Free plan")
-                    .foregroundStyle(.primary)
-                Spacer()
-                if entitlementManager.isLegacyCustomer {
-                    Text("Lifetime")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+            if entitlementManager.isPremium {
+                planRow
+            } else {
+                // Free users see the plan row as the entry point to the paywall;
+                // it was previously inert, which wasted the most natural upgrade
+                // touchpoint in the app (PRD - Habit strength §11).
+                Button {
+                    showingPaywall = true
+                } label: {
+                    HStack {
+                        planRow
+                        Image(systemName: "chevron.right")
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(.tertiary)
+                    }
                 }
+                .accessibilityIdentifier("planRowButton")
             }
 
             Button {
@@ -166,7 +185,22 @@ struct AppSettingsView: View {
                 .accessibilityIdentifier("manageSubscriptionButton")
             }
         } header: {
-            Text("Premium")
+            Text("Your plan")
+        }
+    }
+
+    private var planRow: some View {
+        HStack {
+            Image(systemName: entitlementManager.isPremium ? "checkmark.seal.fill" : "seal")
+                .foregroundStyle(entitlementManager.isPremium ? Color.accentColor : .secondary)
+            Text(entitlementManager.isPremium ? "Premium active" : "Free plan")
+                .foregroundStyle(.primary)
+            Spacer()
+            if entitlementManager.isLegacyCustomer {
+                Text("Lifetime")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
         }
     }
 

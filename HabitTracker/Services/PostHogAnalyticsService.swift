@@ -58,7 +58,7 @@ final class PostHogAnalyticsService: AnalyticsService {
         #endif
     }
 
-    func track(_ event: AnalyticsEvent, properties: [String: String]) {
+    func track(_ event: AnalyticsEvent, properties: [String: Any]) {
         // Attach the install cohort as a set-once person property on the first capture of the
         // session. `install_cohort_date` is a coarse local date (no timestamp) and no PII.
         var setOnce: [String: Any]?
@@ -76,7 +76,7 @@ final class PostHogAnalyticsService: AnalyticsService {
         // One StoreKit success -> one PostHog `purchase_completed` + one Firebase `purchase`
         // (PRD §9, §11). Keeps the purchase call site single inside PurchaseService.
         if event == .purchaseCompleted {
-            FirebaseAnalyticsBridge.logPurchase(plan: properties["plan"])
+            FirebaseAnalyticsBridge.logPurchase(plan: properties["plan"] as? String)
         }
     }
 
