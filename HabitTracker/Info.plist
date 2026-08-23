@@ -8,5 +8,16 @@
 	<string>$(POSTHOG_API_KEY)</string>
 	<key>PostHogHost</key>
 	<string>https://$(POSTHOG_HOST)</string>
+	<!-- Firebase default consent state, read by FirebaseApp.configure(). Google Ads rejects
+	     conversion imports from EEA traffic unless ad_user_data and ad_personalization arrive
+	     as "granted" in the raw payload sent by the app. -->
+	<key>GOOGLE_ANALYTICS_DEFAULT_ALLOW_ANALYTICS_STORAGE</key>
+	<true/>
+	<key>GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_STORAGE</key>
+	<true/>
+	<key>GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_USER_DATA</key>
+	<true/>
+	<key>GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_PERSONALIZATION_SIGNALS</key>
+	<true/>
 </dict>
 </plist>
