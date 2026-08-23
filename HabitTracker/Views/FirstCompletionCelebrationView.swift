@@ -7,6 +7,7 @@ import SwiftUI
 /// offers a one-tap opt-in with a time picker, since users who leave the first session without
 /// a reminder rarely come back on day 2.
 struct FirstCompletionCelebrationView: View {
+    let habit: CelebrationHabit
     let offersReminderOptIn: Bool
     let onEnableReminder: (Date) -> Void
     let onDismiss: () -> Void
@@ -43,6 +44,8 @@ struct FirstCompletionCelebrationView: View {
                     .font(.title2.weight(.bold))
                     .foregroundStyle(.white)
                     .multilineTextAlignment(.center)
+
+                CelebrationHabitBadge(habit: habit)
 
                 if offersReminderOptIn {
                     reminderOptIn

@@ -8,8 +8,8 @@ import SwiftUI
 /// reminder yet, the moment doubles as the opt-in prompt.
 struct StageCelebrationView: View {
     let stage: HabitStage
+    let habit: CelebrationHabit
     let offersNotificationOptIn: Bool
-    let accentColor: Color
     let onEnableNotifications: (Date) -> Void
     let onDismiss: () -> Void
 
@@ -41,7 +41,16 @@ struct StageCelebrationView: View {
             VStack(spacing: 20) {
                 Image(systemName: stage.sfSymbolName)
                     .font(.system(size: 56))
-                    .foregroundStyle(accentColor)
+                    .foregroundStyle(habit.accentColor)
+
+                VStack(spacing: 12) {
+                    Text("Congratulations! New stage achieved")
+                        .font(.title2.weight(.bold))
+                        .foregroundStyle(.white)
+                        .multilineTextAlignment(.center)
+
+                    CelebrationHabitBadge(habit: habit)
+                }
 
                 Text(stage.displayName.uppercased())
                     .font(.caption.weight(.bold))
@@ -49,7 +58,7 @@ struct StageCelebrationView: View {
                     .foregroundStyle(.white.opacity(0.7))
 
                 Text(copy.title)
-                    .font(.title2.weight(.bold))
+                    .font(.headline)
                     .foregroundStyle(.white)
                     .multilineTextAlignment(.center)
 

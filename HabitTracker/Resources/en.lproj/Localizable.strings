@@ -232,6 +232,7 @@
 "Habit strength will be shown after 3 completions" = "Habit strength will be shown after 3 completions";
 "Habit strength, %lld" = "Habit strength, %lld";
 "Consistency grid, %lld days completed" = "Consistency grid, %lld days completed";
+"Congratulations! New stage achieved" = "Congratulations! New stage achieved";
 "Keep going" = "Keep going";
 "Your brain is wiring the cue" = "Your brain is wiring the cue";
 "Repetition is linking this action to its context. The first neural pathway is forming — keep showing up and the association will deepen." = "Repetition is linking this action to its context. The first neural pathway is forming — keep showing up and the association will deepen.";

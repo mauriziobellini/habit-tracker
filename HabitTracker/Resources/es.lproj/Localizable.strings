@@ -232,6 +232,7 @@
 "Habit strength will be shown after 3 completions" = "La fuerza del hábito se mostrará después de 3 completados";
 "Habit strength, %lld" = "Fuerza del hábito, %lld";
 "Consistency grid, %lld days completed" = "Cuadrícula de constancia, %lld días completados";
+"Congratulations! New stage achieved" = "¡Enhorabuena! Nueva etapa alcanzada";
 "Keep going" = "¡Sigue así!";
 "Your brain is wiring the cue" = "Tu cerebro está creando la señal";
 "Repetition is linking this action to its context. The first neural pathway is forming — keep showing up and the association will deepen." = "La repetición está vinculando esta acción con su contexto. La primera vía neuronal se está formando: sigue apareciendo y la asociación se hará más profunda.";

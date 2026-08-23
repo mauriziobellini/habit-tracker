@@ -3,6 +3,7 @@ import SwiftUI
 /// Full-screen celebration overlay shown when the user reaches a reward streak.
 /// Features animated confetti particles and the reward message.
 struct RewardCelebrationView: View {
+    let habit: CelebrationHabit
     let rewardText: String
     let onDismiss: () -> Void
 
@@ -38,6 +39,8 @@ struct RewardCelebrationView: View {
                     .font(.title.weight(.bold))
                     .foregroundStyle(.white)
 
+                CelebrationHabitBadge(habit: habit)
+
                 Text("You can now reward yourself with:")
                     .font(.body)
                     .foregroundStyle(.white.opacity(0.9))
@@ -71,7 +74,11 @@ struct RewardCelebrationView: View {
             }
         }
         .accessibilityElement(children: .combine)
-        .accessibilityLabel(Text("Congratulations! You can now reward yourself with: \(rewardText)"))
+        .accessibilityLabel(
+            Text(habit.name)
+                + Text(verbatim: ". ")
+                + Text("Congratulations! You can now reward yourself with: \(rewardText)")
+        )
         .accessibilityAddTraits(.isModal)
     }
 
@@ -91,6 +98,67 @@ struct RewardCelebrationView: View {
                 shape: ConfettiShape.allCases.randomElement()!
             )
         }
+    }
+}
+
+// MARK: - Habit Identity
+
+/// The habit a celebration is about, snapshotted for the overlay.
+///
+/// Celebrations used to show only stage or reward copy, which left the user guessing
+/// which habit earned it once more than one habit is on the dashboard.
+struct CelebrationHabit {
+    let name: String
+    let iconName: String?
+    let initials: String
+    let accentColor: Color
+
+    init(task: HabitTask) {
+        self.name = task.title
+        self.iconName = task.iconName
+        self.initials = task.initialsDisplay
+        self.accentColor = TaskColor.from(token: task.colorToken).color
+    }
+
+    init(name: String, iconName: String?, initials: String, accentColor: Color) {
+        self.name = name
+        self.iconName = iconName
+        self.initials = initials
+        self.accentColor = accentColor
+    }
+}
+
+/// Icon-and-name pill naming the habit a celebration refers to. Mirrors the icon
+/// fallback used on the dashboard circles: SF Symbol when set, initials otherwise.
+struct CelebrationHabitBadge: View {
+    let habit: CelebrationHabit
+
+    var body: some View {
+        HStack(spacing: 8) {
+            Group {
+                if let iconName = habit.iconName {
+                    Image(systemName: iconName)
+                        .font(.system(size: 17, weight: .medium))
+                } else {
+                    Text(habit.initials)
+                        .font(.system(size: 15, weight: .bold, design: .rounded))
+                }
+            }
+            // Full-strength accent on the dimmed backdrop: the palette is tuned to stay
+            // vibrant against dark, and a tinted plate behind it washed the glyph out.
+            .foregroundStyle(habit.accentColor)
+            .fixedSize()
+
+            Text(habit.name)
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(.white)
+                .lineLimit(2)
+        }
+        .padding(.horizontal, 14)
+        .padding(.vertical, 8)
+        .background(Capsule().fill(.white.opacity(0.15)))
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text(habit.name))
     }
 }
 

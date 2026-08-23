@@ -149,8 +149,9 @@ struct TaskListView: View {
                 GeneralStatsView()
             }
             .overlay {
-                if viewModel.showingRewardCelebration {
+                if viewModel.showingRewardCelebration, let habit = viewModel.rewardCelebrationHabit {
                     RewardCelebrationView(
+                        habit: habit,
                         rewardText: viewModel.rewardCelebrationText
                     ) {
                         viewModel.dismissRewardCelebration(analytics: analytics)
@@ -160,8 +161,9 @@ struct TaskListView: View {
                 }
             }
             .overlay {
-                if viewModel.showingFirstCompletionPrompt {
+                if viewModel.showingFirstCompletionPrompt, let habit = viewModel.firstCompletionHabit {
                     FirstCompletionCelebrationView(
+                        habit: habit,
                         offersReminderOptIn: viewModel.firstCompletionOffersReminderOptIn,
                         onEnableReminder: { time in
                             viewModel.enableReminderFromFirstCompletionPrompt(
@@ -181,8 +183,8 @@ struct TaskListView: View {
                 if viewModel.showingStageCelebration, let transition = viewModel.stageCelebration {
                     StageCelebrationView(
                         stage: transition.to,
+                        habit: CelebrationHabit(task: transition.task),
                         offersNotificationOptIn: !transition.task.notificationEnabled,
-                        accentColor: TaskColor.from(token: transition.task.colorToken).color,
                         onEnableNotifications: { time in
                             viewModel.enableNotificationsFromStageCelebration(
                                 at: time, context: modelContext, analytics: analytics
@@ -495,6 +497,7 @@ struct TaskListView: View {
             let streak = task.currentStreak(weekStartDay: weekStartDay)
             if streak > 0 && streak % task.rewardStreakCount == 0 {
                 viewModel.rewardCelebrationText = rewardText
+                viewModel.rewardCelebrationHabit = CelebrationHabit(task: task)
                 viewModel.showingRewardCelebration = true
                 analytics.track(.rewardUnlocked, properties: ["streak_count": AnalyticsBucket.streak(streak)])
             }

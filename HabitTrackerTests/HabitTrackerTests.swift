@@ -434,6 +434,23 @@ struct TaskListViewModelTests {
         #expect(!vm.firstCompletionOffersReminderOptIn)
     }
 
+    @Test("First completion prompt names the habit it celebrates")
+    func firstCompletionPromptCarriesHabitIdentity() {
+        let vm = TaskListViewModel()
+        vm.presentFirstCompletionPrompt(
+            for: HabitTask(title: "Walk the dog", iconName: "dog.fill", colorToken: "green")
+        )
+        #expect(vm.firstCompletionHabit?.name == "Walk the dog")
+        #expect(vm.firstCompletionHabit?.iconName == "dog.fill")
+    }
+
+    @Test("Celebration habit falls back to initials when the habit has no icon")
+    func celebrationHabitFallsBackToInitials() {
+        let habit = CelebrationHabit(task: HabitTask(title: "Walk the dog"))
+        #expect(habit.iconName == nil)
+        #expect(habit.initials == "WT")
+    }
+
     @Test("Dismissing the first completion prompt hides it")
     func firstCompletionPromptDismiss() {
         let vm = TaskListViewModel()

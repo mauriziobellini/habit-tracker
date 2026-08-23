@@ -22,6 +22,8 @@ final class TaskListViewModel {
     // Reward celebration
     var showingRewardCelebration = false
     var rewardCelebrationText = ""
+    /// The habit the reward belongs to, so the overlay can name it.
+    var rewardCelebrationHabit: CelebrationHabit?
 
     // Stage advance celebration (PRD - Habit strength §8)
     var showingStageCelebration = false
@@ -33,6 +35,8 @@ final class TaskListViewModel {
     // First completion celebration (Experiment - Opt out notifications)
     var showingFirstCompletionPrompt = false
     var firstCompletionOffersReminderOptIn = false
+    /// Kept past dismissal so the overlay does not lose the habit name mid fade-out.
+    var firstCompletionHabit: CelebrationHabit?
     private var firstCompletionTask: HabitTask?
 
     // Freemium paywall (PRD - Freemium §6, §7)
@@ -207,6 +211,7 @@ final class TaskListViewModel {
     /// moment to offer one (Experiment - Opt out notifications).
     func presentFirstCompletionPrompt(for task: HabitTask, analytics: AnalyticsService = NoOpAnalyticsService()) {
         firstCompletionTask = task
+        firstCompletionHabit = CelebrationHabit(task: task)
         firstCompletionOffersReminderOptIn = !task.notificationEnabled
         showingFirstCompletionPrompt = true
         analytics.track(.firstCompletionPromptShown, properties: [
