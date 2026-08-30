@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 63;
+	objectVersion = 77;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -47,6 +47,7 @@
 		83F2FF2773436926E0FC8353 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = BA339BDC3DC2988F6A1582FB /* FirebaseAnalytics */; };
 		8FD490931E9356CD4D7E247D /* HabitTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 004D5DF10775A860CE77FD04 /* HabitTrackerApp.swift */; };
 		90328EAC8CAA18C3EDA4C393 /* StageCelebrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D10F04C35B7BF6F48D304D84 /* StageCelebrationView.swift */; };
+		9520F8013DB8689F434648DC /* DemoVideoSeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D61DDCA86890037074EA9A1 /* DemoVideoSeed.swift */; };
 		9637AB7A33C2E73124110FED /* TaskListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C35731CAF743F7ECAA2089 /* TaskListView.swift */; };
 		9B3B1CCBFA3751C45B53E23A /* Configuration.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 6DFAE23DA1FC14884E439BC4 /* Configuration.storekit */; };
 		9EDC95CBF66CE76CE7705147 /* HabitSummarySheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94868EF9B3349BDFC6EA9F41 /* HabitSummarySheetView.swift */; };
@@ -61,6 +62,8 @@
 		C24607AF93BE4F262F02AAC2 /* MigrationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E37FBBD441F5E42CA30E03F /* MigrationService.swift */; };
 		C2B5D5F7CF734BCC320CA9BD /* HabitStrength.swift in Sources */ = {isa = PBXBuildFile; fileRef = B691B4B44DABCC77FDA86A2A /* HabitStrength.swift */; };
 		C32977F94511CD44D6F4F611 /* FreemiumUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C039C5A0ADC54C15AF1BC2C7 /* FreemiumUITests.swift */; };
+		C69A75504FA68EA0944A3940 /* AppPreviewRecording.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F7966FF50F2EEA277409E3 /* AppPreviewRecording.swift */; };
+		C8BDC84BFD218A3C96199386 /* AppScreenshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEA4B9FCBD92BA786EDFBBD8 /* AppScreenshots.swift */; };
 		D416AB5F73B6BA227A4C1B2F /* GeneralStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02655527C1279F2B7FD2787 /* GeneralStatsView.swift */; };
 		D8096E689FF5EEB9CE54A3F2 /* AppSettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78CE7047859F7D0BC91CF3FD /* AppSettingsViewModel.swift */; };
 		D82D52073629334DFD5AC59F /* ManageCompletionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB249180B1715966263AFEAB /* ManageCompletionsView.swift */; };
@@ -122,9 +125,10 @@
 		5E37FBBD441F5E42CA30E03F /* MigrationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MigrationService.swift; sourceTree = "<group>"; };
 		60B405D8517768C23C7EC846 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		65BEF1AD62BB1488E356A032 /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
-		6DFAE23DA1FC14884E439BC4 /* Configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Configuration.storekit; sourceTree = "<group>"; };
+		6DFAE23DA1FC14884E439BC4 /* Configuration.storekit */ = {isa = PBXFileReference; path = Configuration.storekit; sourceTree = "<group>"; };
 		6EF5FB924106AAB464465CBF /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		754CC36EEC02243848BB3618 /* StrengthNotificationScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrengthNotificationScheduler.swift; sourceTree = "<group>"; };
+		75F7966FF50F2EEA277409E3 /* AppPreviewRecording.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPreviewRecording.swift; sourceTree = "<group>"; };
 		760F5BD62C8A9159CF944253 /* TaskStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskStatsView.swift; sourceTree = "<group>"; };
 		770BA6BADD427DA34662E4D1 /* TaskConfigurationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskConfigurationView.swift; sourceTree = "<group>"; };
 		78CE7047859F7D0BC91CF3FD /* AppSettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsViewModel.swift; sourceTree = "<group>"; };
@@ -135,7 +139,8 @@
 		85D78856B1AA5B60B94314CC /* NewTaskSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTaskSelectorView.swift; sourceTree = "<group>"; };
 		8826365D301D57762C7FBEDF /* FreemiumTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreemiumTests.swift; sourceTree = "<group>"; };
 		8AFF4251A4854D53DE4D9C20 /* FirstCompletionCelebrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstCompletionCelebrationView.swift; sourceTree = "<group>"; };
-		934C18A7F2EB31512CEB4A4E /* HabitTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HabitTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D61DDCA86890037074EA9A1 /* DemoVideoSeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoVideoSeed.swift; sourceTree = "<group>"; };
+		934C18A7F2EB31512CEB4A4E /* HabitTracker.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = HabitTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94868EF9B3349BDFC6EA9F41 /* HabitSummarySheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitSummarySheetView.swift; sourceTree = "<group>"; };
 		94CFAAA3CFF314D9E33E4397 /* TaskStatsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskStatsViewModel.swift; sourceTree = "<group>"; };
 		9E02CDB17D07392A97E71D78 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -171,6 +176,7 @@
 		FCAB5EFECF9A9ABB342CD71F /* RewardCelebrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardCelebrationView.swift; sourceTree = "<group>"; };
 		FCB15D387F47D8EB72B9393F /* PremiumPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumPlan.swift; sourceTree = "<group>"; };
 		FCFA7262F739D0FAED7FD0F2 /* TaskConfigurationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskConfigurationViewModel.swift; sourceTree = "<group>"; };
+		FEA4B9FCBD92BA786EDFBBD8 /* AppScreenshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppScreenshots.swift; sourceTree = "<group>"; };
 		FF9D38D77EB078C801B84738 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -237,6 +243,8 @@
 		2ED89AB54C94174F68FE2B71 /* HabitTrackerUITests */ = {
 			isa = PBXGroup;
 			children = (
+				75F7966FF50F2EEA277409E3 /* AppPreviewRecording.swift */,
+				FEA4B9FCBD92BA786EDFBBD8 /* AppScreenshots.swift */,
 				C039C5A0ADC54C15AF1BC2C7 /* FreemiumUITests.swift */,
 				A7BB4A35ADC8069CE789471A /* HabitTrackerUITests.swift */,
 			);
@@ -287,6 +295,7 @@
 				D4CC3D665015567909C2307F /* AnalyticsProperties.swift */,
 				D498414D8E001B51C8D50C7D /* AnalyticsService.swift */,
 				467BF5DE626AC87A0C868DDB /* AnalyticsServiceFactory.swift */,
+				8D61DDCA86890037074EA9A1 /* DemoVideoSeed.swift */,
 				25DFC8475CDD905A8ACDB25C /* EntitlementManager.swift */,
 				35CF8533448724296D641063 /* FirebaseAnalyticsBridge.swift */,
 				076E47CE1B6D933D87554B99 /* HabitAccessPolicy.swift */,
@@ -446,6 +455,7 @@
 				7241BB4A17D0E2F8DCADE4D4 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				C0A35E3CC1FC62F9D664ADC7 /* XCRemoteSwiftPackageReference "posthog-ios" */,
 			);
+			preferredProjectObjectVersion = 77;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -496,6 +506,7 @@
 				3F51E0330B5A606BE57DF9E2 /* ColorPalette.swift in Sources */,
 				80875B57F9F20ADA20143EA3 /* CompletionRingView.swift in Sources */,
 				63075D02E92E0F7CC35392F0 /* ContentView.swift in Sources */,
+				9520F8013DB8689F434648DC /* DemoVideoSeed.swift in Sources */,
 				BB52B361DD4CE02F6B8520DD /* EntitlementManager.swift in Sources */,
 				07BE1CDB495E028DA4ED5E28 /* Enums.swift in Sources */,
 				21BF3A49297A0723E95A6976 /* FirebaseAnalyticsBridge.swift in Sources */,
@@ -549,6 +560,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C69A75504FA68EA0944A3940 /* AppPreviewRecording.swift in Sources */,
+				C8BDC84BFD218A3C96199386 /* AppScreenshots.swift in Sources */,
 				C32977F94511CD44D6F4F611 /* FreemiumUITests.swift in Sources */,
 				BF8A0E3B8BB67721D0F04E5D /* HabitTrackerUITests.swift in Sources */,
 			);
@@ -593,8 +606,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 7;
-				DEVELOPMENT_TEAM = VR85B5U7U4;
+				CURRENT_PROJECT_VERSION = 6;
 				INFOPLIST_FILE = HabitTracker/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Ring Habits – Streak & Reward";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
@@ -605,7 +617,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.3.0;
+				MARKETING_VERSION = 2.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = co.fooshi.habitring;
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -686,8 +698,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 7;
-				DEVELOPMENT_TEAM = VR85B5U7U4;
+				CURRENT_PROJECT_VERSION = 6;
 				INFOPLIST_FILE = HabitTracker/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Ring Habits – Streak & Reward";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
@@ -698,7 +709,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.3.0;
+				MARKETING_VERSION = 2.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = co.fooshi.habitring;
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;

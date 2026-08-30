@@ -11,16 +11,9 @@ struct RewardCelebrationView: View {
     @State private var showContent = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-    private let confettiColors: [Color] = [
-        .red, .orange, .yellow, .green, .blue, .purple, .pink, .mint, .cyan, .indigo
-    ]
-
     var body: some View {
         ZStack {
-            // Dimmed background
-            Color.black.opacity(0.6)
-                .ignoresSafeArea()
-                .onTapGesture { onDismiss() }
+            CelebrationBackdrop(accentColor: habit.accentColor, onTap: onDismiss)
 
             // Confetti layer
             if !reduceMotion {
@@ -33,21 +26,21 @@ struct RewardCelebrationView: View {
             VStack(spacing: 24) {
                 Image(systemName: "party.popper.fill")
                     .font(.system(size: 56))
-                    .foregroundStyle(.yellow)
+                    .foregroundStyle(.orange)
 
                 Text("Congratulations!")
                     .font(.title.weight(.bold))
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.primary)
 
                 CelebrationHabitBadge(habit: habit)
 
                 Text("You can now reward yourself with:")
                     .font(.body)
-                    .foregroundStyle(.white.opacity(0.9))
+                    .foregroundStyle(.secondary)
 
                 Text(rewardText)
                     .font(.title2.weight(.semibold))
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.primary)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 16)
 
@@ -55,11 +48,7 @@ struct RewardCelebrationView: View {
                     onDismiss()
                 } label: {
                     Text("Awesome!")
-                        .font(.headline)
-                        .foregroundStyle(.black)
-                        .padding(.horizontal, 48)
-                        .padding(.vertical, 14)
-                        .background(Capsule().fill(.white))
+                        .celebrationProminentLabel(horizontalPadding: 48)
                 }
                 .padding(.top, 8)
             }
@@ -86,7 +75,7 @@ struct RewardCelebrationView: View {
         guard !reduceMotion else { return }
         confettiPieces = (0..<60).map { _ in
             ConfettiPiece(
-                color: confettiColors.randomElement()!,
+                color: ConfettiPiece.palette.randomElement()!,
                 startX: CGFloat.random(in: 0...1),
                 startY: CGFloat.random(in: -0.3...0),
                 endY: CGFloat.random(in: 1.0...1.5),
@@ -98,6 +87,65 @@ struct RewardCelebrationView: View {
                 shape: ConfettiShape.allCases.randomElement()!
             )
         }
+    }
+}
+
+// MARK: - Celebration Chrome
+
+/// Opaque full-screen backdrop shared by every celebration overlay.
+///
+/// The celebrations used to sit on a 60% black scrim, which left the dashboard
+/// grid showing through and pulled the copy close to the backdrop luminance —
+/// unreadable in dark mode, muddy in light mode. An opaque semantic surface with a
+/// soft accent wash keeps every label at full contrast in both appearances
+/// (UX principles §4 and §8).
+struct CelebrationBackdrop: View {
+    let accentColor: Color
+    let onTap: () -> Void
+
+    var body: some View {
+        ZStack {
+            Color(.systemBackground)
+
+            LinearGradient(
+                colors: [accentColor.opacity(0.28), accentColor.opacity(0.06), .clear],
+                startPoint: .top,
+                endPoint: .center
+            )
+        }
+        .ignoresSafeArea()
+        .contentShape(Rectangle())
+        .onTapGesture(perform: onTap)
+    }
+}
+
+extension View {
+    /// Prominent capsule CTA. The inverted fill (primary plate, background-colored
+    /// label) guarantees the contrast ratio in both appearances without hardcoding
+    /// black or white.
+    func celebrationProminentLabel(horizontalPadding: CGFloat = 32) -> some View {
+        font(.headline)
+            .foregroundStyle(Color(.systemBackground))
+            .padding(.horizontal, horizontalPadding)
+            .padding(.vertical, 14)
+            .background(Capsule().fill(Color.primary))
+    }
+
+    /// Low-emphasis text CTA sitting directly on the backdrop.
+    func celebrationSecondaryLabel() -> some View {
+        font(.subheadline)
+            .foregroundStyle(.secondary)
+            .padding(.horizontal, 24)
+            .padding(.vertical, 8)
+    }
+
+    /// Neutral plate behind inline controls (the reminder time picker).
+    func celebrationFieldBackground() -> some View {
+        padding(.horizontal, 16)
+            .padding(.vertical, 10)
+            .background(
+                RoundedRectangle(cornerRadius: 12).fill(Color(.tertiarySystemFill))
+            )
     }
 }
 
@@ -144,19 +192,19 @@ struct CelebrationHabitBadge: View {
                         .font(.system(size: 15, weight: .bold, design: .rounded))
                 }
             }
-            // Full-strength accent on the dimmed backdrop: the palette is tuned to stay
-            // vibrant against dark, and a tinted plate behind it washed the glyph out.
+            // Full-strength accent: the palette adapts per appearance already, and a
+            // tinted plate behind the glyph washed it out.
             .foregroundStyle(habit.accentColor)
             .fixedSize()
 
             Text(habit.name)
                 .font(.subheadline.weight(.semibold))
-                .foregroundStyle(.white)
+                .foregroundStyle(.primary)
                 .lineLimit(2)
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 8)
-        .background(Capsule().fill(.white.opacity(0.15)))
+        .background(Capsule().fill(Color(.tertiarySystemFill)))
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text(habit.name))
     }
@@ -169,6 +217,13 @@ enum ConfettiShape: CaseIterable {
 }
 
 struct ConfettiPiece: Identifiable {
+    /// Shared by every celebration. Pale tones (yellow, mint, cyan) are left out:
+    /// they all but vanish against the light-appearance backdrop, and the particles
+    /// already fade as they fall.
+    static let palette: [Color] = [
+        .red, .orange, .green, .teal, .blue, .indigo, .purple, .pink
+    ]
+
     let id = UUID()
     let color: Color
     let startX: CGFloat

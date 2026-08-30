@@ -19,15 +19,9 @@ struct FirstCompletionCelebrationView: View {
     @State private var showContent = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-    private let confettiColors: [Color] = [
-        .red, .orange, .yellow, .green, .blue, .purple, .pink, .mint, .cyan, .indigo
-    ]
-
     var body: some View {
         ZStack {
-            Color.black.opacity(0.6)
-                .ignoresSafeArea()
-                .onTapGesture { onDismiss() }
+            CelebrationBackdrop(accentColor: habit.accentColor, onTap: onDismiss)
 
             if !reduceMotion {
                 ForEach(confettiPieces) { piece in
@@ -42,7 +36,7 @@ struct FirstCompletionCelebrationView: View {
 
                 Text("Congratulations on your first completion!")
                     .font(.title2.weight(.bold))
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.primary)
                     .multilineTextAlignment(.center)
 
                 CelebrationHabitBadge(habit: habit)
@@ -52,7 +46,7 @@ struct FirstCompletionCelebrationView: View {
                 } else {
                     Text("Keep it going — we'll remind you at your chosen time.")
                         .font(.body)
-                        .foregroundStyle(.white.opacity(0.9))
+                        .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
 
                     dismissButton(title: String(localized: "Awesome!"), prominent: true)
@@ -75,7 +69,7 @@ struct FirstCompletionCelebrationView: View {
     private var reminderOptIn: some View {
         Text("People who turn on reminders complete their habits 40% more often.")
             .font(.body)
-            .foregroundStyle(.white.opacity(0.9))
+            .foregroundStyle(.secondary)
             .multilineTextAlignment(.center)
 
         DatePicker(
@@ -84,22 +78,13 @@ struct FirstCompletionCelebrationView: View {
             displayedComponents: .hourAndMinute
         )
         .datePickerStyle(.compact)
-        .foregroundStyle(.white)
-        .padding(.horizontal, 16)
-        .padding(.vertical, 10)
-        .background(
-            RoundedRectangle(cornerRadius: 12).fill(.white.opacity(0.15))
-        )
+        .celebrationFieldBackground()
 
         Button {
             onEnableReminder(reminderTime)
         } label: {
             Text("Turn on reminders")
-                .font(.headline)
-                .foregroundStyle(.black)
-                .padding(.horizontal, 32)
-                .padding(.vertical, 14)
-                .background(Capsule().fill(.white))
+                .celebrationProminentLabel()
         }
         .accessibilityIdentifier("firstCompletionEnableRemindersButton")
 
@@ -110,16 +95,11 @@ struct FirstCompletionCelebrationView: View {
         Button {
             onDismiss()
         } label: {
-            Text(title)
-                .font(prominent ? .headline : .subheadline)
-                .foregroundStyle(prominent ? .black : .white.opacity(0.8))
-                .padding(.horizontal, prominent ? 48 : 24)
-                .padding(.vertical, prominent ? 14 : 8)
-                .background {
-                    if prominent {
-                        Capsule().fill(.white)
-                    }
-                }
+            if prominent {
+                Text(title).celebrationProminentLabel(horizontalPadding: 48)
+            } else {
+                Text(title).celebrationSecondaryLabel()
+            }
         }
         .accessibilityIdentifier("firstCompletionDismissButton")
     }
@@ -128,7 +108,7 @@ struct FirstCompletionCelebrationView: View {
         guard !reduceMotion else { return }
         confettiPieces = (0..<60).map { _ in
             ConfettiPiece(
-                color: confettiColors.randomElement()!,
+                color: ConfettiPiece.palette.randomElement()!,
                 startX: CGFloat.random(in: 0...1),
                 startY: CGFloat.random(in: -0.3...0),
                 endY: CGFloat.random(in: 1.0...1.5),

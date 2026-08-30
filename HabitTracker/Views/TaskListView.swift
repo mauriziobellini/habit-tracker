@@ -148,61 +148,6 @@ struct TaskListView: View {
             .sheet(isPresented: $viewModel.showingGeneralStats) {
                 GeneralStatsView()
             }
-            .overlay {
-                if viewModel.showingRewardCelebration, let habit = viewModel.rewardCelebrationHabit {
-                    RewardCelebrationView(
-                        habit: habit,
-                        rewardText: viewModel.rewardCelebrationText
-                    ) {
-                        viewModel.dismissRewardCelebration(analytics: analytics)
-                    }
-                    .transition(.opacity)
-                    .zIndex(100)
-                }
-            }
-            .overlay {
-                if viewModel.showingFirstCompletionPrompt, let habit = viewModel.firstCompletionHabit {
-                    FirstCompletionCelebrationView(
-                        habit: habit,
-                        offersReminderOptIn: viewModel.firstCompletionOffersReminderOptIn,
-                        onEnableReminder: { time in
-                            viewModel.enableReminderFromFirstCompletionPrompt(
-                                at: time,
-                                analytics: analytics
-                            )
-                        },
-                        onDismiss: {
-                            viewModel.dismissFirstCompletionPrompt(analytics: analytics)
-                        }
-                    )
-                    .transition(.opacity)
-                    .zIndex(101)
-                }
-            }
-            .overlay {
-                if viewModel.showingStageCelebration, let transition = viewModel.stageCelebration {
-                    StageCelebrationView(
-                        stage: transition.to,
-                        habit: CelebrationHabit(task: transition.task),
-                        offersNotificationOptIn: !transition.task.notificationEnabled,
-                        onEnableNotifications: { time in
-                            viewModel.enableNotificationsFromStageCelebration(
-                                at: time, context: modelContext, analytics: analytics
-                            )
-                        },
-                        onDismiss: {
-                            viewModel.dismissStageCelebration(
-                                context: modelContext, analytics: analytics
-                            )
-                        }
-                    )
-                    .transition(.opacity)
-                    .zIndex(102)
-                }
-            }
-            .animation(.easeInOut(duration: 0.3), value: viewModel.showingRewardCelebration)
-            .animation(.easeInOut(duration: 0.3), value: viewModel.showingFirstCompletionPrompt)
-            .animation(.easeInOut(duration: 0.3), value: viewModel.showingStageCelebration)
             .task {
                 // Cold launch does not always register as a scenePhase change. The
                 // evaluator is idempotent per day, so an overlapping call is a no-op.
@@ -229,6 +174,64 @@ struct TaskListView: View {
                 refreshDayIfNeeded()
             }
         }
+        // Celebrations wrap the whole stack, not its content: an overlay applied
+        // inside the stack renders below the navigation bar, so the title and
+        // toolbar buttons stayed visible on top of the opaque backdrop.
+        .overlay {
+            if viewModel.showingRewardCelebration, let habit = viewModel.rewardCelebrationHabit {
+                RewardCelebrationView(
+                    habit: habit,
+                    rewardText: viewModel.rewardCelebrationText
+                ) {
+                    viewModel.dismissRewardCelebration(analytics: analytics)
+                }
+                .transition(.opacity)
+                .zIndex(100)
+            }
+        }
+        .overlay {
+            if viewModel.showingFirstCompletionPrompt, let habit = viewModel.firstCompletionHabit {
+                FirstCompletionCelebrationView(
+                    habit: habit,
+                    offersReminderOptIn: viewModel.firstCompletionOffersReminderOptIn,
+                    onEnableReminder: { time in
+                        viewModel.enableReminderFromFirstCompletionPrompt(
+                            at: time,
+                            analytics: analytics
+                        )
+                    },
+                    onDismiss: {
+                        viewModel.dismissFirstCompletionPrompt(analytics: analytics)
+                    }
+                )
+                .transition(.opacity)
+                .zIndex(101)
+            }
+        }
+        .overlay {
+            if viewModel.showingStageCelebration, let transition = viewModel.stageCelebration {
+                StageCelebrationView(
+                    stage: transition.to,
+                    habit: CelebrationHabit(task: transition.task),
+                    offersNotificationOptIn: !transition.task.notificationEnabled,
+                    onEnableNotifications: { time in
+                        viewModel.enableNotificationsFromStageCelebration(
+                            at: time, context: modelContext, analytics: analytics
+                        )
+                    },
+                    onDismiss: {
+                        viewModel.dismissStageCelebration(
+                            context: modelContext, analytics: analytics
+                        )
+                    }
+                )
+                .transition(.opacity)
+                .zIndex(102)
+            }
+        }
+        .animation(.easeInOut(duration: 0.3), value: viewModel.showingRewardCelebration)
+        .animation(.easeInOut(duration: 0.3), value: viewModel.showingFirstCompletionPrompt)
+        .animation(.easeInOut(duration: 0.3), value: viewModel.showingStageCelebration)
     }
 
     private func refreshDayIfNeeded() {

@@ -51,6 +51,7 @@ struct ContentView: View {
     private func applyUITestingSeedIfNeeded() {
         seedTwoHabitsIfNeeded()
         seedStrongHabitIfNeeded()
+        DemoVideoSeed.seedIfNeeded(context: modelContext)
     }
 
     private func seedTwoHabitsIfNeeded() {

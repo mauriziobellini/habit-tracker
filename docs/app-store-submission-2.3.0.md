@@ -205,58 +205,58 @@ Paste order tip: English (U.S.) → Spanish (Spain) → French → German → It
 
 #### English (U.S.) — en
 
-- **Habit Strength** — every habit now has a formation score (0–100) and a stage from Starting to Mastering. Watch the inner ring on the dashboard grow as your habit becomes automatic.
-- **Habit summary sheet** — tap a habit once to see your strength, stage, and a consistency grid. Stats, Edit, and Remove are one tap away.
-- **Stage celebrations** — when your habit advances to a new stage, enjoy a full-screen celebration. Optionally turn on reminders right from the moment.
-- **Smarter notifications** — get a heads-up when you're close to the next stage or at risk of slipping back. Mark done or snooze directly from the notification.
+- Habit Strength — every habit now has a formation score (0–100) and a stage from Starting to Mastering. Watch the inner ring on the dashboard grow as your habit becomes automatic.
+- Habit summary sheet — tap a habit once to see your strength, stage, and a consistency grid. Stats, Edit, and Remove are one tap away.
+- Stage celebrations — when your habit advances to a new stage, enjoy a full-screen celebration. Optionally turn on reminders right from the moment.
+- Smarter notifications — get a heads-up when you're close to the next stage or at risk of slipping back. Mark done or snooze directly from the notification.
 - Faster tap-and-hold to complete (~1.4 seconds) and clearer dashboard hints.
 
 #### Spanish (Spain) — es
 
-- **Fuerza del hábito** — cada hábito tiene ahora una puntuación de formación (0–100) y una etapa de Starting a Mastering. Observa crecer el anillo interior en el panel principal.
-- **Ficha resumen del hábito** — toca una vez un hábito para ver tu fuerza, etapa y una cuadrícula de consistencia. Estadísticas, Editar y Eliminar a un toque.
-- **Celebraciones de etapa** — cuando tu hábito avanza de etapa, disfruta de una celebración a pantalla completa. Activa recordatorios desde el mismo momento si quieres.
-- **Notificaciones más inteligentes** — aviso cuando estés cerca de la siguiente etapa o en riesgo de retroceder. Marca hecho o posponer desde la notificación.
+- Fuerza del hábito — cada hábito tiene ahora una puntuación de formación (0–100) y una etapa de Starting a Mastering. Observa crecer el anillo interior en el panel principal.
+- Ficha resumen del hábito — toca una vez un hábito para ver tu fuerza, etapa y una cuadrícula de consistencia. Estadísticas, Editar y Eliminar a un toque.
+- Celebraciones de etapa — cuando tu hábito avanza de etapa, disfruta de una celebración a pantalla completa. Activa recordatorios desde el mismo momento si quieres.
+- Notificaciones más inteligentes — aviso cuando estés cerca de la siguiente etapa o en riesgo de retroceder. Marca hecho o posponer desde la notificación.
 - Mantén pulsado más rápido para completar (~1,4 s) e indicaciones más claras en el panel.
 
 #### Portuguese (Portugal) — pt-PT
 
-- **Força do hábito** — cada hábito tem agora uma pontuação de formação (0–100) e uma fase de Starting a Mastering. Veja o anel interior no painel principal crescer.
-- **Ficha resumo do hábito** — toque uma vez num hábito para ver a força, fase e grelha de consistência. Estatísticas, Editar e Remover a um toque.
-- **Celebrações de fase** — quando o hábito avança de fase, desfrute de uma celebração em ecrã completo. Ative lembretes nesse momento, se quiser.
-- **Notificações mais inteligentes** — aviso quando estiver perto da fase seguinte ou em risco de recuar. Marque feito ou adie a partir da notificação.
+- Força do hábito — cada hábito tem agora uma pontuação de formação (0–100) e uma fase de Starting a Mastering. Veja o anel interior no painel principal crescer.
+- Ficha resumo do hábito — toque uma vez num hábito para ver a força, fase e grelha de consistência. Estatísticas, Editar e Remover a um toque.
+- Celebrações de fase — quando o hábito avança de fase, desfrute de uma celebração em ecrã completo. Ative lembretes nesse momento, se quiser.
+- Notificações mais inteligentes — aviso quando estiver perto da fase seguinte ou em risco de recuar. Marque feito ou adie a partir da notificação.
 - Toque e mantenha mais rápido para concluir (~1,4 s) e dicas mais claras no painel.
 
 #### French — fr
 
-- **Force de l'habitude** — chaque habitude a désormais un score de formation (0–100) et une étape de Starting à Mastering. Regardez l'anneau intérieur grandir sur le tableau de bord.
-- **Fiche résumé de l'habitude** — touchez une habitude une fois pour voir votre force, étape et une grille de régularité. Stats, Modifier et Supprimer à portée de main.
-- **Célébrations d'étape** — quand votre habitude progresse, profitez d'une célébration plein écran. Activez les rappels sur le moment si vous le souhaitez.
-- **Notifications plus intelligentes** — alerte quand vous approchez de l'étape suivante ou risquez de reculer. Marquer fait ou reporter depuis la notification.
+- Force de l'habitude — chaque habitude a désormais un score de formation (0–100) et une étape de Starting à Mastering. Regardez l'anneau intérieur grandir sur le tableau de bord.
+- Fiche résumé de l'habitude — touchez une habitude une fois pour voir votre force, étape et une grille de régularité. Stats, Modifier et Supprimer à portée de main.
+- Célébrations d'étape — quand votre habitude progresse, profitez d'une célébration plein écran. Activez les rappels sur le moment si vous le souhaitez.
+- Notifications plus intelligentes — alerte quand vous approchez de l'étape suivante ou risquez de reculer. Marquer fait ou reporter depuis la notification.
 - Appui prolongé plus rapide pour terminer (~1,4 s) et indications plus claires sur le tableau de bord.
 
 #### German — de
 
-- **Gewohnheitsstärke** — jede Gewohnheit hat jetzt einen Formationswert (0–100) und eine Stufe von Starting bis Mastering. Sieh zu, wie der innere Ring auf dem Dashboard wächst.
-- **Gewohnheits-Übersicht** — einmal tippen für Stärke, Stufe und Konsistenzraster. Statistiken, Bearbeiten und Entfernen direkt erreichbar.
-- **Stufen-Feiern** — bei einem Stufenaufstieg gibt es eine Vollbild-Feier. Erinnerungen optional direkt dabei aktivieren.
-- **Intelligentere Benachrichtigungen** — Hinweis, wenn du der nächsten Stufe nahe bist oder zurückfallen könntest. Als erledigt markieren oder später direkt aus der Benachrichtigung.
+- Gewohnheitsstärke — jede Gewohnheit hat jetzt einen Formationswert (0–100) und eine Stufe von Starting bis Mastering. Sieh zu, wie der innere Ring auf dem Dashboard wächst.
+- Gewohnheits-Übersicht — einmal tippen für Stärke, Stufe und Konsistenzraster. Statistiken, Bearbeiten und Entfernen direkt erreichbar.
+- Stufen-Feiern — bei einem Stufenaufstieg gibt es eine Vollbild-Feier. Erinnerungen optional direkt dabei aktivieren.
+- Intelligentere Benachrichtigungen — Hinweis, wenn du der nächsten Stufe nahe bist oder zurückfallen könntest. Als erledigt markieren oder später direkt aus der Benachrichtigung.
 - Schnelleres Gedrückthalten zum Abschließen (~1,4 s) und klarere Dashboard-Hinweise.
 
 #### Italian — it
 
-- **Forza dell'abitudine** — ogni abitudine ha ora un punteggio di formazione (0–100) e una fase da Starting a Mastering. Guarda crescere l'anello interno nella dashboard.
-- **Scheda riepilogo abitudine** — tocca una volta un'abitudine per vedere forza, fase e griglia di costanza. Statistiche, Modifica e Rimuovi a un tocco.
-- **Celebrazioni di fase** — quando l'abitudine avanza, goditi una celebrazione a schermo intero. Attiva i promemoria in quel momento, se vuoi.
-- **Notifiche più intelligenti** — avviso quando sei vicino alla fase successiva o a rischio di retrocedere. Segna fatto o posticipa dalla notifica.
+- Forza dell'abitudine — ogni abitudine ha ora un punteggio di formazione (0–100) e una fase da Starting a Mastering. Guarda crescere l'anello interno nella dashboard.
+- Scheda riepilogo abitudine — tocca una volta un'abitudine per vedere forza, fase e griglia di costanza. Statistiche, Modifica e Rimuovi a un tocco.
+- Celebrazioni di fase — quando l'abitudine avanza, goditi una celebrazione a schermo intero. Attiva i promemoria in quel momento, se vuoi.
+- Notifiche più intelligenti — avviso quando sei vicino alla fase successiva o a rischio di retrocedere. Segna fatto o posticipa dalla notifica.
 - Tieni premuto più velocemente per completare (~1,4 s) e suggerimenti più chiari nella dashboard.
 
 #### Dutch — nl
 
-- **Gewoontesterkte** — elke gewoonte heeft nu een vormingsscore (0–100) en een fase van Starting tot Mastering. Zie de binnenste ring op het dashboard groeien.
-- **Gewoonte-overzicht** — tik één keer op een gewoonte voor sterkte, fase en consistentieraster. Statistieken, Bewerken en Verwijderen binnen bereik.
-- **Fase-vieringen** — bij een nieuwe fase een volledig scherm viering. Schakel desgewenst direct herinneringen in.
-- **Slimmere meldingen** — heads-up wanneer je dicht bij de volgende fase bent of kunt terugvallen. Markeer klaar of stel uit vanuit de melding.
+- Gewoontesterkte — elke gewoonte heeft nu een vormingsscore (0–100) en een fase van Starting tot Mastering. Zie de binnenste ring op het dashboard groeien.
+- Gewoonte-overzicht — tik één keer op een gewoonte voor sterkte, fase en consistentieraster. Statistieken, Bewerken en Verwijderen binnen bereik.
+- Fase-vieringen — bij een nieuwe fase een volledig scherm viering. Schakel desgewenst direct herinneringen in.
+- Slimmere meldingen — heads-up wanneer je dicht bij de volgende fase bent of kunt terugvallen. Markeer klaar of stel uit vanuit de melding.
 - Sneller ingedrukt houden om te voltooien (~1,4 s) en duidelijkere dashboardhints.
 
 ---
