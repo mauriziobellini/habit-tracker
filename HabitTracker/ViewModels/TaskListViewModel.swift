@@ -45,11 +45,27 @@ final class TaskListViewModel {
     private var wantsSelectorAfterUnlock = false
     var premiumUnlocked = false
 
-    /// Decide what happens when the user taps "+": open the selector or show the paywall.
-    func handleAddTapped(currentHabitCount: Int, isPremium: Bool, analytics: AnalyticsService = NoOpAnalyticsService()) {
+    // Objectives entry (PRD - objectives §7, §8.2)
+    var showingAddOptions = false
+    var showingObjectives = false
+    private var pendingAddOption: AddHabitOption?
+
+    /// Decide what happens when the user taps "+": the paywall at the free limit, then the
+    /// "Add habit / Add from objective" sheet when objectives are available, otherwise
+    /// today's selector.
+    ///
+    /// - Parameter objectivesAvailable: evaluated by the caller at tap time, never cached,
+    ///   so turning Apple Intelligence on or off applies on the next tap.
+    func handleAddTapped(
+        currentHabitCount: Int,
+        isPremium: Bool,
+        objectivesAvailable: Bool = false,
+        analytics: AnalyticsService = NoOpAnalyticsService()
+    ) {
         analytics.track(.addHabitTapped, properties: [
             "habit_count_before": AnalyticsBucket.habitCount(currentHabitCount),
             "is_premium": String(isPremium),
+            "objectives_available": String(objectivesAvailable),
         ])
         if HabitAccessPolicy.shouldPresentPaywallForNewHabit(
             currentHabitCount: currentHabitCount,
@@ -57,7 +73,32 @@ final class TaskListViewModel {
         ) {
             presentPaywall(source: "add_habit", openSelectorOnUnlock: true)
         } else {
+            openAddFlow(objectivesAvailable: objectivesAvailable)
+        }
+    }
+
+    private func openAddFlow(objectivesAvailable: Bool) {
+        if objectivesAvailable {
+            showingAddOptions = true
+        } else {
             showingTaskSelector = true
+        }
+    }
+
+    /// The option is acted on only once the sheet has dismissed: presenting the next
+    /// sheet while this one is still on screen silently drops it.
+    func selectAddOption(_ option: AddHabitOption, analytics: AnalyticsService = NoOpAnalyticsService()) {
+        analytics.track(.objectiveOptionSelected, properties: ["option": option.rawValue])
+        pendingAddOption = option
+        showingAddOptions = false
+    }
+
+    func performPendingAddOption() {
+        guard let option = pendingAddOption else { return }
+        pendingAddOption = nil
+        switch option {
+        case .habit:     showingTaskSelector = true
+        case .objective: showingObjectives = true
         }
     }
 
@@ -71,14 +112,17 @@ final class TaskListViewModel {
 
     /// Called when the paywall sheet finishes dismissing. Continues the add-habit flow if the
     /// user unlocked premium while trying to create a habit (chained sheet, PRD - Freemium §8).
-    func handlePaywallDismissed(analytics: AnalyticsService = NoOpAnalyticsService()) {
+    func handlePaywallDismissed(
+        objectivesAvailable: Bool = false,
+        analytics: AnalyticsService = NoOpAnalyticsService()
+    ) {
         // Measurement PRD §9: `paywall_dismissed` fires only when the sheet closed without a
         // successful purchase/restore in that session (abandon signal).
         if !premiumUnlocked {
             analytics.track(.paywallDismissed, properties: ["source": paywallSource])
         }
         if premiumUnlocked && wantsSelectorAfterUnlock {
-            showingTaskSelector = true
+            openAddFlow(objectivesAvailable: objectivesAvailable)
         }
         premiumUnlocked = false
         wantsSelectorAfterUnlock = false

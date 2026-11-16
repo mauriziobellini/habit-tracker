@@ -10,6 +10,7 @@ struct HabitTrackerApp: App {
     @State private var entitlementManager: EntitlementManager
     @State private var purchaseService: PurchaseService
     private let appOpenTracker: AppOpenTracker
+    private let objectiveAvailability = ObjectiveAvailabilityFactory.make()
     private let modelContainer: ModelContainer
     @State private var strengthCache = HabitStrengthCache()
     /// Retained for the lifetime of the app: `UNUserNotificationCenter` holds its
@@ -65,6 +66,8 @@ struct HabitTrackerApp: App {
                 .environment(\.analyticsService, analytics)
                 .environment(\.appOpenTracker, appOpenTracker)
                 .environment(strengthCache)
+                .environment(\.objectiveAvailability, objectiveAvailability)
+                .environment(\.makeObjectiveGenerator, { ObjectiveSuggestionFactory.make() })
                 .id(languageCode)
                 .onChange(of: languageCode) { _, newValue in
                     Bundle.setLanguage(newValue)

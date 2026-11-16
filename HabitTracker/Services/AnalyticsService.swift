@@ -41,6 +41,15 @@ enum AnalyticsEvent: String {
     case stageAdvanceCelebrationAction = "stage_advance_celebration_action"
     case habitSummaryOpened = "habit_summary_opened"
     case stageReverted = "stage_reverted"
+
+    // Objectives (PRD - objectives §10.8). Structural only: never objective, refine,
+    // criteria or generated habit text.
+    case objectiveOptionSelected = "objective_option_selected"
+    case objectiveConfiguratorOpened = "objective_configurator_opened"
+    case objectiveSearchSubmitted = "objective_search_submitted"
+    case objectiveSearchCompleted = "objective_search_completed"
+    case objectiveProposalOpened = "objective_proposal_opened"
+    case objectiveNewSearchTapped = "objective_new_search_tapped"
 }
 
 /// Abstraction over analytics so the provider (TelemetryDeck, Firebase, etc.) can be swapped

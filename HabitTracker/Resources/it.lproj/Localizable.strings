@@ -253,3 +253,36 @@
 "Tap and hold to complete, single tap for details" = "Tieni premuto per completare, tocca per i dettagli";
 "Your plan" = "Il tuo piano";
 "Press and hold the circle to mark a habit as done." = "Tieni premuto il cerchio per segnare un'abitudine come completata.";
+
+// MARK: - Objectives
+"Add habit" = "Aggiungi abitudine";
+"Create a single custom habit" = "Crea un'abitudine personalizzata";
+"Add from objective" = "Aggiungi da un obiettivo";
+"Get habit suggestions to reach an objective" = "Ricevi suggerimenti di abitudini per raggiungere un obiettivo";
+"Describe what you want to achieve" = "Descrivi cosa vuoi ottenere";
+"I want to..." = "Voglio...";
+"Get habits" = "Ottieni abitudini";
+"Suggestions are generated on your iPhone" = "I suggerimenti vengono generati sul tuo iPhone";
+"Refine" = "Perfeziona";
+"Add details to refine the suggestions" = "Aggiungi dettagli per perfezionare i suggerimenti";
+"Generate more" = "Generane altre";
+"New search" = "Nuova ricerca";
+"Added" = "Aggiunta";
+"We cannot suggest anything for that request" = "Non possiamo suggerire nulla per questa richiesta";
+"Something went wrong. Try again." = "Qualcosa è andato storto. Riprova.";
+"Try again" = "Riprova";
+"Double tap to review and add" = "Tocca due volte per rivedere e aggiungere";
+"Generating suggestions" = "Generazione dei suggerimenti";
+"%lld times" = "%lld volte";
+"Learn to play piano" = "Imparare a suonare il pianoforte";
+"Learn to play guitar" = "Imparare a suonare la chitarra";
+"Become a morning person" = "Diventare mattiniero";
+"Become a great parent" = "Essere un genitore migliore";
+"Get in good shape" = "Rimettermi in forma";
+"Be more present" = "Essere più presente";
+"Read more books" = "Leggere più libri";
+"Sleep better" = "Dormire meglio";
+"Learn a new language" = "Imparare una nuova lingua";
+"Feel less stressed" = "Sentirmi meno stressato";
+"Eat healthier" = "Mangiare più sano";
+"Run a 5K" = "Correre 5 km";

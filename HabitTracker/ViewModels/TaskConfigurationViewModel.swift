@@ -46,6 +46,7 @@ final class TaskConfigurationViewModel {
 
     var presetIdentifier: String? = nil
     var isPreset: Bool = false
+    var creationSource: HabitCreationSource = .manual
 
     // MARK: - Initialization
 
@@ -89,11 +90,28 @@ final class TaskConfigurationViewModel {
         goalValue = preset.defaultGoalValue
         presetIdentifier = preset.id
         isPreset = true
+        creationSource = .preset
 
         // Match category by name
         if let cat = categories.first(where: { $0.name == preset.categoryName }) {
             selectedCategoryID = cat.id
         }
+    }
+
+    /// Initialize from a habit suggested in the objectives flow. Fields the suggestion
+    /// does not cover keep their create-mode defaults.
+    func applyProposal(_ proposal: HabitProposal, measurementSystem: MeasurementSystem) {
+        title = proposal.title
+        iconName = proposal.iconName
+        frequencyType = proposal.frequency
+        timesPerPeriod = proposal.timesPerPeriod
+        clampTimesToFrequency()
+        goalType = proposal.goalType
+        goalValue = proposal.goalType == .none ? nil : proposal.goalValue
+        goalUnit = ObjectiveUnitPolicy.unit(for: proposal.goalType, system: measurementSystem)
+        presetIdentifier = nil
+        isPreset = false
+        creationSource = .objective
     }
 
     // MARK: - Validation
@@ -107,6 +125,10 @@ final class TaskConfigurationViewModel {
 
     /// Valid range for the times-per-period stepper, per frequency (PRD §9).
     var timesPerPeriodRange: ClosedRange<Int> {
+        Self.timesPerPeriodRange(for: frequencyType)
+    }
+
+    static func timesPerPeriodRange(for frequencyType: FrequencyType) -> ClosedRange<Int> {
         switch frequencyType {
         case .daily:        return 1...48
         case .weekly:       return 1...7
@@ -235,7 +257,7 @@ final class TaskConfigurationViewModel {
             var createProps = task.analyticsStructuralProperties()
             createProps["is_first"] = String(existingCount == 0)
             createProps["habit_count_after"] = AnalyticsBucket.habitCount(existingCount + 1)
-            createProps["source"] = isPreset ? "preset" : "manual"
+            createProps["source"] = creationSource.rawValue
             analytics.track(.habitCreated, properties: createProps)
 
         case .edit(let task):

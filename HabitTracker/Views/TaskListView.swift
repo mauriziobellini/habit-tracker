@@ -25,6 +25,8 @@ struct TaskListView: View {
     @Environment(\.analyticsService) private var analytics
     @Environment(HabitStrengthCache.self) private var strengthCache
     @Environment(\.requestReview) private var requestReview
+    @Environment(\.objectiveAvailability) private var objectiveAvailability
+    @Environment(\.makeObjectiveGenerator) private var makeObjectiveGenerator
 
     /// IDs of habits locked behind the paywall (lapsed subscription with >2 habits).
     private var lockedHabitIDs: Set<UUID> {
@@ -86,8 +88,22 @@ struct TaskListView: View {
             .sheet(isPresented: $viewModel.showingTaskSelector) {
                 NewTaskSelectorView()
             }
+            .sheet(isPresented: $viewModel.showingAddOptions, onDismiss: {
+                viewModel.performPendingAddOption()
+            }) {
+                AddHabitOptionsSheet { option in
+                    viewModel.selectAddOption(option, analytics: analytics)
+                }
+            }
+            .sheet(isPresented: $viewModel.showingObjectives) {
+                objectivesConfigurator
+                    .presentationDetents([.large])
+            }
             .sheet(isPresented: $viewModel.showingPaywall, onDismiss: {
-                viewModel.handlePaywallDismissed(analytics: analytics)
+                viewModel.handlePaywallDismissed(
+                    objectivesAvailable: objectiveAvailability.isAvailable(),
+                    analytics: analytics
+                )
             }) {
                 PaywallView(
                     viewModel: PaywallViewModel(
@@ -318,13 +334,33 @@ struct TaskListView: View {
 
     // MARK: - Add Button
 
+    private func handleAddTapped() {
+        viewModel.handleAddTapped(
+            currentHabitCount: tasks.count,
+            isPremium: entitlementManager.isPremium,
+            objectivesAvailable: objectiveAvailability.isAvailable(),
+            analytics: analytics
+        )
+    }
+
+    @ViewBuilder
+    private var objectivesConfigurator: some View {
+        if let generator = makeObjectiveGenerator() {
+            let system = allSettings.first?.measurementSystem ?? .metric
+            ObjectivesConfiguratorView(
+                viewModel: ObjectivesViewModel(
+                    generator: generator,
+                    analytics: analytics,
+                    isPremium: { [entitlementManager] in entitlementManager.isPremium },
+                    measurementSystem: { system }
+                )
+            )
+        }
+    }
+
     private var addButton: some View {
         Button {
-            viewModel.handleAddTapped(
-                currentHabitCount: tasks.count,
-                isPremium: entitlementManager.isPremium,
-                analytics: analytics
-            )
+            handleAddTapped()
         } label: {
             Image(systemName: "plus")
                 .font(.title3.weight(.semibold))
@@ -561,11 +597,7 @@ struct TaskListView: View {
                 .multilineTextAlignment(.center)
 
             Button {
-                viewModel.handleAddTapped(
-                    currentHabitCount: tasks.count,
-                    isPremium: entitlementManager.isPremium,
-                    analytics: analytics
-                )
+                handleAddTapped()
             } label: {
                 Text("Add Habit")
                     .font(.headline)

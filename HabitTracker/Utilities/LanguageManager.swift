@@ -30,6 +30,11 @@ enum AppLanguage: String, CaseIterable, Identifiable {
 
     static let userDefaultsKey = "appLanguage"
 
+    /// The language chosen in the app, which can differ from the device language.
+    static var current: AppLanguage {
+        UserDefaults.standard.string(forKey: userDefaultsKey).flatMap(AppLanguage.init(rawValue:)) ?? .english
+    }
+
     /// Picks the best supported language from the device's preferred languages list.
     static func detectFromDevice() -> AppLanguage {
         for preferred in Locale.preferredLanguages {

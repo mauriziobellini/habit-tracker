@@ -253,3 +253,36 @@
 "Tap and hold to complete, single tap for details" = "Tap and hold to complete, single tap for details";
 "Your plan" = "Your plan";
 "Press and hold the circle to mark a habit as done." = "Press and hold the circle to mark a habit as done.";
+
+// MARK: - Objectives
+"Add habit" = "Add habit";
+"Create a single custom habit" = "Create a single custom habit";
+"Add from objective" = "Add from objective";
+"Get habit suggestions to reach an objective" = "Get habit suggestions to reach an objective";
+"Describe what you want to achieve" = "Describe what you want to achieve";
+"I want to..." = "I want to...";
+"Get habits" = "Get habits";
+"Suggestions are generated on your iPhone" = "Suggestions are generated on your iPhone";
+"Refine" = "Refine";
+"Add details to refine the suggestions" = "Add details to refine the suggestions";
+"Generate more" = "Generate more";
+"New search" = "New search";
+"Added" = "Added";
+"We cannot suggest anything for that request" = "We cannot suggest anything for that request";
+"Something went wrong. Try again." = "Something went wrong. Try again.";
+"Try again" = "Try again";
+"Double tap to review and add" = "Double tap to review and add";
+"Generating suggestions" = "Generating suggestions";
+"%lld times" = "%lld times";
+"Learn to play piano" = "Learn to play piano";
+"Learn to play guitar" = "Learn to play guitar";
+"Become a morning person" = "Become a morning person";
+"Become a great parent" = "Become a great parent";
+"Get in good shape" = "Get in good shape";
+"Be more present" = "Be more present";
+"Read more books" = "Read more books";
+"Sleep better" = "Sleep better";
+"Learn a new language" = "Learn a new language";
+"Feel less stressed" = "Feel less stressed";
+"Eat healthier" = "Eat healthier";
+"Run a 5K" = "Run a 5K";

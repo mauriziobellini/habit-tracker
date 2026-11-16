@@ -15,10 +15,22 @@ set -euo pipefail
 PROJECT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 CODE_DIR="$(dirname "$PROJECT_DIR")"
 WORKSPACE_FILE="$CODE_DIR/habit-tracker.code-workspace"
-CURSOR_CLI="/Applications/Cursor.app/Contents/Resources/app/bin/cursor"
+
+# Prefer the user Applications install over /Applications.
+if [[ -x "$HOME/Applications/Cursor.app/Contents/Resources/app/bin/cursor" ]]; then
+	CURSOR_CLI="$HOME/Applications/Cursor.app/Contents/Resources/app/bin/cursor"
+	CURSOR_APP="$HOME/Applications/Cursor.app"
+elif [[ -x "/Applications/Cursor.app/Contents/Resources/app/bin/cursor" ]]; then
+	CURSOR_CLI="/Applications/Cursor.app/Contents/Resources/app/bin/cursor"
+	CURSOR_APP="/Applications/Cursor.app"
+else
+	CURSOR_CLI=""
+	CURSOR_APP=""
+fi
 
 # Create a new desktop and switch to it before opening apps.
-osascript <<'SPACE'
+# Failure is non-fatal (needs Accessibility; Mission Control UI coordinates vary).
+if ! osascript <<'SPACE'
 tell application "Finder"
 	set screenBounds to bounds of window of desktop
 	set screenWidth to item 3 of screenBounds
@@ -31,14 +43,19 @@ tell application "System Events"
 	delay 0.5
 end tell
 SPACE
+then
+	echo "Warning: could not create a new Mission Control desktop (Accessibility / UI). Continuing." >&2
+fi
 
 if [[ ! -f "$WORKSPACE_FILE" ]]; then
 	echo "Workspace not found: $WORKSPACE_FILE" >&2
 	exit 1
 fi
 
-if [[ -x "$CURSOR_CLI" ]]; then
+if [[ -n "$CURSOR_CLI" ]]; then
 	"$CURSOR_CLI" -n "$WORKSPACE_FILE"
+elif [[ -n "$CURSOR_APP" ]]; then
+	open -na "$CURSOR_APP" --args -n "$WORKSPACE_FILE"
 else
 	open -na Cursor "$WORKSPACE_FILE"
 fi

@@ -253,3 +253,36 @@
 "Tap and hold to complete, single tap for details" = "Houd ingedrukt om te voltooien, tik voor details";
 "Your plan" = "Jouw plan";
 "Press and hold the circle to mark a habit as done." = "Houd de cirkel ingedrukt om een gewoonte als gedaan te markeren.";
+
+// MARK: - Objectives
+"Add habit" = "Gewoonte toevoegen";
+"Create a single custom habit" = "Maak één eigen gewoonte";
+"Add from objective" = "Toevoegen vanuit een doel";
+"Get habit suggestions to reach an objective" = "Krijg gewoontesuggesties om een doel te bereiken";
+"Describe what you want to achieve" = "Beschrijf wat je wilt bereiken";
+"I want to..." = "Ik wil...";
+"Get habits" = "Gewoontes ophalen";
+"Suggestions are generated on your iPhone" = "Suggesties worden op je iPhone gemaakt";
+"Refine" = "Verfijnen";
+"Add details to refine the suggestions" = "Voeg details toe om de suggesties te verfijnen";
+"Generate more" = "Meer maken";
+"New search" = "Nieuwe zoekopdracht";
+"Added" = "Toegevoegd";
+"We cannot suggest anything for that request" = "We kunnen niets voorstellen voor dit verzoek";
+"Something went wrong. Try again." = "Er ging iets mis. Probeer het opnieuw.";
+"Try again" = "Opnieuw proberen";
+"Double tap to review and add" = "Tik twee keer om te bekijken en toe te voegen";
+"Generating suggestions" = "Suggesties worden gemaakt";
+"%lld times" = "%lld keer";
+"Learn to play piano" = "Piano leren spelen";
+"Learn to play guitar" = "Gitaar leren spelen";
+"Become a morning person" = "Een ochtendmens worden";
+"Become a great parent" = "Een geweldige ouder zijn";
+"Get in good shape" = "In vorm komen";
+"Be more present" = "Meer in het moment leven";
+"Read more books" = "Meer boeken lezen";
+"Sleep better" = "Beter slapen";
+"Learn a new language" = "Een nieuwe taal leren";
+"Feel less stressed" = "Minder stress ervaren";
+"Eat healthier" = "Gezonder eten";
+"Run a 5K" = "5 km hardlopen";
