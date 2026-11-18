@@ -29,21 +29,18 @@ enum GenFrequency: CaseIterable {
     }
 }
 
+/// Mirrors `HabitProposal.suggestedGoalTypes`, in the same order.
 @available(iOS 26, *)
 @Generable
 enum GenGoal: CaseIterable {
-    case none, repetitions, time, cups, calories, distance, weight, capacity
+    case none, repetitions, time, distance
 
     var goalType: GoalType {
         switch self {
         case .none:        return .none
         case .repetitions: return .repetitions
         case .time:        return .time
-        case .cups:        return .cups
-        case .calories:    return .calories
         case .distance:    return .distance
-        case .weight:      return .weight
-        case .capacity:    return .capacity
         }
     }
 }

@@ -15,30 +15,51 @@ enum ObjectivePromptStrings {
         "prompt.more",
         "prompt.exclude",
         "prompt.units",
+    ] + listKeys
+
+    /// Comma-separated term lists, as opposed to instructions and prompt templates.
+    static let listKeys = [
         "evaluator.blocklist",
+        "evaluator.intakeTerms",
+        "policing.blocklist",
+        "policing.weightActions",
+        "policing.weightTerms",
     ]
 
     static func localized(_ key: String) -> String {
         Bundle.main.localizedString(forKey: key, value: nil, table: table)
     }
 
-    static func englishBlocklist() -> [String] {
+    static func englishList(_ key: String) -> [String] {
         guard let path = Bundle.main.path(forResource: table, ofType: "strings", inDirectory: "en.lproj"),
               let contents = NSDictionary(contentsOfFile: path) as? [String: String],
-              let list = contents["evaluator.blocklist"]
+              let list = contents[key]
         else { return [] }
         return splitList(list)
     }
 
-    /// The current language's blocklist plus the English one, since users mix languages.
+    /// The current language's list plus the English one, since users mix languages.
+    static func list(_ key: String) -> [String] {
+        Array(Set(splitList(localized(key)).filter { $0 != key } + englishList(key)))
+    }
+
+    /// Generated habits containing any of these are dropped.
     static func blocklist() -> [String] {
-        Array(Set(splitList(localized("evaluator.blocklist")) + englishBlocklist()))
+        list("evaluator.blocklist") + list("evaluator.intakeTerms")
+    }
+
+    static func requestScreen() -> ObjectiveRequestScreen {
+        ObjectiveRequestScreen(
+            blocklist: list("policing.blocklist"),
+            weightActions: list("policing.weightActions"),
+            weightTerms: list("policing.weightTerms")
+        )
     }
 
     static func splitList(_ list: String) -> [String] {
         list.split(separator: ",")
             .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
-            .filter { !$0.isEmpty && $0 != "evaluator.blocklist" }
+            .filter { !$0.isEmpty }
     }
 }
 
@@ -100,7 +121,7 @@ struct ObjectivePromptBuilder {
     /// Tells the model which unit each goal amount is expressed in, so the number it
     /// returns matches the unit the app attaches (see `ObjectiveUnitPolicy`).
     static func unitsDescription(for system: MeasurementSystem) -> String {
-        GoalType.allCases
+        HabitProposal.suggestedGoalTypes
             .filter { $0 != .none }
             .compactMap { type in
                 ObjectiveUnitPolicy.unit(for: type, system: system).map { "\(type.rawValue) = \($0)" }

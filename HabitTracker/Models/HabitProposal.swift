@@ -39,6 +39,10 @@ struct HabitProposal: Identifiable, Equatable {
 
     static let suggestedFrequencies: [FrequencyType] = [.daily, .weekly, .monthly]
 
+    /// No intake or body-weight goals (cups, calories, capacity, weight): the model must
+    /// never suggest how much to eat or drink, nor a weight target.
+    static let suggestedGoalTypes: [GoalType] = [.none, .repetitions, .time, .distance]
+
     static let fallbackIconName = "star.fill"
 
     /// The icons the model may pick from. Kept short because every case is part of the

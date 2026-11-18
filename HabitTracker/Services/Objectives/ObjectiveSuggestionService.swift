@@ -1,6 +1,6 @@
 import Foundation
 
-/// Runs the objectives pipeline (PRD - objectives §8.3): policing → streamed research →
+/// Runs the objectives pipeline (PRD - objectives §8.3): request screen → policing → streamed research →
 /// local evaluator → one retry when fewer than three habits survive. Accepted habits are
 /// emitted one by one as soon as each finishes generating.
 final class ObjectiveSuggestionService: ObjectiveSuggestionGenerating {
@@ -10,15 +10,18 @@ final class ObjectiveSuggestionService: ObjectiveSuggestionGenerating {
     private let backend: ObjectiveModelBackend
     private let promptBuilder: ObjectivePromptBuilder
     private let blocklist: () -> [String]
+    private let requestScreen: () -> ObjectiveRequestScreen
 
     init(
         backend: ObjectiveModelBackend,
         promptBuilder: ObjectivePromptBuilder = ObjectivePromptBuilder(),
-        blocklist: @escaping () -> [String] = ObjectivePromptStrings.blocklist
+        blocklist: @escaping () -> [String] = ObjectivePromptStrings.blocklist,
+        requestScreen: @escaping () -> ObjectiveRequestScreen = ObjectivePromptStrings.requestScreen
     ) {
         self.backend = backend
         self.promptBuilder = promptBuilder
         self.blocklist = blocklist
+        self.requestScreen = requestScreen
     }
 
     func prewarm() {
@@ -75,6 +78,9 @@ final class ObjectiveSuggestionService: ObjectiveSuggestionGenerating {
         let clock = ContinuousClock()
         let start = clock.now
         let blocklist = blocklist()
+
+        let typed = ([request.objective] + request.refinements).joined(separator: "\n")
+        guard !requestScreen().rejects(typed) else { throw ObjectiveFailure.rejected }
 
         let approved = try await backend.judge(promptBuilder.policingPrompt(for: request))
         try Task.checkCancellation()

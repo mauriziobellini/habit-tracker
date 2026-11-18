@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 63;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -145,7 +145,7 @@
 		5E37FBBD441F5E42CA30E03F /* MigrationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MigrationService.swift; sourceTree = "<group>"; };
 		60B405D8517768C23C7EC846 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		65BEF1AD62BB1488E356A032 /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
-		6DFAE23DA1FC14884E439BC4 /* Configuration.storekit */ = {isa = PBXFileReference; path = Configuration.storekit; sourceTree = "<group>"; };
+		6DFAE23DA1FC14884E439BC4 /* Configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Configuration.storekit; sourceTree = "<group>"; };
 		6EF5FB924106AAB464465CBF /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		754CC36EEC02243848BB3618 /* StrengthNotificationScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrengthNotificationScheduler.swift; sourceTree = "<group>"; };
 		75F7966FF50F2EEA277409E3 /* AppPreviewRecording.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPreviewRecording.swift; sourceTree = "<group>"; };
@@ -163,7 +163,7 @@
 		8826365D301D57762C7FBEDF /* FreemiumTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreemiumTests.swift; sourceTree = "<group>"; };
 		8AFF4251A4854D53DE4D9C20 /* FirstCompletionCelebrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstCompletionCelebrationView.swift; sourceTree = "<group>"; };
 		8D61DDCA86890037074EA9A1 /* DemoVideoSeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoVideoSeed.swift; sourceTree = "<group>"; };
-		934C18A7F2EB31512CEB4A4E /* HabitTracker.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = HabitTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		934C18A7F2EB31512CEB4A4E /* HabitTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HabitTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94868EF9B3349BDFC6EA9F41 /* HabitSummarySheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitSummarySheetView.swift; sourceTree = "<group>"; };
 		9488AFB55798DD8EC313A193 /* ObjectivePresetCarousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectivePresetCarousel.swift; sourceTree = "<group>"; };
 		94CFAAA3CFF314D9E33E4397 /* TaskStatsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskStatsViewModel.swift; sourceTree = "<group>"; };
@@ -528,7 +528,6 @@
 				7241BB4A17D0E2F8DCADE4D4 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				C0A35E3CC1FC62F9D664ADC7 /* XCRemoteSwiftPackageReference "posthog-ios" */,
 			);
-			preferredProjectObjectVersion = 77;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -710,7 +709,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 8;
+				DEVELOPMENT_TEAM = VR85B5U7U4;
 				INFOPLIST_FILE = HabitTracker/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Ring Habits – Streak & Reward";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
@@ -721,7 +721,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2.0;
+				MARKETING_VERSION = 2.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = co.fooshi.habitring;
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -802,7 +802,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 8;
+				DEVELOPMENT_TEAM = VR85B5U7U4;
 				INFOPLIST_FILE = HabitTracker/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Ring Habits – Streak & Reward";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
@@ -813,7 +814,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2.0;
+				MARKETING_VERSION = 2.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = co.fooshi.habitring;
 				SDKROOT = iphoneos;
 				SWIFT_EMIT_LOC_STRINGS = YES;

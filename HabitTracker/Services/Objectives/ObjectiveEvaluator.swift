@@ -1,5 +1,25 @@
 import Foundation
 
+/// Fixed checks on what the user typed, run before the policing model, which a small
+/// on-device model cannot be relied on to enforce. Lose or gain weight requests are
+/// rejected; getting fit or in better shape is fine.
+struct ObjectiveRequestScreen: Equatable {
+    /// Words or phrases that reject a request on their own, e.g. "weight loss", "dimagrire".
+    var blocklist: [String]
+    /// A request is rejected when it contains one of these together with a weight term,
+    /// e.g. "lose 5 kg" or "put on weight".
+    var weightActions: [String]
+    var weightTerms: [String]
+
+    func rejects(_ text: String) -> Bool {
+        // Digits are dropped so "5kg" still reads as "kg".
+        let words = text.replacingOccurrences(of: "[0-9]+", with: " ", options: .regularExpression)
+        if ObjectiveEvaluator.isBlocked(words, blocklist: blocklist) { return true }
+        return ObjectiveEvaluator.isBlocked(words, blocklist: weightActions)
+            && ObjectiveEvaluator.isBlocked(words, blocklist: weightTerms)
+    }
+}
+
 /// App-side checks on every generated habit before it reaches the UI (PRD - objectives
 /// §8.3 "Evaluator step"). The generation schema already constrains most values; this is
 /// the safety net. Never logs titles or summaries.
@@ -61,13 +81,7 @@ enum ObjectiveEvaluator {
                 proposal.goalValue = nil
                 corrected = true
             }
-        } else if let value = proposal.goalValue, value > 0 {
-            let maxValue = maxGoalValue(for: proposal.goalType, system: measurementSystem)
-            if value > maxValue {
-                proposal.goalValue = maxValue
-                corrected = true
-            }
-        } else {
+        } else if !hasValidGoal(proposal, system: measurementSystem) {
             proposal.goalType = .none
             proposal.goalValue = nil
             corrected = true
@@ -83,11 +97,21 @@ enum ObjectiveEvaluator {
             return .dropped(.duplicate)
         }
 
-        if isBlocked("\(title) \(summary)", blocklist: blocklist) {
+        let text = "\(title) \(summary)"
+        if isBlocked(text, blocklist: blocklist) || mentionsIntakeAmount(text) {
             return .dropped(.blocked)
         }
 
         return corrected ? .corrected(proposal) : .accepted(proposal)
+    }
+
+    /// An out-of-range amount is never clamped: a clamped amount looks deliberate but
+    /// means nothing, so the goal is removed instead.
+    private static func hasValidGoal(_ proposal: HabitProposal, system: MeasurementSystem) -> Bool {
+        guard HabitProposal.suggestedGoalTypes.contains(proposal.goalType),
+              let value = proposal.goalValue, value > 0
+        else { return false }
+        return value <= maxGoalValue(for: proposal.goalType, system: system)
     }
 
     static func maxGoalValue(for goalType: GoalType, system: MeasurementSystem) -> Double {
@@ -102,6 +126,17 @@ enum ObjectiveEvaluator {
         case .weight:      return metric ? 200 : 440
         case .capacity:    return metric ? 10 : 340
         }
+    }
+
+    /// A number followed by a volume, energy or mass unit, e.g. "2 L", "500ml", "1,5 l".
+    /// Kept out of the word lists because a lone "l" would match French elisions like "l'eau".
+    private static let intakeAmount = try! NSRegularExpression(
+        pattern: #"\d+([.,]\d+)?\s*(l|cl|dl|ml|oz|kcal|cal|g)\b"#,
+        options: .caseInsensitive
+    )
+
+    static func mentionsIntakeAmount(_ text: String) -> Bool {
+        intakeAmount.firstMatch(in: text, range: NSRange(text.startIndex..., in: text)) != nil
     }
 
     /// Case- and diacritic-insensitive comparison key.

@@ -145,8 +145,28 @@ private enum Fixture {
 
     static let promptBuilder = ObjectivePromptBuilder(localized: { promptStrings[$0] ?? $0 })
 
+    static let screen = ObjectiveRequestScreen(
+        blocklist: ["weight loss"], weightActions: ["lose", "gain", "put on"], weightTerms: ["weight", "kg"]
+    )
+
     static func service(_ backend: FakeBackend, blocklist: [String] = ["skip meals"]) -> ObjectiveSuggestionService {
-        ObjectiveSuggestionService(backend: backend, promptBuilder: promptBuilder, blocklist: { blocklist })
+        ObjectiveSuggestionService(
+            backend: backend, promptBuilder: promptBuilder, blocklist: { blocklist }, requestScreen: { screen }
+        )
+    }
+
+    /// The request screen as shipped for one language, plus English.
+    static func shippedScreen(_ language: String) throws -> ObjectiveRequestScreen {
+        let strings = try lproj(language, table: ObjectivePromptStrings.table)
+        let english = try lproj("en", table: ObjectivePromptStrings.table)
+        func list(_ key: String) -> [String] {
+            ObjectivePromptStrings.splitList(strings[key] ?? "") + ObjectivePromptStrings.splitList(english[key] ?? "")
+        }
+        return ObjectiveRequestScreen(
+            blocklist: list("policing.blocklist"),
+            weightActions: list("policing.weightActions"),
+            weightTerms: list("policing.weightTerms")
+        )
     }
 
     static func collect(
@@ -355,6 +375,19 @@ struct ObjectiveDomainTests {
         #endif
     }
 
+    @Test("The model can only suggest goals that are not about intake or body weight")
+    func suggestedGoalTypes() {
+        let allowed = HabitProposal.suggestedGoalTypes
+        for intake in [GoalType.cups, .calories, .capacity, .weight] {
+            #expect(!allowed.contains(intake))
+        }
+        #if canImport(FoundationModels)
+        if #available(iOS 26, *) {
+            #expect(GenGoal.allCases.map(\.goalType) == allowed)
+        }
+        #endif
+    }
+
     @Test("Drafts map to proposals only with a title and a suggested frequency")
     func draftMapping() {
         #expect(HabitProposal(draft: Fixture.draft("Read")) != nil)
@@ -399,6 +432,9 @@ struct ObjectivePromptTests {
         #expect(!prompt.contains("X: "))
         #expect(prompt.contains("distance = km"))
         #expect(prompt.contains("time = min"))
+        for unsupported in ["cups", "calories", "capacity", "weight"] {
+            #expect(!prompt.contains("\(unsupported) ="))
+        }
     }
 
     @Test("Refine, Generate more and the retry each add their instruction")
@@ -420,7 +456,7 @@ struct ObjectivePromptTests {
         imperial.measurementSystem = .imperial
         let prompt = Fixture.promptBuilder.researchPrompt(for: imperial, excluding: [])
         #expect(prompt.contains("distance = mi"))
-        #expect(prompt.contains("weight = lb"))
+        #expect(!prompt.contains("distance = km"))
     }
 
     @Test("Exclusions keep the most recent titles, fewer in the compact prompt")
@@ -449,14 +485,18 @@ struct ObjectivePromptTests {
                 let template = try #require(strings[key])
                 #expect(template.components(separatedBy: "%@").count == 2, "\(language) \(key)")
             }
-            #expect(!ObjectivePromptStrings.splitList(strings["evaluator.blocklist"] ?? "").isEmpty)
+            for key in ObjectivePromptStrings.listKeys {
+                #expect(!ObjectivePromptStrings.splitList(strings[key] ?? "").isEmpty, "\(language) \(key)")
+            }
         }
     }
 
     @Test("Blocklists split on commas and ignore blanks")
     func splitList() {
         #expect(ObjectivePromptStrings.splitList(" a, b c ,, d ") == ["a", "b c", "d"])
-        #expect(!ObjectivePromptStrings.englishBlocklist().isEmpty)
+        for key in ObjectivePromptStrings.listKeys {
+            #expect(!ObjectivePromptStrings.englishList(key).isEmpty, "\(key)")
+        }
     }
 }
 
@@ -516,8 +556,47 @@ struct ObjectiveEvaluatorTests {
         let missing = evaluate(Fixture.proposal(goalType: .repetitions, goalValue: nil)).proposal
         #expect(missing?.goalType == GoalType.none)
 
-        let huge = evaluate(Fixture.proposal(goalType: .time, goalValue: 5000)).proposal
-        #expect(huge?.goalValue == 600)
+        let atMax = evaluate(Fixture.proposal(goalType: .time, goalValue: 600)).proposal
+        #expect(atMax?.goalValue == 600)
+    }
+
+    @Test("An out-of-range amount removes the goal instead of being clamped")
+    func outOfRangeGoal() {
+        let result = evaluate(Fixture.proposal(goalType: .time, goalValue: 5000))
+        #expect(result.proposal?.goalType == GoalType.none)
+        #expect(result.proposal?.goalValue == nil)
+        if case .corrected = result {} else { Issue.record("expected a corrected result") }
+    }
+
+    @Test("Intake and body-weight goals are removed, keeping the habit")
+    func unsupportedGoalTypes() {
+        for goalType in [GoalType.cups, .calories, .capacity, .weight] {
+            let proposal = evaluate(Fixture.proposal(goalType: goalType, goalValue: 2)).proposal
+            #expect(proposal?.goalType == GoalType.none, "\(goalType)")
+            #expect(proposal?.goalValue == nil)
+        }
+    }
+
+    @Test("Habits about food or drink amounts are dropped with the shipped lists")
+    func intakeTerms() {
+        let blocklist = ObjectivePromptStrings.englishList("evaluator.blocklist")
+            + ObjectivePromptStrings.englishList("evaluator.intakeTerms")
+        for title in ["Drink 2 glasses", "Drink 2 L of water", "Eat 200 extra calories", "Track your kcal"] {
+            #expect(evaluate(Fixture.proposal(title), blocklist: blocklist) == .dropped(.blocked), "\(title)")
+        }
+        for title in ["Eat a healthy meal", "Walk after dinner", "Read for 20 minutes"] {
+            #expect(evaluate(Fixture.proposal(title), blocklist: blocklist).proposal != nil, "\(title)")
+        }
+    }
+
+    @Test("A number with an intake unit is caught in any language, but not other counts")
+    func intakeAmounts() {
+        for text in ["Drink 2 L of water", "Bevi 1,5 l", "500ml every morning", "Add 200 kcal", "Eat 30 g of nuts"] {
+            #expect(ObjectiveEvaluator.mentionsIntakeAmount(text), "\(text)")
+        }
+        for text in ["Run 2 laps", "Play 3 games", "Bois de l'eau", "Read 10 pages", "Walk 2 km"] {
+            #expect(!ObjectiveEvaluator.mentionsIntakeAmount(text), "\(text)")
+        }
     }
 
     @Test("Unknown icons fall back to the default")
@@ -534,6 +613,52 @@ struct ObjectiveEvaluatorTests {
     func blocklist() {
         #expect(evaluate(Fixture.proposal("Skip meals on Fridays")) == .dropped(.blocked))
         #expect(evaluate(Fixture.proposal("Learn a new method")).proposal != nil)
+    }
+}
+
+// MARK: - Request screen
+
+@Suite("Objectives request screen")
+struct ObjectiveRequestScreenTests {
+    @Test("Phrases reject alone; actions only together with a weight term")
+    func rules() {
+        let screen = Fixture.screen
+        #expect(screen.rejects("Help with my weight loss"))
+        #expect(screen.rejects("I want to lose weight"))
+        #expect(screen.rejects("Gain 3kg"))
+        #expect(screen.rejects("Put on some weight"))
+        #expect(!screen.rejects("Lose my fear of speaking"))
+        #expect(!screen.rejects("Gain muscle"))
+        #expect(!screen.rejects("Track my weightlifting"))
+    }
+
+    @Test("The shipped lists reject direct weight requests and allow fitness goals")
+    func shippedLists() throws {
+        let cases: [(language: String, rejected: [String], allowed: [String])] = [
+            ("en", ["I want to lose weight", "Lose 10 kg by summer", "Gain weight", "Put on 3 kilos", "Weight loss"],
+                   ["I want to get fit", "Get in better shape", "Lift heavier weights", "Gain muscle", "Learn piano"]),
+            ("it", ["Voglio dimagrire", "Perdere 5 chili", "Prendere peso"],
+                   ["Rimettermi in forma", "Imparare il piano"]),
+            ("es", ["Quiero adelgazar", "Bajar de peso", "Perder 5 kilos"],
+                   ["Ponerme en forma", "Aprender piano"]),
+            ("fr", ["Je veux maigrir", "Perdre du poids", "Prendre 3 kilos"],
+                   ["Me remettre en forme", "Prendre un livre chaque soir"]),
+            ("de", ["Ich will abnehmen", "5 kg verlieren"],
+                   ["Fitter werden", "Klavier lernen"]),
+            ("nl", ["Ik wil afvallen", "5 kilo kwijtraken"],
+                   ["Fitter worden", "Op tijd aankomen"]),
+            ("pt-PT", ["Quero emagrecer", "Perder peso"],
+                   ["Ficar em forma", "Aprender piano"]),
+        ]
+        for (language, rejected, allowed) in cases {
+            let screen = try Fixture.shippedScreen(language)
+            for text in rejected {
+                #expect(screen.rejects(text), "\(language) should reject \(text)")
+            }
+            for text in allowed {
+                #expect(!screen.rejects(text), "\(language) should allow \(text)")
+            }
+        }
     }
 }
 
@@ -583,6 +708,22 @@ struct ObjectiveSuggestionServiceTests {
         #expect(error as? ObjectiveFailure == .rejected)
         #expect(events.isEmpty)
         #expect(backend.researchPrompts.isEmpty)
+    }
+
+    @Test("A weight request is rejected before the model runs, also when it comes as a refinement")
+    func requestScreenRejects() async {
+        let backend = FakeBackend()
+        let (events, error) = await Fixture.collect(Fixture.service(backend).run(ObjectiveRequest(objective: "Lose 5kg")))
+        #expect(error as? ObjectiveFailure == .rejected)
+        #expect(events.isEmpty)
+        #expect(backend.judgePrompts.isEmpty)
+        #expect(backend.researchPrompts.isEmpty)
+
+        let refined = FakeBackend()
+        let request = ObjectiveRequest(objective: "Get fit", refinements: ["I also want to lose weight"], mode: .refine)
+        let (_, refinedError) = await Fixture.collect(Fixture.service(refined).run(request))
+        #expect(refinedError as? ObjectiveFailure == .rejected)
+        #expect(refined.judgePrompts.isEmpty)
     }
 
     @Test("Guardrail violations and refusals count as rejections; other errors are generic")
